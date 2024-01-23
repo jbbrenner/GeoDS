@@ -1,0 +1,20 @@
+name = "Downscaling_Project"
+version = "0.1.0"
+license = "license"
+author = "Jean-Baptiste Brenner"
+maintainer = "jean-baptiste.brenner@lsce.ipsl.fr"
+copyright = "Copyright 2024, Jean-Baptiste Brenner"
+[build]
+auto-executables = true
+auto-tests = true
+auto-examples = true
+module-naming = false
+external-modules = ["netcdff","netcdf","ncio"]
+link = ["netcdff","netcdf", "ncio"]
+[install]
+library = false
+[fortran]
+implicit-typing = false
+implicit-external = false
+source-form = "free"
+
