@@ -16,7 +16,7 @@ PROGRAM main
   REAL :: T
   CHARACTER(LEN=10) :: interpol
 
-  REAL, DIMENSION(1:256,1:156)  :: elev
+  REAL, DIMENSION(256,156)  :: elev
   INTEGER :: n
   
 
