@@ -5,7 +5,7 @@ PROGRAM main
   USE Parametrization
   USE Temperature
   USE ncio, ONLY: nc_read
-  USE Reading_Variables
+  !USE Reading_Variables
   !----------------------------------------------------------!
   !
   !----------------------------------------------------------!
@@ -16,7 +16,7 @@ PROGRAM main
   REAL :: T
   CHARACTER(LEN=10) :: interpol
 
-  REAL, DIMENSION(1:256,1:156)  :: elev
+  REAL, DIMENSION(256,156)  :: eleva
   INTEGER :: n
   
 
@@ -24,20 +24,22 @@ PROGRAM main
   ! Call external functions and subroutines
   !----------------------------------------------------------!
   CALL Test(3.0,T)
-  CALL Lecture(n,elev)
+  CALL nc_read("/home/jbrenner/These/Cartes/S.nc","orog",eleva)
+
+  !CALL Lecture(n,elev)
 
 
   !----------------------------------------------------------!
   ! Apply interpolation using CDO
   ! Bash script located in src
   !----------------------------------------------------------!
-  WRITE(*,*)"Do you want to call the Interpolation module ? yes or no"
-  READ(*,*)interpol
-  IF (interpol=="yes") THEN
-     CALL SYSTEM("pwd && bash src/Interpolation.sh && cd -")
-  ELSE
-     WRITE(*,*)"Interpolation skipped"
-  ENDIF
+  !WRITE(*,*)"Do you want to call the Interpolation module ? yes or no"
+  !READ(*,*)interpol
+  !IF (interpol=="yes") THEN
+     !CALL SYSTEM("pwd && bash src/Interpolation.sh && cd -")
+ ! ELSE
+     !WRITE(*,*)"Interpolation skipped"
+ ! ENDIF
   !----------------------------------------------------------!
 
   
