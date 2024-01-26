@@ -1,0 +1,75 @@
+# Generic definitions ...
+
+F_OPTIM_HIGH  = -O3
+F_PRE_PROCESS = -cpp
+F_FLAGS_EXTD  = -ffixed-line-length-132
+F_FLAGS_CARD  = -ffixed-line-length-80
+F_DFLT_DBLE8  = -fdefault-double-8
+F_DFLT_REAL8  = -fdefault-real-8
+F_DFLT_DBLE   = $(F_DFLT_REAL8) $(F_DFLT_DBLE8)
+F_DFLT_INTG8  = -fdefault-integer-8
+F_DFLT_INTG4  = -fdefault-integer-4
+F_INIT_ZERO   = -finit-local-zero
+F_STRCT_EIGHT = -std=f2008
+F_TREAT_FORTR =
+F_IMPLIC_NONE = -fimplicit-none
+#
+#
+F_SIGN_ZERO   = -fno-sign-zero
+F_REC_MARK    = -frecord-marker=4
+#
+F_HEAD_FIL    = -I
+F_MAX_ERR     = -fmax-errors=5
+DIAG_DISABLE  =
+
+F_BIG_ENDIAN  = -fconvert='big-endian'
+# Could be deprecated if no commons left ...
+F_NO_ALIGN    = -fno-align-commons
+F_MEM_MODEL_M =
+F_MEM_MODEL_L =
+F_LARGE_ARRAY =
+#
+DBG_FLAGS     = -w -g -p -ggdb -ffpe-trap=invalid,zero,overflow,underflow -fbacktrace -fcheck=all
+DBG_FLAGS     = -p -ggdb -Wall -W -Wextra -Wsurprising -pedantic -fbounds-check -fstrict-aliasing -fimplicit-none -Warray-temporaries -Wextra -fbacktrace -fcheck=all
+
+CMP_SPECF     =
+OPENMP        =
+
+ifeq ($(strip $(lib_netcdff_path)),)
+LIBNETCDF     = -Wl,-rpath=${lib_netcdf_path} -L${lib_netcdf_path} -lnetcdf -lnetcdff
+INCNETCDF     = -I${inc_netcdf_path}
+else
+LIBNETCDFF    = -Wl,-rpath=${lib_netcdff_path} -L${lib_netcdff_path} -lnetcdff
+INCNETCDFF    = -I${inc_netcdff_path}
+LIBNETCDF     = -Wl,-rpath=${lib_netcdf_path} -L${lib_netcdf_path} -lnetcdf
+INCNETCDF     = -I${inc_netcdf_path}
+endif
+
+LIBNCIO       = -Wl,-rpath=${lib_ncio_path} -L${lib_ncio_path} -lncio
+INCNCIO       = -I${inc_ncio_path}
+
+LIBUDUNITS    = -Wl,-rpath=${lib_udunits_path} -L${lib_udunits_path} -lncio
+INCUDUNITS    = -I${inc_udunits_path}
+
+LIBUUID       = -Wl,-rpath=${lib_uuid_path} -L${lib_uuid_path} -luuid-fortran
+INCUUID       = -I${inc_uuid_path}
+
+LIBMODMXM     = -Wl,-rpath=${lib_modmxm_path} -L${lib_modmxm_path} -lmodmxm
+INCMODMXM     = -I${inc_modmxm_path}
+
+LIBMEDUSA     = -Wl,-rpath=${lib_medusa_path} -L${lib_medusa_path} -lmedusa
+INCMEDUSA     = -I${inc_medusa_path}
+
+LIBTHDYCT     = -Wl,-rpath=${lib_thdyct_path} -L${lib_thdyct_path} -lthdyct
+INCTHDYCT     = -I${inc_thdyct_path}
+
+LIBGRISLI     = -Wl,-rpath=${lib_grisli_path} -L${lib_grisli_path} -lgrisli
+INCGRISLI     = -I${inc_grisli_path}
+
+LIBCARAIB     = -Wl,-rpath=${lib_caraib_path} -L${lib_caraib_path} -lcaraib
+INCCARAIB     = -I${inc_caraib_path} -I${com_caraib_path}
+
+INC_F_DIR     = -I${objdir}
+MOD_F_DIR     = -J${objdir}
+
+# The End of All Things (op. cit.)
