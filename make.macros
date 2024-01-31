@@ -11,12 +11,12 @@ lib_netcdff_path =
 inc_netcdff_path = 
 lib_netcdf_path  = /usr/lib/x86_64-linux-gnu
 inc_netcdf_path  = /usr/include
-lib_ncio_path    = /home/roche/.local/lib
-inc_ncio_path    = /home/roche/.local/include
+lib_ncio_path    = /home/jbrenner/ncio/lib
+inc_ncio_path    = /home/jbrenner/ncio/include
 
 objdir           = .obj
 fc_compiler_path = /usr/bin/gfortran
-fc_fmakedep_path = /home/roche/DOCUMENTS/DEVELOPPEMENTS-PROGRAMMES/makedepf90-2.8.8/makedepf90
+fc_fmakedep_path = /home/jbrenner/makedepf90-2.8.8/makedepf90
 
 include gfortran.options
 

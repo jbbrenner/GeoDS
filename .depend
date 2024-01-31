@@ -1,0 +1,9 @@
+FOBJ=src/Parametrization.o src/Reading_variables.o src/Temperature.o src/main.o 
+
+GeoDS.x: $(FOBJ)
+	$(FC) -o $@ $(FFLAGS) $(LDFLAGS) $(FOBJ) $(LIBS)
+
+src/Parametrization.o : src/Parametrization.f90 
+src/Reading_variables.o : src/Reading_variables.f90 
+src/Temperature.o : src/Temperature.f90 src/Parametrization.o 
+src/main.o : src/main.f90 src/Temperature.o src/Parametrization.o 

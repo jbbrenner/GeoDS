@@ -1,0 +1,25 @@
+!Configuration file
+
+!_______________________________________________________!
+!________Parametrization regarding temperature__________!
+
+&Temperature
+
+LR_temperature_dataset_file = "/home/jbrenner/These/Cartes/atmmmyl004000.nc"
+LR_surface_temperature_id   = "ts"
+/
+
+!_______________________________________________________!
+!________Parametrization regarding topography___________!
+
+&Topography
+
+!LR_elevation_file = "/home/jbrenner/These/Cartes/elevation-T21.nc"
+HR_elevation_file = "/home/jbrenner/These/Cartes/Topographie_Test_1km.nc"
+
+!LR_surface_elevation_id	 = "elevation" : si je les rajoute, ne pas oublier l'ordre dans l'appel du programme
+HR_surface_elevation_id  = "S"
+/
+
+!_______________________________________________________!
+!________Parametrization regarding topography___________!
