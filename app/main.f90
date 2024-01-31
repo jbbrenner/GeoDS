@@ -4,7 +4,8 @@ PROGRAM main
   !________________________________________________________________________________________!
 
   USE Parametrization
-  USE Reading_Variables
+  USE Reading_Inputs
+  USE Writing_Outputs
   USE Temperature
   USE ncio, ONLY: nc_read
   !________________________________________________________________________________________!
@@ -34,30 +35,57 @@ PROGRAM main
 
 
   
-  REAL :: T
-  CHARACTER(LEN=10) :: interpol
+  !REAL :: T
+  !CHARACTER(LEN=10) :: interpol
 
   !________________________________________________________________________________________!
   ! Calling external functions and subroutines
   !________________________________________________________________________________________!
-  CALL Test(3.0,T)
+  !CALL Test(3.0,T)
   
   CALL inputs_temperature(LR_temperature_file, LR_surface_temperature_id,&
        LR_surface_temperature_data,lrtemp_x_size,&
        lrtemp_y_size,lrtemp_t_size)
 
+  PRINT *,"_______________________________"
   PRINT *,LR_surface_temperature_data(1,1,1)
-  PRINT*,"____________________________"
 
+  CALL Test(LR_surface_temperature_data)
+
+  PRINT *,LR_surface_temperature_data(1,1,1)
+
+  PRINT *,"______________________________"
+  
   CALL inputs_topography(HR_elevation_file, HR_surface_elevation_id,&
        HR_surface_elevation_data,hrtopo_x_size,hrtopo_y_size,hrtopo_t_size)
 
   PRINT *,HR_surface_elevation_data(71,61,1)
 
+
   
+  
+  !________________________________________________________________________________________!
+  !Deallocating all arrays after writing outputs in netCDF files
+  !________________________________________________________________________________________!
+  
+  DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data)
+
+  !________________________________________________________________________________________!
+  
+  WRITE(*,*)"end of the program"
+  !________________________________________________________________________________________!
+
+END PROGRAM main
+
+
+
+
+
+
+
   !----------------------------------------------------------!
   ! Apply interpolation using CDO
-  ! Bash script located in src
+! Bash script located in src
   !----------------------------------------------------------!
   !WRITE(*,*)"Do you want to call the Interpolation module ? yes or no"
   !READ(*,*)interpol
@@ -67,10 +95,3 @@ PROGRAM main
      !WRITE(*,*)"Interpolation skipped"
  ! ENDIF
   !----------------------------------------------------------!
-
-  
-  WRITE(*,*)"end of the program"
-
-  !________________________________________________________________________________________!
-
-END PROGRAM main

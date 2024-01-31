@@ -12,16 +12,14 @@ MODULE Temperature
   !-----------------------------------------------------------------------! 
 CONTAINS
 
-  SUBROUTINE Test(x,T)
+  SUBROUTINE Test(LR_surface_temperature_data)
     
     IMPLICIT NONE
 
-    REAL,INTENT(IN) :: x
-    REAL,INTENT(OUT) :: T
+    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: LR_surface_temperature_data
 
-    T=lapse_rate*x
+    LR_surface_temperature_data(:,:,:)=lapse_rate*LR_surface_temperature_data(:,:,:)
 
-    PRINT*,'Le resultat vaut :',T
     
 
   END SUBROUTINE Test

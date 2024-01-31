@@ -1,9 +1,10 @@
-FOBJ=src/Parametrization.o src/Reading_variables.o src/Temperature.o src/main.o 
+FOBJ=src/Parametrization.o src/Reading_Inputs.o src/Temperature.o src/Writing_Outputs.o src/main.o 
 
 GeoDS.x: $(FOBJ)
 	$(FC) -o $@ $(FFLAGS) $(LDFLAGS) $(FOBJ) $(LIBS)
 
 src/Parametrization.o : src/Parametrization.f90 
-src/Reading_variables.o : src/Reading_variables.f90 
+src/Reading_Inputs.o : src/Reading_Inputs.f90 src/Parametrization.o 
 src/Temperature.o : src/Temperature.f90 src/Parametrization.o 
-src/main.o : src/main.f90 src/Temperature.o src/Parametrization.o 
+src/Writing_Outputs.o : src/Writing_Outputs.f90 src/Parametrization.o 
+src/main.o : src/main.f90 src/Temperature.o src/Writing_Outputs.o src/Reading_Inputs.o src/Parametrization.o 
