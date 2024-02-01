@@ -7,17 +7,17 @@ PROGRAM main
   USE Reading_Inputs
   USE Writing_Outputs
   USE Temperature
-  USE ncio, ONLY: nc_read
+  USE ncio
   !________________________________________________________________________________________!
 
   IMPLICIT NONE
 
   !________________________________________________________________________________________!
-  !Declaring variables
+  !Declaring input variables
   !________________________________________________________________________________________!  
 
-  !Temperature related variables
-  CHARACTER (LEN=100) :: LR_temperature_file
+  !Temperature-related input variables
+  CHARACTER (LEN=256) :: LR_temperature_file
   CHARACTER (LEN=20) :: LR_surface_temperature_id
   REAL, DIMENSION(:,:,:), ALLOCATABLE :: LR_surface_temperature_data
   INTEGER :: lrtemp_x_size
@@ -25,23 +25,24 @@ PROGRAM main
   INTEGER :: lrtemp_t_size
 
 
-  !Topography related variables
-  CHARACTER (LEN=100) :: HR_elevation_file
+  !Topography-related input variables
+  CHARACTER (LEN=256) :: HR_elevation_file
   CHARACTER (LEN=20) :: HR_surface_elevation_id
   REAL, DIMENSION(:,:,:), ALLOCATABLE :: HR_surface_elevation_data
   INTEGER :: hrtopo_x_size
   INTEGER :: hrtopo_y_size
   INTEGER :: hrtopo_t_size
-
-
   
-  !REAL :: T
-  !CHARACTER(LEN=10) :: interpol
+  !________________________________________________________________________________________!
+  !Declaring output variables
+  !________________________________________________________________________________________!  
 
+  !Temperature-related output variables
+  CHARACTER (LEN=256) :: ds_temperature_file
+ 
   !________________________________________________________________________________________!
-  ! Calling external functions and subroutines
+  !Reading netCDF input files 
   !________________________________________________________________________________________!
-  !CALL Test(3.0,T)
   
   CALL inputs_temperature(LR_temperature_file, LR_surface_temperature_id,&
        LR_surface_temperature_data,lrtemp_x_size,&
@@ -61,8 +62,11 @@ PROGRAM main
 
   PRINT *,HR_surface_elevation_data(71,61,1)
 
+  !________________________________________________________________________________________!
+  !Writing netCDF output files 
+  !________________________________________________________________________________________!
 
-  
+  CALL downscaled_outputs_writing(ds_temperature_file)
   
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
@@ -72,7 +76,7 @@ PROGRAM main
 
   !________________________________________________________________________________________!
   
-  WRITE(*,*)"end of the program"
+  WRITE(*,*)"Closing program"
   !________________________________________________________________________________________!
 
 END PROGRAM main

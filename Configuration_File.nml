@@ -5,6 +5,7 @@
 
 &Temperature
 
+!Input variables
 LR_temperature_file = "/home/jbrenner/These/Cartes/atmmmyl004000.nc" !Path of the low resolution temperature input netCDF file (GCM's outputs)
 LR_surface_temperature_id   = "ts"				     !Name of the variable to be read in the input file
 lrtemp_x_size = 64 						     !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
@@ -30,4 +31,12 @@ hrtopo_t_size = 1							  !Dataset extent in the t temporal dimension for the se
 
  !si je rajoute des elements, ne pas oublier l'ordre dans l'appel du programme
 !_______________________________________________________!
-!________Parametrization regarding topography___________!
+!________Parametrization regarding outputs___________!
+
+&Downscaled_outputs
+
+ds_temperature_file = "/home/jbrenner/These/GeoDS_Outputs/downscaled_temperature_Alpes_1km.nc"
+/
+
+
+
