@@ -4,7 +4,8 @@ MODULE Reading_Inputs
 
   USE Parametrization, only: Configuration_file
   USE ncio, ONLY: nc_read
-
+  USE Support_functions, only: config_file_access
+  
   !________________________________________________________________________________________! 
 
   IMPLICIT NONE
@@ -18,39 +19,34 @@ CONTAINS
   !open the same configuration file containing paths and other parametrization variables (namelist), but each one is associated
   !with a different category of data (i.e : data related to temperature, precipitation, topography...)
   
-  SUBROUTINE inputs_temperature(LR_temperature_file, LR_surface_temperature_id,&
-       LR_surface_temperature_data,lrtemp_x_size,&
-       lrtemp_y_size,lrtemp_t_size)
+  SUBROUTINE inputs_temperature(LR_surface_temperature_data)
 
     IMPLICIT NONE
 
-    CHARACTER (LEN=256), INTENT(INOUT) :: LR_temperature_file
-    CHARACTER (LEN=20), INTENT(INOUT) :: LR_surface_temperature_id
     REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: LR_surface_temperature_data
-    INTEGER, INTENT(INOUT) :: lrtemp_x_size 
-    INTEGER, INTENT(INOUT) :: lrtemp_y_size
-    INTEGER, INTENT(INOUT) :: lrtemp_t_size
+
+    CHARACTER(LEN=100) :: config_namelist_blockname
+    INTEGER :: ios, fu
+
+    CHARACTER (LEN=256) :: LR_temperature_file
+    CHARACTER (LEN=20) :: LR_surface_temperature_id
+    INTEGER :: lrtemp_x_size 
+    INTEGER :: lrtemp_y_size
+    INTEGER :: lrtemp_t_size
+
+    CHARACTER (LEN=256) :: HR_elevation_file
+    CHARACTER (LEN=20) :: HR_surface_elevation_id
+    INTEGER :: hrtopo_x_size 
+    INTEGER :: hrtopo_y_size
+    INTEGER :: hrtopo_t_size
     
-    INTEGER :: ios,fu
-    LOGICAL :: input_checking
+    CHARACTER (LEN=256) :: ds_temperature_file
 
-    NAMELIST/Temperature/LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
-         lrtemp_y_size,lrtemp_t_size
+    config_namelist_blockname="Temperature"
 
-    !Checking whether the configuration file exists or not
-    INQUIRE (file=Configuration_file, EXIST=input_checking)
-
-        IF (input_checking .eqv. (.FALSE.)) THEN
-            WRITE (*, *)"Error: input file", Configuration_file, "does not exist"
-         END IF
-
-    !Opening configuration file to access netCDF files paths (temperature data)
-    OPEN (NEWUNIT=fu,ACTION='READ', FILE=Configuration_file, IOSTAT=ios)
-        IF (ios /= 0) THEN
-            WRITE (*, *)"Error:",Configuration_file,"could not be opened"
-         END IF
-
-    READ (UNIT=fu, NML=Temperature, IOSTAT=ios)
+    CALL config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
+         lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
+         hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
 
     !Sizing data array with dimensions stored in the configuration file
     ALLOCATE (LR_surface_temperature_data(1:lrtemp_x_size,&
@@ -59,47 +55,40 @@ CONTAINS
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(LR_temperature_file, LR_surface_temperature_id, LR_surface_temperature_data)
 
-    !Closing configuration file
-    CLOSE(fu)
-
   END SUBROUTINE inputs_temperature
 
   !________________________________________________________________________________________!
   !________________________________________________________________________________________!
 
-  SUBROUTINE inputs_topography(HR_elevation_file, HR_surface_elevation_id,&
-       HR_surface_elevation_data,hrtopo_x_size,&
-       hrtopo_y_size,hrtopo_t_size)
+  SUBROUTINE inputs_topography(HR_surface_elevation_data)
 
     IMPLICIT NONE
 
-    CHARACTER (LEN=256), INTENT(INOUT) :: HR_elevation_file
-    CHARACTER (LEN=20), INTENT(INOUT) :: HR_surface_elevation_id
     REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: HR_surface_elevation_data
-    INTEGER, INTENT(INOUT) :: hrtopo_x_size 
-    INTEGER, INTENT(INOUT) :: hrtopo_y_size
-    INTEGER, INTENT(INOUT) :: hrtopo_t_size
+
+    CHARACTER(LEN=100) :: config_namelist_blockname
+    INTEGER :: ios, fu
     
-    INTEGER :: ios,fu
-    LOGICAL :: input_checking
+    CHARACTER (LEN=256) :: LR_temperature_file
+    CHARACTER (LEN=20) :: LR_surface_temperature_id
+    INTEGER :: lrtemp_x_size 
+    INTEGER :: lrtemp_y_size
+    INTEGER :: lrtemp_t_size
 
-    NAMELIST/Topography/HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-         hrtopo_y_size, hrtopo_t_size
-
-    !Checking whether the configuration file exists or not
-    INQUIRE (file=Configuration_file, EXIST=input_checking)
-
-        IF (input_checking .eqv. (.FALSE.)) THEN
-            WRITE (*, *)"Error: input file", Configuration_file, "does not exist"
-         END IF
-
-    !Opening configuration file to access netCDF files paths (elevation data)
-    OPEN (ACTION='READ', FILE=Configuration_file, IOSTAT=ios, NEWUNIT=fu)
-        IF (ios /= 0) THEN
-            WRITE (*, *)"Error:",Configuration_file,"could not be opened"
-         END IF
-    READ (NML=Topography, IOSTAT=ios, UNIT=fu)
-
+    CHARACTER (LEN=256) :: HR_elevation_file
+    CHARACTER (LEN=20) :: HR_surface_elevation_id
+    INTEGER :: hrtopo_x_size 
+    INTEGER :: hrtopo_y_size
+    INTEGER :: hrtopo_t_size
+    
+    CHARACTER (LEN=256) :: ds_temperature_file
+    
+    config_namelist_blockname="Topography"
+    
+    CALL config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
+         lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
+         hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
+    
     !Sizing data array using dimensions stored in the configuration file
     ALLOCATE (HR_surface_elevation_data(1:hrtopo_x_size,&
          1:hrtopo_y_size,1:hrtopo_t_size))
@@ -108,7 +97,7 @@ CONTAINS
     CALL nc_read(HR_elevation_file, HR_surface_elevation_id, HR_surface_elevation_data)
 
     !Closing configuration file
-    CLOSE(fu)
+   ! CLOSE(fu)
 
   END SUBROUTINE inputs_topography
 

@@ -4,6 +4,7 @@ PROGRAM main
   !________________________________________________________________________________________!
 
   USE Parametrization
+  USE Support_functions
   USE Reading_Inputs
   USE Writing_Outputs
   USE Temperature
@@ -12,6 +13,13 @@ PROGRAM main
 
   IMPLICIT NONE
 
+  !________________________________________________________________________________________!
+  !Declaring support variables
+  !________________________________________________________________________________________!
+
+  CHARACTER(LEN=100) :: config_namelist_blockname
+  INTEGER :: ios, fu
+  
   !________________________________________________________________________________________!
   !Declaring input variables
   !________________________________________________________________________________________!  
@@ -44,9 +52,7 @@ PROGRAM main
   !Reading netCDF input files 
   !________________________________________________________________________________________!
   
-  CALL inputs_temperature(LR_temperature_file, LR_surface_temperature_id,&
-       LR_surface_temperature_data,lrtemp_x_size,&
-       lrtemp_y_size,lrtemp_t_size)
+  CALL inputs_temperature(LR_surface_temperature_data)
 
   PRINT *,"_______________________________"
   PRINT *,LR_surface_temperature_data(1,1,1)
@@ -57,8 +63,7 @@ PROGRAM main
 
   PRINT *,"______________________________"
   
-  CALL inputs_topography(HR_elevation_file, HR_surface_elevation_id,&
-       HR_surface_elevation_data,hrtopo_x_size,hrtopo_y_size,hrtopo_t_size)
+  CALL inputs_topography(HR_surface_elevation_data)
 
   PRINT *,HR_surface_elevation_data(71,61,1)
 
@@ -66,13 +71,17 @@ PROGRAM main
   !Writing netCDF output files 
   !________________________________________________________________________________________!
 
-  CALL downscaled_outputs_writing(ds_temperature_file)
-  
+  CALL downscaled_outputs_writing()
+
+  !________________________________________________________________________________________!
+  !Closing configuration file
+  !________________________________________________________________________________________!
+  CLOSE (fu)
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
-  
-  DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data)
+
+   DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data)
 
   !________________________________________________________________________________________!
   
