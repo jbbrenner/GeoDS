@@ -4,54 +4,30 @@ MODULE Support_functions
   !writing tasks.   
   !________________________________________________________________________________________!
 
-  USE Parametrization, only: Configuration_file
-
-  !________________________________________________________________________________________! 
+  USE Parametrization
 
   IMPLICIT NONE
-
-  !________________________________________________________________________________________!
-  !________________________________________________________________________________________!
-
+  
+  !Declaring local variables
+  LOGICAL, PRIVATE :: input_checking
+  
 CONTAINS
 
   !________________________________________________________________________________________!
-  !Subroutine used to automate access to configuration file. For each new blockname or variable written in the file,
-  !functions arguments have to be updated
+  !Subroutine used to automate access to configuration file
   !________________________________________________________________________________________!
 
-  SUBROUTINE config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
-         lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-       hrtopo_y_size,hrtopo_t_size, downscaled_climate_data_file, ios, fu)
+  SUBROUTINE config_file_access(ios, fu)
 
     IMPLICIT NONE
-
-    CHARACTER(LEN=100), INTENT(INOUT) :: config_namelist_blockname
-    
-    CHARACTER (LEN=256), INTENT(INOUT) :: LR_temperature_file
-    CHARACTER (LEN=20), INTENT(INOUT) :: LR_surface_temperature_id
-    INTEGER, INTENT(INOUT) :: lrtemp_x_size 
-    INTEGER, INTENT(INOUT) :: lrtemp_y_size
-    INTEGER, INTENT(INOUT) :: lrtemp_t_size
-
-    CHARACTER (LEN=256), INTENT(INOUT) :: HR_elevation_file
-    CHARACTER (LEN=20), INTENT(INOUT) :: HR_surface_elevation_id
-    INTEGER, INTENT(INOUT) :: hrtopo_x_size 
-    INTEGER, INTENT(INOUT) :: hrtopo_y_size
-    INTEGER, INTENT(INOUT) :: hrtopo_t_size
-    
-    CHARACTER (LEN=256), INTENT(INOUT) :: downscaled_climate_data_file
-
-    
+     
     INTEGER,INTENT(INOUT) :: ios,fu
     
-    LOGICAL :: input_checking
-
     NAMELIST/Temperature/LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
          lrtemp_y_size,lrtemp_t_size
     NAMELIST/Topography/HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
        hrtopo_y_size,hrtopo_t_size
-    NAMELIST/Downscaled_outputs/downscaled_climate_data_file
+    NAMELIST/Downscaled_outputs/downscaled_climate_data_file, xdim_ds_grid, ydim_ds_grid
 
 
     !Checking whether the configuration file exists or not
