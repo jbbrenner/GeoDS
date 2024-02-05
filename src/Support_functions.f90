@@ -10,6 +10,7 @@ MODULE Support_functions
   
   !Declaring local variables
   LOGICAL, PRIVATE :: input_checking
+  !________________________________________________________________________________________!
   
 CONTAINS
 
@@ -32,7 +33,7 @@ CONTAINS
 
     !Checking whether the configuration file exists or not
     INQUIRE (file=Configuration_file, EXIST=input_checking)
-    IF (input_checking .eqv. (.FALSE.)) THEN
+    IF (input_checking .EQV. (.FALSE.)) THEN
        WRITE (*, *)"Error: input file", Configuration_file, "does not exist"
     END IF
 
