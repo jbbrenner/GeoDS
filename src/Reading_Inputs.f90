@@ -21,8 +21,9 @@ CONTAINS
     IMPLICIT NONE
 
     REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: LR_surface_temperature_data
-    CHARACTER(LEN=100), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
+    
 
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
@@ -48,7 +49,7 @@ CONTAINS
     IMPLICIT NONE
 
     REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: HR_surface_elevation_data
-    CHARACTER(LEN=100), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
@@ -60,14 +61,19 @@ CONTAINS
     CALL config_file_access(ios, fu)
     
     !Sizing data array using dimensions stored in the configuration file
+    
     ALLOCATE (HR_surface_elevation_data(1:hrtopo_x_size,&
          1:hrtopo_y_size,1:hrtopo_t_size))
 
-    !Storing temperature data from LR netCDF file in array
-    CALL nc_read(HR_elevation_file, HR_surface_elevation_id, HR_surface_elevation_data)
 
+    IF (hrtopo_t_size .EQ. 1) THEN       
+     CALL nc_read(HR_elevation_file, HR_surface_elevation_id, HR_surface_elevation_data(:,:,1))
+   ELSE
+    !Storing temperature data from LR netCDF file in array
+     CALL nc_read(HR_elevation_file, HR_surface_elevation_id, HR_surface_elevation_data)
+   ENDIF
     !Closing configuration file
-   ! CLOSE(fu)
+   CLOSE(fu)
 
   END SUBROUTINE inputs_topography
 

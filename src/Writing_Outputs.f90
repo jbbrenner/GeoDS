@@ -21,8 +21,9 @@ CONTAINS
     IMPLICIT NONE
     
     DOUBLE PRECISION, ALLOCATABLE, INTENT(INOUT) :: x_ds_grid(:), y_ds_grid(:)
-    CHARACTER(LEN=100), INTENT(OUT) :: config_namelist_blockname
-    INTEGER, INTENT(INOUT):: ios, fu 
+    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    INTEGER, INTENT(INOUT) :: ios, fu
+
 
     !______________________________________________________________________________________!
     !Reading outputs variables in the configuration file
@@ -58,8 +59,10 @@ CONTAINS
 
     CALL nc_write_dim(downscaled_climate_data_file,"x",x=x_ds_grid,units="m")
     CALL nc_write_dim(downscaled_climate_data_file,"y",x=y_ds_grid,units="m")
-    call nc_write_dim(downscaled_climate_data_file,"time",x=1.0, &
+    CALL nc_write_dim(downscaled_climate_data_file,"time",x=1.0, &
          units="years",calendar="360_day", unlimited=.TRUE.)
+
+    CLOSE(fu)
     
   END SUBROUTINE downscaled_outputs_grid_init
 
