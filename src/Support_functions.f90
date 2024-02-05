@@ -22,7 +22,7 @@ CONTAINS
 
   SUBROUTINE config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
          lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-       hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
+       hrtopo_y_size,hrtopo_t_size, downscaled_climate_data_file, ios, fu)
 
     IMPLICIT NONE
 
@@ -40,7 +40,7 @@ CONTAINS
     INTEGER, INTENT(INOUT) :: hrtopo_y_size
     INTEGER, INTENT(INOUT) :: hrtopo_t_size
     
-    CHARACTER (LEN=256), INTENT(INOUT) :: ds_temperature_file
+    CHARACTER (LEN=256), INTENT(INOUT) :: downscaled_climate_data_file
 
     
     INTEGER,INTENT(INOUT) :: ios,fu
@@ -51,7 +51,7 @@ CONTAINS
          lrtemp_y_size,lrtemp_t_size
     NAMELIST/Topography/HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
        hrtopo_y_size,hrtopo_t_size
-    NAMELIST/Downscaled_outputs/ds_temperature_file
+    NAMELIST/Downscaled_outputs/downscaled_climate_data_file
 
 
     !Checking whether the configuration file exists or not

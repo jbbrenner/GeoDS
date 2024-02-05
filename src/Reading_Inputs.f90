@@ -40,13 +40,14 @@ CONTAINS
     INTEGER :: hrtopo_y_size
     INTEGER :: hrtopo_t_size
     
-    CHARACTER (LEN=256) :: ds_temperature_file
+    CHARACTER (LEN=256) :: downscaled_climate_data_file
+    
 
     config_namelist_blockname="Temperature"
 
     CALL config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
          lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-         hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
+         hrtopo_y_size,hrtopo_t_size, downscaled_climate_data_file, ios, fu)
 
     !Sizing data array with dimensions stored in the configuration file
     ALLOCATE (LR_surface_temperature_data(1:lrtemp_x_size,&
@@ -81,13 +82,13 @@ CONTAINS
     INTEGER :: hrtopo_y_size
     INTEGER :: hrtopo_t_size
     
-    CHARACTER (LEN=256) :: ds_temperature_file
+    CHARACTER (LEN=256) :: downscaled_climate_data_file
     
     config_namelist_blockname="Topography"
     
     CALL config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
          lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-         hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
+         hrtopo_y_size,hrtopo_t_size, downscaled_climate_data_file, ios, fu)
     
     !Sizing data array using dimensions stored in the configuration file
     ALLOCATE (HR_surface_elevation_data(1:hrtopo_x_size,&

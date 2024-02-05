@@ -45,8 +45,9 @@ PROGRAM main
   !Declaring output variables
   !________________________________________________________________________________________!  
 
-  !Temperature-related output variables
-  CHARACTER (LEN=256) :: ds_temperature_file
+  CHARACTER (LEN=256) :: downscaled_climate_data_file
+  DOUBLE PRECISION, ALLOCATABLE :: x_ds_grid(:), y_ds_grid(:)
+  INTEGER :: x_max, y_max
  
   !________________________________________________________________________________________!
   !Reading netCDF input files 
@@ -71,7 +72,7 @@ PROGRAM main
   !Writing netCDF output files 
   !________________________________________________________________________________________!
 
-  CALL downscaled_outputs_writing()
+  CALL downscaled_outputs_grid_init(x_ds_grid,y_ds_grid)
 
   !________________________________________________________________________________________!
   !Closing configuration file
@@ -81,7 +82,7 @@ PROGRAM main
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
 
-   DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data)
+  DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data,x_ds_grid,y_ds_grid)
 
   !________________________________________________________________________________________!
   

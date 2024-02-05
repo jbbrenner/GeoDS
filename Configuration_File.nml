@@ -35,7 +35,7 @@ hrtopo_t_size = 1							  !Dataset extent in the t temporal dimension for the se
 
 &Downscaled_outputs
 
-ds_temperature_file = "/home/jbrenner/These/GeoDS_Outputs/downscaled_temperature_Alpes_1km.nc"
+downscaled_climate_data_file = "/home/jbrenner/These/GeoDS_Outputs/downscaled_temperature_Alpes_1km.nc"
 /
 
 

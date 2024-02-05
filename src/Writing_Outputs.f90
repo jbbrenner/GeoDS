@@ -2,7 +2,7 @@ MODULE Writing_Outputs
   !________________________________________________________________________________________!
 
   USE Parametrization, only: Configuration_file
-  USE ncio, only: nc_create
+  USE ncio, only: nc_create, nc_write_attr, nc_write_dim
   USE Support_functions, only: config_file_access
 
   !________________________________________________________________________________________! 
@@ -11,13 +11,21 @@ MODULE Writing_Outputs
 
   !________________________________________________________________________________________!
   !________________________________________________________________________________________!
+  !Declaring local variables
+  INTEGER, PRIVATE :: i
 
+  
 CONTAINS
 
-  SUBROUTINE downscaled_outputs_writing()
+  !________________________________________________________________________________________!
+  !Subroutine generating a new empty netCDF file with high-resolution grid 
+  !________________________________________________________________________________________!
+  
+  SUBROUTINE downscaled_outputs_grid_init(x_ds_grid,y_ds_grid)
 
     IMPLICIT NONE
     
+    DOUBLE PRECISION, ALLOCATABLE, INTENT(INOUT) :: x_ds_grid(:), y_ds_grid(:)
     
     CHARACTER(LEN=100) :: config_namelist_blockname
     INTEGER :: ios, fu
@@ -34,7 +42,9 @@ CONTAINS
     INTEGER :: hrtopo_y_size
     INTEGER :: hrtopo_t_size
     
-    CHARACTER (LEN=256) :: ds_temperature_file
+    CHARACTER (LEN=256) :: downscaled_climate_data_file
+
+    
 
     !_________________________________________________________________________________!
     !Reading outputs variables in the configuration file
@@ -43,13 +53,39 @@ CONTAINS
     
     CALL config_file_access(config_namelist_blockname, LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
          lrtemp_y_size,lrtemp_t_size, HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-         hrtopo_y_size,hrtopo_t_size, ds_temperature_file, ios, fu)
+         hrtopo_y_size,hrtopo_t_size, downscaled_climate_data_file, ios, fu)
 
     !_________________________________________________________________________________!
-       
-    CALL nc_create(ds_temperature_file, overwrite=.TRUE.,netcdf4=.TRUE.)    
+    ALLOCATE (x_ds_grid(921))
+    ALLOCATE (y_ds_grid(521))
+
+    x_ds_grid(:)=0
+    y_ds_grid(:)=0
+
     
-  END SUBROUTINE downscaled_outputs_writing
+    x_ds_grid(1)=-443750.d0 
+    DO i=2,901
+       x_ds_grid(i)=x_ds_grid(i-1)+1000.d0
+    ENDDO
+
+    y_ds_grid(1)=-251600.d0
+    DO i=2,521
+       y_ds_grid(i)=y_ds_grid(i-1)+1000.d0
+    ENDDO
+  
+       
+    CALL nc_create(downscaled_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+
+    CALL nc_write_attr(downscaled_climate_data_file,"Title","High-resolution climate data grid")
+    CALL nc_write_attr(downscaled_climate_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
+
+    CALL nc_write_dim(downscaled_climate_data_file,"x",x=x_ds_grid,units="m")
+    CALL nc_write_dim(downscaled_climate_data_file,"y",x=y_ds_grid,units="m")
+    call nc_write_dim(downscaled_climate_data_file,"time",x=1.0, &
+         units="years",calendar="360_day", unlimited=.TRUE.)
+    
+  END SUBROUTINE downscaled_outputs_grid_init
 
   !________________________________________________________________________________________!
   !________________________________________________________________________________________!
