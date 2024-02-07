@@ -3,7 +3,7 @@ MODULE Writing_Outputs
 
   USE Parametrization
   USE ncio, only: nc_create, nc_write_attr, nc_write_dim
-  USE Support_functions, only: config_file_access
+  USE Support_functions, only: accessing_config_file
   
   IMPLICIT NONE
 
@@ -16,59 +16,97 @@ CONTAINS
   !Subroutine generating a new empty netCDF file with high-resolution grid 
   !________________________________________________________________________________________!
   
-  SUBROUTINE downscaled_outputs_grid_init(x_ds_grid,y_ds_grid, config_namelist_blockname,ios, fu)
+  SUBROUTINE initializing_downscaled_outputs_grid(ds_x_grid, ds_y_grid, ds_monthly_t_grid,&
+       ds_annual_t_grid, config_namelist_blockname,ios, fu)
 
     IMPLICIT NONE
     
-    DOUBLE PRECISION, ALLOCATABLE, INTENT(INOUT) :: x_ds_grid(:), y_ds_grid(:)
+    DOUBLE PRECISION, ALLOCATABLE, INTENT(INOUT) :: ds_x_grid(:), ds_y_grid(:), ds_monthly_t_grid(:), ds_annual_t_grid(:)
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
-
+    config_namelist_blockname="Global_inputs_variables"
+    CALL accessing_config_file(ios, fu)
+    
+    CLOSE(fu)
     !______________________________________________________________________________________!
     !Reading outputs variables in the configuration file
     !______________________________________________________________________________________!
     config_namelist_blockname="Downscaled_outputs"
-    
-    CALL config_file_access(ios, fu)
+    CALL accessing_config_file(ios, fu)
 
     !______________________________________________________________________________________!
-    ALLOCATE (x_ds_grid(921))
-    ALLOCATE (y_ds_grid(521))
-
-    x_ds_grid(:)=0
-    y_ds_grid(:)=0
-
     
-    x_ds_grid(1)=-443750.d0 
-    DO i=2,xdim_ds_grid
-       x_ds_grid(i)=x_ds_grid(i-1)+1000.d0
+    ALLOCATE (ds_x_grid(hr_topo_x_size))
+    ALLOCATE (ds_y_grid(hr_topo_y_size))
+
+    ds_x_grid(:) = 0
+    ds_y_grid(:) = 0
+    
+    ds_x_grid(1) = ds_x_grid_lower_bound
+    DO i = 2,hr_topo_x_size
+       ds_x_grid(i) = ds_x_grid(i-1) + spatial_resolution
     ENDDO
 
-    y_ds_grid(1)=-251600.d0
-    DO i=2,ydim_ds_grid
-       y_ds_grid(i)=y_ds_grid(i-1)+1000.d0
+    ds_y_grid(1) = ds_y_grid_lower_bound
+    DO i = 2, hr_topo_y_size
+       ds_y_grid(i) = ds_y_grid(i-1) + spatial_resolution
     ENDDO
-  
-       
-    CALL nc_create(downscaled_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
 
-    CALL nc_write_attr(downscaled_climate_data_file,"Title","High-resolution climate data grid")
-    CALL nc_write_attr(downscaled_climate_data_file,"Institution", &
+    !If monthly low resolution climate data are available, the algorithm generates monthly
+    !downscaled data as well. The user can choose in the configuration file whether annual
+    !dataset are wanted or not (= monthly data average over a year).
+    !If only annual low resolution climate data are available, the algorithm generates annual
+    !downscaled data.
+
+    IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
+       ALLOCATE (ds_monthly_t_grid(lr_climate_data_t_size))
+       CALL nc_create(ds_monthly_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+       CALL nc_write_attr(ds_monthly_climate_data_file,"Title","High-resolution climate data grid")
+       CALL nc_write_attr(ds_monthly_climate_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-    CALL nc_write_dim(downscaled_climate_data_file,"x",x=x_ds_grid,units="m")
-    CALL nc_write_dim(downscaled_climate_data_file,"y",x=y_ds_grid,units="m")
-    CALL nc_write_dim(downscaled_climate_data_file,"time",x=1.0, &
-         units="years",calendar="360_day", unlimited=.TRUE.)
+       CALL nc_write_dim(ds_monthly_climate_data_file,"x",x=ds_x_grid,units="m")
+       CALL nc_write_dim(ds_monthly_climate_data_file,"y",x=ds_y_grid,units="m")
+       CALL nc_write_dim(ds_monthly_climate_data_file,"time",x=ds_monthly_t_grid, &
+            units="months",calendar="360_day", unlimited=.TRUE.)
+       
+       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
+          ALLOCATE (ds_annual_t_grid(lr_climate_data_t_size/months_nbr))
+          CALL nc_create(ds_annual_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_climate_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-    CLOSE(fu)
+          CALL nc_write_dim(ds_annual_climate_data_file,"x",x=ds_x_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,"y",x=ds_y_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
+               units="years",calendar="360_day", unlimited=.TRUE.)
+       ENDIF
+       
+     ELSE
+          ALLOCATE (ds_annual_t_grid(lr_climate_data_t_size))
+          CALL nc_create(ds_annual_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_climate_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
+
+          CALL nc_write_dim(ds_annual_climate_data_file,"x",x=ds_x_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,"y",x=ds_y_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
+               units="years",calendar="360_day", unlimited=.TRUE.)
+     ENDIF
     
-  END SUBROUTINE downscaled_outputs_grid_init
+       
+     CLOSE(fu)
+    
+  END SUBROUTINE initializing_downscaled_outputs_grid
 
   !________________________________________________________________________________________!
   !Subroutine writing downscaled climate data in the netCDF file generated by the downscaled_outputs_grid_init subroutine
   !________________________________________________________________________________________!
-  
 
+
+
+  
 END MODULE Writing_Outputs

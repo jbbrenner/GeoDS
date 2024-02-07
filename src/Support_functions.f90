@@ -18,21 +18,24 @@ CONTAINS
   !Subroutine used to automate access to configuration file
   !________________________________________________________________________________________!
 
-  SUBROUTINE config_file_access(ios, fu)
+  SUBROUTINE accessing_config_file(ios, fu)
 
     IMPLICIT NONE
      
     INTEGER,INTENT(INOUT) :: ios,fu
-    
-    NAMELIST/Temperature/LR_temperature_file, LR_surface_temperature_id,lrtemp_x_size,&
-         lrtemp_y_size,lrtemp_t_size
-    NAMELIST/Topography/HR_elevation_file, HR_surface_elevation_id,hrtopo_x_size,&
-       hrtopo_y_size,hrtopo_t_size
-    NAMELIST/Downscaled_outputs/downscaled_climate_data_file, xdim_ds_grid, ydim_ds_grid
+
+    NAMELIST/Global_inputs_variables/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
+         lr_climate_data_y_size, lr_climate_data_t_size
+    NAMELIST/Temperature/lr_surface_temperature_id
+    NAMELIST/Topography/hr_elevation_file, hr_surface_elevation_id, hr_topo_x_size,&
+       hr_topo_y_size, hr_topo_t_size
+    NAMELIST/Downscaled_outputs/ds_monthly_climate_data_file, ds_annual_climate_data_file,&
+         ds_x_grid_lower_bound, ds_y_grid_lower_bound,&
+         spatial_resolution, ds_annual_data_generation
 
 
     !Checking whether the configuration file exists or not
-    INQUIRE (file=Configuration_file, EXIST=input_checking)
+    INQUIRE (file = Configuration_file, EXIST = input_checking)
     IF (input_checking .EQV. (.FALSE.)) THEN
        WRITE (*, *)"Error: input file", Configuration_file, "does not exist"
     END IF
@@ -40,28 +43,36 @@ CONTAINS
     !Opening configuration file and reading variables depending on the block explored
     !by the calling subroutine
     SELECT CASE(config_namelist_blockname)
-    CASE ("Temperature")
-       OPEN (NEWUNIT=fu, ACTION='READ', FILE=Configuration_file, IOSTAT=ios)
+       
+    CASE ("Global_inputs_variables")
+       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
-            WRITE (*, *)"Error:",Configuration_file,"could not be opened"
+            WRITE (*, *)"Error:", Configuration_file, "could not be opened"
        END IF
-       READ (UNIT=fu, NML=Temperature, IOSTAT=ios)
+       READ (UNIT = fu, NML = Global_inputs_variables, IOSTAT = ios)
+       PRINT*, "Configuration file : accessing general inputs variables"
+    CASE ("Temperature")
+       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
+       IF (ios /= 0) THEN
+            WRITE (*, *)"Error:", Configuration_file, "could not be opened"
+       END IF
+       READ (UNIT = fu, NML = Temperature, IOSTAT = ios)
        PRINT*, "Configuration file : accessing temperature-related variables"
        
     CASE ("Topography")
-       OPEN (NEWUNIT=fu, ACTION='READ', FILE=Configuration_file, IOSTAT=ios)
+       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
-            WRITE (*, *)"Error:",Configuration_file,"could not be opened"
+            WRITE (*, *)"Error:",Configuration_file, "could not be opened"
        END IF
-       READ (UNIT=fu, NML=Topography, IOSTAT=ios)
+       READ (UNIT = fu, NML = Topography, IOSTAT = ios)
        PRINT*, "Configuration file : accessing topography-related variables"
        
     CASE ("Downscaled_outputs")
-       OPEN (NEWUNIT=fu, ACTION='READ', FILE=Configuration_file, IOSTAT=ios)
+       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
-            WRITE (*, *)"Error:",Configuration_file,"could not be opened"
+            WRITE (*, *)"Error:", Configuration_file, "could not be opened"
        END IF
-       READ (UNIT=fu, NML=Downscaled_outputs, IOSTAT=ios)
+       READ (UNIT = fu, NML = Downscaled_outputs, IOSTAT = ios)
        PRINT*, "Configuration file : accessing outputs-related variables"
 
     CASE DEFAULT
@@ -69,7 +80,7 @@ CONTAINS
        
     END SELECT
            
-  END SUBROUTINE config_file_access
+  END SUBROUTINE accessing_config_file
 
   !________________________________________________________________________________________!
   !________________________________________________________________________________________!

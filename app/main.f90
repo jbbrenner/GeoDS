@@ -4,49 +4,53 @@ PROGRAM main
   !________________________________________________________________________________________!
 
   USE Parametrization
-  USE Support_functions
-  USE Reading_Inputs
-  USE Writing_Outputs
-  USE Temperature
-  USE ncio
+  USE Reading_Inputs, only: reading_temperature_inputs, reading_topography_inputs
+  USE Writing_Outputs, only: initializing_downscaled_outputs_grid
+  USE Temperature, only: Test
   !________________________________________________________________________________________!
 
-  IMPLICIT NONE 
+  IMPLICIT NONE
+
   !________________________________________________________________________________________!
   !Reading netCDF input files 
   !________________________________________________________________________________________!
   
-  CALL inputs_temperature(LR_surface_temperature_data, config_namelist_blockname,ios, fu)
+  CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
 
   PRINT *,"_______________________________"
-  PRINT *,LR_surface_temperature_data(1,1,1)
+  PRINT *,lr_surface_temperature_data(1,1,1)
 
-  CALL Test(LR_surface_temperature_data)
+  CALL Test(lr_surface_temperature_data)
 
-  PRINT *,LR_surface_temperature_data(1,1,1)
+  PRINT *,lr_surface_temperature_data(1,1,1)
 
   PRINT *,"______________________________"
   
-  CALL inputs_topography(HR_surface_elevation_data, config_namelist_blockname, ios, fu)
+  CALL reading_topography_inputs(hr_surface_elevation_data, config_namelist_blockname, ios, fu)
 
-  PRINT *,HR_surface_elevation_data(71,61,1)
+  PRINT *,hr_surface_elevation_data(71,61,1)
 
   !________________________________________________________________________________________!
   !Writing netCDF output files 
   !________________________________________________________________________________________!
 
-  CALL downscaled_outputs_grid_init(x_ds_grid,y_ds_grid, config_namelist_blockname, ios, fu)
+  CALL initializing_downscaled_outputs_grid(ds_x_grid,ds_y_grid,ds_monthly_t_grid,&
+       ds_annual_t_grid, config_namelist_blockname, ios, fu)
 
-  !________________________________________________________________________________________!
-  !Closing configuration file
-  !________________________________________________________________________________________!
-  !CLOSE (fu)
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
 
-  DEALLOCATE(LR_surface_temperature_data,HR_surface_elevation_data,x_ds_grid,y_ds_grid)
-
+  DEALLOCATE(lr_surface_temperature_data,hr_surface_elevation_data, ds_x_grid, ds_y_grid)
+  
+  IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
+     DEALLOCATE(ds_monthly_t_grid)
+     IF (ds_annual_data_generation .EQV. .TRUE.) THEN
+        DEALLOCATE(ds_annual_t_grid)
+     ENDIF
+  ELSE
+     DEALLOCATE(ds_annual_t_grid)
+  ENDIF
   !________________________________________________________________________________________!
   
   WRITE(*,*)"Closing program"
