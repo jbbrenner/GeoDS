@@ -1,28 +1,28 @@
-MODULE Temperature
+MODULE Temperature_downscaling
 
+  !____________________________________________________________________________!
   
-  !-----------------------------------------------------------------------!
   USE Parametrization
-  !-----------------------------------------------------------------------! 
+  !____________________________________________________________________________!
+ 
 
   IMPLICIT NONE
 
-   
-
-  !-----------------------------------------------------------------------! 
 CONTAINS
 
-  SUBROUTINE Test(LR_surface_temperature_data)
+  !____________________________________________________________________________!
+  SUBROUTINE applying_lapse_rate_correction(lr_surface_temperature_data)
     
     IMPLICIT NONE
 
-    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: LR_surface_temperature_data
+    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
 
-    LR_surface_temperature_data(:,:,:)=lapse_rate*LR_surface_temperature_data(:,:,:)
+    lr_surface_temperature_data(:,:,:) = lapse_rate * lr_surface_temperature_data(:,:,:)
 
     
 
-  END SUBROUTINE Test
+  END SUBROUTINE applying_lapse_rate_correction
  
-  !-----------------------------------------------------------------------! 
-  END MODULE Temperature
+   !____________________________________________________________________________!
+
+  END MODULE Temperature_downscaling

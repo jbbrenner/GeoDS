@@ -7,5 +7,5 @@ src/Parametrization.o : src/Parametrization.f90
 src/Reading_Inputs.o : src/Reading_Inputs.f90 src/Support_functions.o src/Parametrization.o 
 src/Support_functions.o : src/Support_functions.f90 src/Parametrization.o 
 src/Temperature.o : src/Temperature.f90 src/Parametrization.o 
-src/Writing_Outputs.o : src/Writing_Outputs.f90 src/Support_functions.o src/Parametrization.o 
+src/Writing_Outputs.o : src/Writing_Outputs.f90 src/Temperature.o src/Support_functions.o src/Parametrization.o 
 src/main.o : src/main.f90 src/Temperature.o src/Writing_Outputs.o src/Reading_Inputs.o src/Parametrization.o 

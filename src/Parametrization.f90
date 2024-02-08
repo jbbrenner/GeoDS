@@ -41,10 +41,10 @@ MODULE Parametrization
   !Output variables
   !________________________________________________________________________________________!
 
-  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file
-  CHARACTER (LEN=str_len) :: ds_annual_climate_data_file
-  DOUBLE PRECISION, ALLOCATABLE :: ds_x_grid(:), ds_y_grid(:), ds_monthly_t_grid(:), ds_annual_t_grid(:)
+  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file
+  DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
   LOGICAL :: ds_annual_data_generation
   !________________________________________________________________________________________!
   

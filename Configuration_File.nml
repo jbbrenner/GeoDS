@@ -9,10 +9,10 @@
 &Global_inputs_variables
 
 lr_monthly_climate_data_availibility = .TRUE.				     !Variable used to check whether monthly climate input data are available or not
-lr_climate_data_file = "/home/jbrenner/These/Cartes/atmmmyl004000.nc" !Path of the low resolution temperature input netCDF file (GCM's outputs)
-lr_climate_data_x_size = 64                                                   !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-lr_climate_data_y_size = 32                                                   !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
-lr_climate_data_t_size = 1200                                                 !Dataset extent in the t temporal dimension for the selected variable
+lr_climate_data_file = "/home/jbrenner/These/Cartes/lr_surf_temp.nc"  	     !Path of the low resolution temperature input netCDF file (GCM's outputs)
+lr_climate_data_x_size = 71                                                  !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+lr_climate_data_y_size = 61                                                  !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+lr_climate_data_t_size = 1200                                                !Dataset extent in the t temporal dimension for the selected variable
 /
 
 !_______________________________________________________!
