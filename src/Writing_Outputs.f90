@@ -10,7 +10,7 @@ MODULE Writing_Outputs
 
   !Declaring local variables
   INTEGER, PRIVATE :: i, j
-  INTEGER, PRIVATE :: k=0
+  INTEGER, PRIVATE :: k = 0
 
 CONTAINS
 
@@ -31,14 +31,11 @@ CONTAINS
     CALL accessing_config_file(ios, fu)
     
     CLOSE(fu)
-    !______________________________________________________________________________________!
+    
     !Reading outputs variables in the configuration file
-    !______________________________________________________________________________________!
     config_namelist_blockname="Downscaled_outputs"
     CALL accessing_config_file(ios, fu)
-
-    !______________________________________________________________________________________!
-    
+   
     ALLOCATE (ds_x_grid(hr_topo_x_size))
     ALLOCATE (ds_y_grid(hr_topo_y_size))
 
@@ -59,8 +56,7 @@ CONTAINS
     !downscaled data as well. The user can choose in the configuration file whether annual
     !dataset are wanted or not (= monthly data average over a year).
     !If only annual low resolution climate data are available, the algorithm generates annual
-    !downscaled data.
-
+    !downscaled data
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
        ALLOCATE (ds_monthly_t_grid(lr_climate_data_t_size))
        CALL nc_create(ds_monthly_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
@@ -112,16 +108,21 @@ CONTAINS
     IMPLICIT NONE
     
     CHARACTER (LEN=str_len), INTENT(IN) :: ds_monthly_climate_data_file, ds_annual_climate_data_file
-    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: ds_monthly_climate_data,&
          ds_annual_climate_data
 
+
+    !Downscaled climate data arrays are sized to fit the high resolution Digital Elevation Model dataset structure (target grid)
+    !If monthly low resolution climate data are available, the annual downscaled climate dataset is built as the average of the
+    !monthly downscaled climate dataset on 12 months time span
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
        
       ALLOCATE (ds_monthly_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:lr_climate_data_t_size))
       ds_monthly_climate_data(:,:,:) = 0
-      CALL applying_lapse_rate_correction(lr_surface_temperature_data)
-      ds_monthly_climate_data(:,:,:) = lr_surface_temperature_data
+      CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, hr_surface_temperature_data)
+      
+      ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
       CALL nc_write(ds_monthly_climate_data_file, "Surface_temperature", ds_monthly_climate_data(:,:,:),&
            dim1="x", dim2="y", dim3="time")
               
@@ -131,7 +132,8 @@ CONTAINS
          ds_annual_climate_data(:,:,:) = 0
          DO WHILE (k<lr_climate_data_t_size/months_nbr)
             DO j=1, months_nbr
-               ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1) + lr_surface_temperature_data(:,:,k*months_nbr + j)
+               ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1) + &
+                    hr_surface_temperature_data(:,:,k*months_nbr + j)
                
             ENDDO
             ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1)/months_nbr
@@ -146,17 +148,14 @@ CONTAINS
          ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:lr_climate_data_t_size))
          ds_annual_climate_data(:,:,:) = 0
-         CALL applying_lapse_rate_correction(lr_surface_temperature_data)
+         CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, hr_surface_temperature_data)
          ds_monthly_climate_data(:,:,:) = lr_surface_temperature_data
          CALL nc_write(ds_annual_climate_data_file, "Surface_temperature", ds_annual_climate_data(:,:,:),&
            dim1="x", dim2="y", dim3="time")
     ENDIF
-
-     
-    
+   
   END SUBROUTINE writing_downscaled_data_outputs
-  
-
+  !________________________________________________________________________________________________________!
 
   
 END MODULE Writing_Outputs

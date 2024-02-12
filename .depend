@@ -1,4 +1,4 @@
-FOBJ=src/Parametrization.o src/Reading_Inputs.o src/Support_functions.o src/Temperature.o src/Writing_Outputs.o src/main.o 
+FOBJ=src/Parametrization.o src/Reading_Inputs.o src/Support_functions.o src/Temperature_downscaling.o src/Topographic_parameters_computation.o src/Writing_Outputs.o src/main.o 
 
 GeoDS.x: $(FOBJ)
 	$(FC) -o $@ $(FFLAGS) $(LDFLAGS) $(FOBJ) $(LIBS)
@@ -6,6 +6,7 @@ GeoDS.x: $(FOBJ)
 src/Parametrization.o : src/Parametrization.f90 
 src/Reading_Inputs.o : src/Reading_Inputs.f90 src/Support_functions.o src/Parametrization.o 
 src/Support_functions.o : src/Support_functions.f90 src/Parametrization.o 
-src/Temperature.o : src/Temperature.f90 src/Parametrization.o 
-src/Writing_Outputs.o : src/Writing_Outputs.f90 src/Temperature.o src/Support_functions.o src/Parametrization.o 
-src/main.o : src/main.f90 src/Temperature.o src/Writing_Outputs.o src/Reading_Inputs.o src/Parametrization.o 
+src/Temperature_downscaling.o : src/Temperature_downscaling.f90 src/Topographic_parameters_computation.o src/Parametrization.o 
+src/Topographic_parameters_computation.o : src/Topographic_parameters_computation.f90 src/Parametrization.o 
+src/Writing_Outputs.o : src/Writing_Outputs.f90 src/Temperature_downscaling.o src/Support_functions.o src/Parametrization.o 
+src/main.o : src/main.f90 src/Writing_Outputs.o src/Reading_Inputs.o src/Parametrization.o 

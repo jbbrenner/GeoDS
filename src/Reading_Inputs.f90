@@ -3,7 +3,7 @@ MODULE Reading_Inputs
   !________________________________________________________________________________________!
 
   USE Parametrization
-  USE ncio, ONLY: nc_read, nc_size
+  USE ncio, ONLY: nc_read
   USE Support_functions, only: accessing_config_file
   
   IMPLICIT NONE
@@ -20,7 +20,7 @@ CONTAINS
 
     IMPLICIT NONE
 
-    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
     
@@ -45,11 +45,12 @@ CONTAINS
   !________________________________________________________________________________________!
   !________________________________________________________________________________________!
 
-  SUBROUTINE reading_topography_inputs(hr_surface_elevation_data, config_namelist_blockname, ios, fu)
+  SUBROUTINE reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, config_namelist_blockname, ios, fu)
 
     IMPLICIT NONE
 
-    REAL, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: hr_surface_elevation_data
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_elevation_data, &
+         hr_surface_elevation_data
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
@@ -62,14 +63,17 @@ CONTAINS
     CALL accessing_config_file(ios, fu)
     
     !Sizing data array using dimensions stored in the configuration file
-    
-    ALLOCATE (HR_surface_elevation_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:hr_topo_t_size))
+
+    ALLOCATE (lr_surface_elevation_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:hr_topo_t_size))
+    ALLOCATE (hr_surface_elevation_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:hr_topo_t_size))
 
 
-    IF (hr_topo_t_size .EQ. 1) THEN       
+    IF (hr_topo_t_size .EQ. 1) THEN
+       CALL nc_read(lr_elevation_file, lr_surface_elevation_id, lr_surface_elevation_data(:,:,1))
        CALL nc_read(hr_elevation_file, hr_surface_elevation_id, hr_surface_elevation_data(:,:,1))
     ELSE
-    !Storing temperature data from LR netCDF file in array
+       !Storing temperature data from LR netCDF file in array
+       CALL nc_read(lr_elevation_file, lr_surface_elevation_id, lr_surface_elevation_data)
        CALL nc_read(hr_elevation_file, hr_surface_elevation_id, hr_surface_elevation_data)
     ENDIF
   

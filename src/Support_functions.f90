@@ -27,7 +27,7 @@ CONTAINS
     NAMELIST/Global_inputs_variables/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
          lr_climate_data_y_size, lr_climate_data_t_size
     NAMELIST/Temperature/lr_surface_temperature_id
-    NAMELIST/Topography/hr_elevation_file, hr_surface_elevation_id, hr_topo_x_size,&
+    NAMELIST/Topography/lr_elevation_file, lr_surface_elevation_id, hr_elevation_file, hr_surface_elevation_id, hr_topo_x_size,&
        hr_topo_y_size, hr_topo_t_size
     NAMELIST/Downscaled_outputs/ds_monthly_climate_data_file, ds_annual_climate_data_file,&
          ds_x_grid_lower_bound, ds_y_grid_lower_bound,&
