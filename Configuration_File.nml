@@ -10,8 +10,8 @@
 
 lr_monthly_climate_data_availibility = .TRUE.				     !Variable used to check whether monthly climate input data are available or not
 lr_climate_data_file = "/home/jbrenner/These/Cartes/lr_surf_temp.nc"  	     !Path of the low resolution temperature input netCDF file (GCM's outputs). Note that the input data must be first interpolated on the high resolution elevation grid
-lr_climate_data_x_size = 71                                                  !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-lr_climate_data_y_size = 61                                                  !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+lr_climate_data_x_size = 90                                                  !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+lr_climate_data_y_size = 52                                                  !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
 lr_climate_data_t_size = 1200                                                !Dataset extent in the t temporal dimension for the selected variable
 /
 
@@ -29,12 +29,14 @@ lr_surface_temperature_id = "ts"				     !Name of the variable to be read in the
 
 &Topography
 
-lr_elevation_file = "/home/jbrenner/These/Cartes/lr_elevation_file.nc" !Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
-lr_surface_elevation_id = "elevation"
-hr_elevation_file = "/home/jbrenner/These/Cartes/Topographie_Test_1km.nc" !Path of the high resolution elevation input netCDF file (GCM's outputs)
-hr_surface_elevation_id  = "S"						  !Name of the variable to be read in the input file
-hr_topo_x_size = 71							  !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-hr_topo_y_size = 61							  !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+lr_topographic_parameters = "/home/jbrenner/These/Cartes/LR_Topographic_Parameters.nc" !Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
+lr_surface_elevation_id = "S"
+lr_topographic_insolation_id = "topographic_daily_insolation"
+hr_topographic_parameters = "/home/jbrenner/These/Cartes/HR_Topographic_Parameters.nc" !Path of the high resolution elevation input netCDF file (GCM's outputs)
+hr_surface_elevation_id = "S"						  !Name of the variable to be read in the input file
+hr_topographic_insolation_id = "topographic_daily_insolation"
+hr_topo_x_size = 90							  !Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+hr_topo_y_size = 52							  !Dataset extent in the y spatial dimension (y/latitude) for the selected variable
 hr_topo_t_size = 1							  !Dataset extent in the t temporal dimension for the selected variable (for topography, dim(t)=1)
 /
 

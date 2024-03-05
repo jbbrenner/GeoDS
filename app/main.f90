@@ -13,15 +13,15 @@ PROGRAM main
   !________________________________________________________________________________________!
   !Reading netCDF input files 
   !________________________________________________________________________________________!
-  
+
   CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
 
   PRINT *,"_______________________________"
   PRINT *,lr_surface_temperature_data(1,1,1)
   PRINT *,"______________________________"
   
-  CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, &
-       config_namelist_blockname, ios, fu)
+  CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
+       hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
 
   PRINT *,hr_surface_elevation_data(71,61,1)
   !________________________________________________________________________________________!
@@ -46,8 +46,9 @@ PROGRAM main
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
 
-  DEALLOCATE(lr_surface_temperature_data, lr_surface_elevation_data, hr_surface_elevation_data, &
-       elevation_anomalies_data, hr_surface_temperature_data, ds_x_grid, ds_y_grid)
+  DEALLOCATE(lr_surface_temperature_data, hr_surface_temperature_data, lr_surface_elevation_data, &
+       hr_surface_elevation_data, elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
+       topographic_insolation_anomalies_data, ds_x_grid, ds_y_grid)
   
   IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
      DEALLOCATE(ds_monthly_t_grid, ds_monthly_climate_data)

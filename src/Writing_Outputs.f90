@@ -117,15 +117,15 @@ CONTAINS
     !If monthly low resolution climate data are available, the annual downscaled climate dataset is built as the average of the
     !monthly downscaled climate dataset on 12 months time span
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
-       
+        
       ALLOCATE (ds_monthly_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:lr_climate_data_t_size))
       ds_monthly_climate_data(:,:,:) = 0
       CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, hr_surface_temperature_data)
-      
+     
       ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
       CALL nc_write(ds_monthly_climate_data_file, "Surface_temperature", ds_monthly_climate_data(:,:,:),&
            dim1="x", dim2="y", dim3="time")
-              
+             
       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
          ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:lr_climate_data_t_size/months_nbr))

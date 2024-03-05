@@ -7,7 +7,7 @@ MODULE Temperature_downscaling
   !____________________________________________________________________________!
   
   USE Parametrization
-  USE Topographic_parameters_computation, only: computing_elevation_anomalies
+  USE Topographic_parameters_computation, only: computing_elevation_anomalies, computing_insolation_anomalies
   !____________________________________________________________________________!
 
   IMPLICIT NONE
@@ -27,6 +27,8 @@ CONTAINS
 
     !Computing elevation anomalies between low resolution grid and high resolution grid
     CALL computing_elevation_anomalies(lr_surface_elevation_data, hr_surface_elevation_data, elevation_anomalies_data)
+    CALL computing_insolation_anomalies(lr_topographic_insolation_data, hr_topographic_insolation_data, &
+       topographic_insolation_anomalies_data)
 
     ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
     hr_surface_temperature_data(:,:,:) = 0 
@@ -35,7 +37,9 @@ CONTAINS
     !a correction of the GCM's outputs. A loop is used to overcome the problem of dimensions inequality between climate
     !data arrays and topographic data arrays
         DO i=1, lr_climate_data_t_size
-           hr_surface_temperature_data(:,:,i) = lr_surface_temperature_data(:,:,i) + lapse_rate * elevation_anomalies_data(:,:,1)
+           hr_surface_temperature_data(:,:,i) = lr_surface_temperature_data(:,:,i) + &
+                lapse_rate * elevation_anomalies_data(:,:,1) + &
+                topographic_insolation_anomalies_data(:,:,1)
         ENDDO       
 
   END SUBROUTINE applying_lapse_rate_correction

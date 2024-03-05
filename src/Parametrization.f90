@@ -29,9 +29,12 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_temperature_data
 
   !Topography-related input variables
-  CHARACTER (LEN=str_len) :: lr_elevation_file, lr_surface_elevation_id, hr_elevation_file, hr_surface_elevation_id
+  CHARACTER (LEN=str_len) :: lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
+       hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id
   INTEGER :: hr_topo_x_size, hr_topo_y_size, hr_topo_t_size
-  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_elevation_data, hr_surface_elevation_data, elevation_anomalies_data
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_elevation_data, hr_surface_elevation_data, &
+       elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
+       topographic_insolation_anomalies_data
   !________________________________________________________________________________________!
   !Output variables
   !________________________________________________________________________________________!
