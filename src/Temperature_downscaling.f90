@@ -38,8 +38,8 @@ CONTAINS
     !data arrays and topographic data arrays
         DO i=1, lr_climate_data_t_size
            hr_surface_temperature_data(:,:,i) = lr_surface_temperature_data(:,:,i) + &
-                lapse_rate * elevation_anomalies_data(:,:,1) + &
-                topographic_insolation_anomalies_data(:,:,1)
+                lambda * elevation_anomalies_data(:,:,1) + &
+                alpha * topographic_insolation_anomalies_data(:,:,1)
         ENDDO       
 
   END SUBROUTINE applying_lapse_rate_correction

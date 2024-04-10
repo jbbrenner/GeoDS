@@ -25,7 +25,7 @@ CONTAINS
     INTEGER,INTENT(INOUT) :: ios,fu
 
     NAMELIST/Global_inputs_variables/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
-         lr_climate_data_y_size, lr_climate_data_t_size
+         lr_climate_data_y_size, lr_climate_data_t_size, lambda, alpha
     NAMELIST/Temperature/lr_surface_temperature_id
     NAMELIST/Topography/lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
     hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id, hr_topo_x_size,&
