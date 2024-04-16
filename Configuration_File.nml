@@ -4,8 +4,8 @@
     lr_climate_data_x_size = 90
     lr_climate_data_y_size = 52
     lr_climate_data_t_size = 1200
-    lambda = 1.5
-    alpha = 0.8
+    lambda = 0.
+    alpha = 0.0001
 /
 
 &temperature

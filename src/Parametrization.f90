@@ -15,7 +15,8 @@ MODULE Parametrization
   CHARACTER (LEN=str_len) :: Configuration_file="/home/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
-  DOUBLE PRECISION, PARAMETER :: lapse_rate = 0.006 !°C.m⁻¹
+  DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
+  !DOUBLE PRECISION, PARAMETER :: lapse_rate = 0.006 !°C.m⁻¹
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!

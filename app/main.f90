@@ -17,13 +17,10 @@ PROGRAM main
   CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
 
   PRINT *,"_______________________________"
-  PRINT *,lr_surface_temperature_data(1,1,1)
-  PRINT *,"______________________________"
   
   CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
        hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
 
-  PRINT *,hr_surface_elevation_data(71,61,1)
   !________________________________________________________________________________________!
   !Writing netCDF output files 
   !________________________________________________________________________________________!
@@ -34,14 +31,19 @@ PROGRAM main
   CALL writing_downscaled_data_outputs(ds_monthly_climate_data_file, ds_annual_climate_data_file,&
        lr_surface_temperature_data, ds_monthly_climate_data, ds_annual_climate_data)
 
-  PRINT*, "lr_temperature", (sum(lr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size)
-  PRINT*, "max_lr_temp", (MAXVAL(lr_surface_temperature_data))
-  PRINT*, "hr_temperature", (sum(hr_surface_temperature_data))
-  PRINT*, "max_hr_temperature",(MAXVAL(hr_surface_temperature_data))
-  PRINT*, "hr_temperature", (sum(hr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size)
-  PRINT*, "mois : ", sum(ds_monthly_climate_data)
-  PRINT*,"annees : ", sum(ds_annual_climate_data)*12
-
+  PRINT*, "Low resolution mean temperature :",&
+       (sum(lr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size)&
+       - T_conv
+  PRINT*, "Low resolution maximum temperature :", (MAXVAL(lr_surface_temperature_data)) - T_conv
+  PRINT*, "Low resolution maximum temperature :",(MINVAL(lr_surface_temperature_data)) - T_conv
+  PRINT*, "High resolution mean temperature :",&
+       (sum(hr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size)&
+       - T_conv
+  PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
+  PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
+  !PRINT*, "mois : ", sum(ds_monthly_climate_data)
+  !PRINT*,"annees : ", sum(ds_annual_climate_data)*12
+  PRINT*,"_______________________________"
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
