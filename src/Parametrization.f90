@@ -45,6 +45,7 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_surface_temperature_data
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_surface_temperature_difference
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
   LOGICAL :: ds_annual_data_generation
   !________________________________________________________________________________________!

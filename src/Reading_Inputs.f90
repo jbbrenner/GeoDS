@@ -39,6 +39,12 @@ CONTAINS
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data)
     
+
+ !PRINT*, "________________ERA_____________________________"
+ !print*, lr_surface_temperature_data(1,1,1)
+ !print*, lr_surface_temperature_data(1,1,2)
+ !print*, '_________________________________________________'
+    
   END SUBROUTINE reading_temperature_inputs
   
   !________________________________________________________________________________________!
@@ -82,7 +88,15 @@ CONTAINS
        CALL nc_read(lr_topographic_parameters, lr_topographic_insolation_id, lr_topographic_insolation_data)
        CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data)
     ENDIF
-  
+
+   ! PRINT*, "_______TEST_______"
+   ! PRINT*, lr_topographic_insolation_data(1,1,1)
+   ! PRINT*, lr_topographic_insolation_data(1,1,2)
+   ! PRINT*, lr_topographic_insolation_data(1,1,7)
+   ! Print*, lr_surface_elevation_data(1,1,1)
+   ! print*, lr_surface_elevation_data(1,1,7)
+   ! print*, hr_topographic_insolation_data(1,1,1)
+   ! print*, hr_topographic_insolation_data(1,1,7)
     !Closing configuration file
    CLOSE(fu)
 

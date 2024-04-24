@@ -1,11 +1,11 @@
 &global_inputs_variables
     lr_monthly_climate_data_availibility = .true.
-    lr_climate_data_file = '/home/jbrenner/These/Cartes/LR_surf_temp.nc'
-    lr_climate_data_x_size = 90
-    lr_climate_data_y_size = 52
-    lr_climate_data_t_size = 1200
-    lambda = 0.
-    alpha = 0.0001
+    lr_climate_data_file = '/home/jbrenner/These/Cartes/ERA5_preprocessed/ERA5_ts_geobil_whole_period.nc'
+    lr_climate_data_x_size = 901
+    lr_climate_data_y_size = 521
+    lr_climate_data_t_size = 60
+    lambda = 0.0
+    alpha = 0.0005
 /
 
 &temperature
@@ -13,15 +13,15 @@
 /
 
 &topography
-    lr_topographic_parameters = '/home/jbrenner/These/Cartes/LR_Topographic_Parameters.nc'
+    lr_topographic_parameters = '/home/jbrenner/These/Cartes/ERA5_preprocessed/LR_Topographic_Parameters.nc'
     lr_surface_elevation_id = 'S'
     lr_topographic_insolation_id = 'topographic_daily_insolation'
-    hr_topographic_parameters = '/home/jbrenner/These/Cartes/HR_Topographic_Parameters.nc'
+    hr_topographic_parameters = '/home/jbrenner/These/Cartes/ERA5_preprocessed/HR_Topographic_Parameters.nc'
     hr_surface_elevation_id = 'S'
     hr_topographic_insolation_id = 'topographic_daily_insolation'
-    hr_topo_x_size = 90
-    hr_topo_y_size = 52
-    hr_topo_t_size = 1
+    hr_topo_x_size = 901
+    hr_topo_y_size = 521
+    hr_topo_t_size = 12
 /
 
 &downscaled_outputs

@@ -41,14 +41,16 @@ PROGRAM main
        - T_conv
   PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
   PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
-  !PRINT*, "mois : ", sum(ds_monthly_climate_data)
-  !PRINT*,"annees : ", sum(ds_annual_climate_data)*12
+  !PRINT*, MAXLOC(hr_surface_temperature_data)
+  PRINT*, "July HR max elevdif temperature :", hr_surface_temperature_data(586,60,7)
+  PRINT*, "July LR max elevdif temperature :", lr_surface_temperature_data(586,60,7)
   PRINT*,"_______________________________"
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
 
-  DEALLOCATE(lr_surface_temperature_data, hr_surface_temperature_data, lr_surface_elevation_data, &
+  DEALLOCATE(lr_hr_surface_temperature_difference, &
+       lr_surface_temperature_data, hr_surface_temperature_data, lr_surface_elevation_data, &
        hr_surface_elevation_data, elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
        topographic_insolation_anomalies_data, ds_x_grid, ds_y_grid)
   

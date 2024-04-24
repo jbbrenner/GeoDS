@@ -68,6 +68,7 @@ CONTAINS
        CALL nc_write_dim(ds_monthly_climate_data_file,"y",x=ds_y_grid,units="m")
        CALL nc_write_dim(ds_monthly_climate_data_file,"time",x=ds_monthly_t_grid, &
             units="months",calendar="360_day", unlimited=.TRUE.)
+            !units="hours since 1800-01-01 00:00:00.0", calendar="gregorian", unlimited=.TRUE.)
        
        IF (ds_annual_data_generation .EQV. .TRUE.) THEN
           ALLOCATE (ds_annual_t_grid(lr_climate_data_t_size/months_nbr))
@@ -120,11 +121,17 @@ CONTAINS
         
       ALLOCATE (ds_monthly_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:lr_climate_data_t_size))
       ds_monthly_climate_data(:,:,:) = 0
-      CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, hr_surface_temperature_data)
+      CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
+           hr_surface_temperature_data, lr_hr_surface_temperature_difference)
      
       ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "Surface_temperature", ds_monthly_climate_data(:,:,:),&
+      CALL nc_write(ds_monthly_climate_data_file, "ts", ds_monthly_climate_data(:,:,:),&
            dim1="x", dim2="y", dim3="time")
+      
+      ds_monthly_climate_data(:,:,:) = 0
+      ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference(:,:,:)
+       
+      CALL nc_write(ds_monthly_climate_data_file, "ts_anomalies", ds_monthly_climate_data(:,:,:), dim1="x", dim2="y", dim3="time")
              
       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
          ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
@@ -139,8 +146,20 @@ CONTAINS
             ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_climate_data_file, "Surface_temperature", ds_annual_climate_data(:,:,:),&
-                    dim1="x", dim2="y", dim3="time")
+         CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
+              dim1="x", dim2="y", dim3="time")
+         ds_annual_climate_data(:,:,:) = 0
+         DO WHILE (k<lr_climate_data_t_size/months_nbr)
+            DO j=1, months_nbr
+               ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1) + &
+                    lr_hr_surface_temperature_difference(:,:,k*months_nbr + j)
+               
+            ENDDO
+            ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1)/months_nbr
+            k=k+1
+         ENDDO
+         CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
+              dim1="x", dim2="y", dim3="time")
          
       ENDIF
        
@@ -148,10 +167,14 @@ CONTAINS
          ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:lr_climate_data_t_size))
          ds_annual_climate_data(:,:,:) = 0
-         CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, hr_surface_temperature_data)
+         CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
+              hr_surface_temperature_data, lr_hr_surface_temperature_difference)
          ds_monthly_climate_data(:,:,:) = lr_surface_temperature_data
-         CALL nc_write(ds_annual_climate_data_file, "Surface_temperature", ds_annual_climate_data(:,:,:),&
-           dim1="x", dim2="y", dim3="time")
+         CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
+              dim1="x", dim2="y", dim3="time")
+        ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference
+         CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
+              dim1="x", dim2="y", dim3="time") 
     ENDIF
    
   END SUBROUTINE writing_downscaled_data_outputs

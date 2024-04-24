@@ -19,16 +19,16 @@ endif
 
 # Compilation rules
 $(DIR)/%.o: $(DIR)/%.f90
-	$(FC) $(F_FLAGS_EXTD) $(FFLAGS) ${INCLUDES} -c $(DIR)/$*.f90 -o $(DIR)/$*.o
+	$(FC) $(F_FLAGS_EXTD) $(FFLAGS) ${INCLUDES} -c -fbounds-check $(DIR)/$*.f90 -o $(DIR)/$*.o
 
 $(DIR)/%.o: $(DIR)/%.f08
-	$(FC) $(F_STRCT_EIGHT) $(F_FLAGS_EXTD) $(FFLAGS) ${INCLUDES} -c ${F_TREAT_FORTR} $(DIR)/$*.f08 -o $(DIR)/$*.o
+	$(FC) $(F_STRCT_EIGHT) $(F_FLAGS_EXTD) $(FFLAGS) ${INCLUDES} -c -fbounds-check ${F_TREAT_FORTR} $(DIR)/$*.f08 -o $(DIR)/$*.o
 
 $(DIR)/%.o: $(DIR)/%.f
-	$(FC) $(F_FLAGS_CARD) $(FFLAGS) ${INCLUDES} -c $(DIR)/$*.f -o $(DIR)/$*.o
+	$(FC) $(F_FLAGS_CARD) $(FFLAGS) ${INCLUDES} -c -fbounds-check $(DIR)/$*.f -o $(DIR)/$*.o
 
 $(DIR)/%.o: $(DIR)/%.F
-	$(FC) $(F_FLAGS_CARD) $(FFLAGS) ${INCLUDES} -c $(DIR)/$*.F -o $(DIR)/$*.o
+	$(FC) $(F_FLAGS_CARD) $(FFLAGS) ${INCLUDES} -c -fbounds-check $(DIR)/$*.F -o $(DIR)/$*.o
 
 # Include the dependency-list created by makedepf90 below
 include .depend
