@@ -42,8 +42,8 @@ PROGRAM main
   PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
   PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
   !PRINT*, MAXLOC(hr_surface_temperature_data)
-  PRINT*, "July HR max elevdif temperature :", hr_surface_temperature_data(586,60,7)
-  PRINT*, "July LR max elevdif temperature :", lr_surface_temperature_data(586,60,7)
+  !PRINT*, "July HR max elevdif temperature :", hr_surface_temperature_data(586,60,7)
+  !PRINT*, "July LR max elevdif temperature :", lr_surface_temperature_data(586,60,7)
   PRINT*,"_______________________________"
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
