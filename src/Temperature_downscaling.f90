@@ -36,7 +36,7 @@ CONTAINS
     !PRINT*,'______________________insol_test_____________________'    
     !PRINT*, topographic_insolation_anomalies_data(1,1,1)
     !PRINT*, topographic_insolation_anomalies_data(1,1,7)
-    !PRINT*,'______________________insol_test_____________________'
+    PRINT*,'______________________insol_test_____________________'
     ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
     ALLOCATE(lr_hr_surface_temperature_difference(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
     
