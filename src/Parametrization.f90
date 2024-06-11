@@ -16,7 +16,7 @@ MODULE Parametrization
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
-  !DOUBLE PRECISION, PARAMETER :: lapse_rate = 0.006 !°C.m⁻¹
+
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!
@@ -30,6 +30,12 @@ MODULE Parametrization
   CHARACTER (LEN=str_len) :: lr_surface_temperature_id
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_temperature_data
 
+
+  !Precipitation-related variables
+  CHARACTER (LEN=str_len) :: lr_precipitation_id
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_precipitation_data
+
+
   !Topography-related input variables
   CHARACTER (LEN=str_len) :: lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
        hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id
@@ -37,6 +43,7 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_elevation_data, hr_surface_elevation_data, &
        elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
        topographic_insolation_anomalies_data
+
   !________________________________________________________________________________________!
   !Output variables
   !________________________________________________________________________________________!
@@ -46,8 +53,11 @@ MODULE Parametrization
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_surface_temperature_data
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_surface_temperature_difference
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_precipitation_data
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_precipitation_data
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
   LOGICAL :: ds_annual_data_generation
   !________________________________________________________________________________________!
+ 
   
 END MODULE Parametrization
