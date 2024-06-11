@@ -10,11 +10,11 @@ MODULE Reading_Inputs
  
 CONTAINS
 
-  !________________________________________________________________________________________!
+  !____________________________________________________________________________________________________________________________!
   !Subroutines required to read netCDF datasets and store related data in arrays using the ncio library. All the subroutines
   !open the same configuration file containing paths and other parametrization variables (namelist), but each one is associated
   !with a different category of data (i.e : data related to temperature, precipitation, topography...)
-  !________________________________________________________________________________________!
+  !____________________________________________________________________________________________________________________________!
   
   SUBROUTINE reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
 
@@ -40,15 +40,38 @@ CONTAINS
     CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data)
     
 
- !PRINT*, "________________ERA_____________________________"
- !print*, lr_surface_temperature_data(1,1,1)
- !print*, lr_surface_temperature_data(1,1,2)
- !print*, '_________________________________________________'
-    
   END SUBROUTINE reading_temperature_inputs
   
-  !________________________________________________________________________________________!
-  !________________________________________________________________________________________!
+  !___________________________________________________________________________________________________________________________!
+  !___________________________________________________________________________________________________________________________!
+!!$  SUBROUTINE reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
+!!$
+!!$    IMPLICIT NONE
+!!$
+!!$    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_precipitation_data
+!!$    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+!!$    INTEGER, INTENT(INOUT) :: ios, fu
+!!$
+!!$    !_____________________________________________________________________________________!
+!!$    !Reading temperature-related input variables in the configuration file
+!!$    !_____________________________________________________________________________________!
+!!$    config_namelist_blockname="Global_inputs_variables"
+!!$    CALL accessing_config_file(ios, fu)
+!!$
+!!$    !Sizing data array with dimensions stored in the configuration file
+!!$    ALLOCATE (lr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
+!!$
+!!$    config_namelist_blockname="Precipitation"
+!!$    CALL accessing_config_file(ios, fu)
+!!$
+!!$    !Storing temperature data from LR netCDF file in array
+!!$    CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)
+!!$
+!!$
+!!$  END SUBROUTINE reading_precipitation_inputs
+
+  !___________________________________________________________________________________________________________________________!
+  !___________________________________________________________________________________________________________________________!
 
   SUBROUTINE reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
        hr_topographic_insolation_data,  config_namelist_blockname, ios, fu)
@@ -60,9 +83,9 @@ CONTAINS
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
-    !_____________________________________________________________________________________!
+    !______________________________________________________________________________________!
     !Reading topography-related input variables in the configuration file
-    !_____________________________________________________________________________________!
+    !______________________________________________________________________________________!
         
     config_namelist_blockname="Topography"
     
@@ -89,20 +112,12 @@ CONTAINS
        CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data)
     ENDIF
 
-   ! PRINT*, "_______TEST_______"
-   ! PRINT*, lr_topographic_insolation_data(1,1,1)
-   ! PRINT*, lr_topographic_insolation_data(1,1,2)
-   ! PRINT*, lr_topographic_insolation_data(1,1,7)
-   ! Print*, lr_surface_elevation_data(1,1,1)
-   ! print*, lr_surface_elevation_data(1,1,7)
-   ! print*, hr_topographic_insolation_data(1,1,1)
-   ! print*, hr_topographic_insolation_data(1,1,7)
     !Closing configuration file
    CLOSE(fu)
 
   END SUBROUTINE reading_topography_inputs
 
-  !________________________________________________________________________________________!
-  !________________________________________________________________________________________!
+  !__________________________________________________________________________________________________________________________!
+  !__________________________________________________________________________________________________________________________!
   
 END MODULE Reading_Inputs

@@ -17,7 +17,11 @@ PROGRAM main
   CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
 
   PRINT *,"_______________________________"
-  
+
+  !CALL reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
+
+  PRINT *,"_______________________________"
+
   CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
        hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
 

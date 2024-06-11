@@ -5,7 +5,8 @@ MODULE Writing_Outputs
   USE Support_functions, only: accessing_config_file
   USE ncio, only: nc_create, nc_write_attr, nc_write_dim, nc_write
   USE Temperature_downscaling, only: applying_lapse_rate_correction
-  
+  USE Precipitation_downscaling, only: downscaling_precipitation
+
   IMPLICIT NONE
 
   !Declaring local variables
@@ -123,16 +124,23 @@ CONTAINS
       ds_monthly_climate_data(:,:,:) = 0
       CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
            hr_surface_temperature_data, lr_hr_surface_temperature_difference)
-     
+    
+      CALL downscaling_precipitation(lr_precipitation_data, hr_precipitation_data, &
+       lr_hr_precipitation_data)
+
       ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
       CALL nc_write(ds_monthly_climate_data_file, "ts", ds_monthly_climate_data(:,:,:),&
            dim1="x", dim2="y", dim3="time")
       
       ds_monthly_climate_data(:,:,:) = 0
       ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference(:,:,:)
-       
       CALL nc_write(ds_monthly_climate_data_file, "ts_anomalies", ds_monthly_climate_data(:,:,:), dim1="x", dim2="y", dim3="time")
-             
+
+      ds_monthly_climate_data(:,:,:) = 0
+      ds_monthly_climate_data(:,:,:) = hr_precipitation_data(:,:,:)
+      CALL nc_write(ds_monthly_climate_data_file, "PP", ds_monthly_climate_data(:,:,:), dim1="x", dim2="y", dim3="time")
+
+
       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
          ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:lr_climate_data_t_size/months_nbr))
@@ -169,12 +177,16 @@ CONTAINS
          ds_annual_climate_data(:,:,:) = 0
          CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
               hr_surface_temperature_data, lr_hr_surface_temperature_difference)
-         ds_monthly_climate_data(:,:,:) = lr_surface_temperature_data
+         ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data
          CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
               dim1="x", dim2="y", dim3="time")
         ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference
          CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
               dim1="x", dim2="y", dim3="time") 
+        ds_monthly_climate_data(:,:,:) = hr_precipitation_data
+         CALL nc_write(ds_annual_climate_data_file, "PP", ds_annual_climate_data(:,:,:),&
+              dim1="x", dim2="y", dim3="time")
+
     ENDIF
    
   END SUBROUTINE writing_downscaled_data_outputs

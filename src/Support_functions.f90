@@ -27,6 +27,7 @@ CONTAINS
     NAMELIST/Global_inputs_variables/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
          lr_climate_data_y_size, lr_climate_data_t_size, lambda, alpha
     NAMELIST/Temperature/lr_surface_temperature_id
+    NAMELIST/Precipitation/lr_precipitation_id
     NAMELIST/Topography/lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
     hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id, hr_topo_x_size,&
        hr_topo_y_size, hr_topo_t_size
@@ -59,7 +60,13 @@ CONTAINS
        END IF
        READ (UNIT = fu, NML = Temperature, IOSTAT = ios)
        PRINT*, "Configuration file : accessing temperature-related variables"
-       
+    CASE ("Precipitation")
+       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
+       IF (ios /= 0) THEN
+            WRITE (*, *)"Error:", Configuration_file, "could not be opened"
+       END IF
+       READ (UNIT = fu, NML = Precipitation, IOSTAT = ios)
+       PRINT*, "Configuration file : accessing precipitation-related variables"
     CASE ("Topography")
        OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
