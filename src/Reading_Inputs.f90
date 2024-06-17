@@ -32,7 +32,6 @@ CONTAINS
 
     !Sizing data array with dimensions stored in the configuration file
     ALLOCATE (lr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
-
     config_namelist_blockname="Temperature"
     CALL accessing_config_file(ios, fu)
    

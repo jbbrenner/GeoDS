@@ -52,7 +52,6 @@ CONTAINS
     DO i = 2, hr_topo_y_size
        ds_y_grid(i) = ds_y_grid(i-1) + spatial_resolution
     ENDDO
-
     !If monthly low resolution climate data are available, the algorithm generates monthly
     !downscaled data as well. The user can choose in the configuration file whether annual
     !dataset are wanted or not (= monthly data average over a year).
@@ -65,8 +64,8 @@ CONTAINS
        CALL nc_write_attr(ds_monthly_climate_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-       CALL nc_write_dim(ds_monthly_climate_data_file,"x",x=ds_x_grid,units="m")
-       CALL nc_write_dim(ds_monthly_climate_data_file,"y",x=ds_y_grid,units="m")
+       CALL nc_write_dim(ds_monthly_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+       CALL nc_write_dim(ds_monthly_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
        CALL nc_write_dim(ds_monthly_climate_data_file,"time",x=ds_monthly_t_grid, &
             units="months",calendar="360_day", unlimited=.TRUE.)
             !units="hours since 1800-01-01 00:00:00.0", calendar="gregorian", unlimited=.TRUE.)
@@ -78,8 +77,8 @@ CONTAINS
           CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-          CALL nc_write_dim(ds_annual_climate_data_file,"x",x=ds_x_grid,units="m")
-          CALL nc_write_dim(ds_annual_climate_data_file,"y",x=ds_y_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
           CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
                units="years",calendar="360_day", unlimited=.TRUE.)
        ENDIF
@@ -91,14 +90,15 @@ CONTAINS
           CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-          CALL nc_write_dim(ds_annual_climate_data_file,"x",x=ds_x_grid,units="m")
-          CALL nc_write_dim(ds_annual_climate_data_file,"y",x=ds_y_grid,units="m")
+          CALL nc_write_dim(ds_annual_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
           CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
                units="years",calendar="360_day", unlimited=.TRUE.)
      ENDIF
         
      CLOSE(fu)
-    
+   
+
   END SUBROUTINE initializing_downscaled_outputs_grid
 
   !________________________________________________________________________________________!
@@ -130,15 +130,17 @@ CONTAINS
 
       ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
       CALL nc_write(ds_monthly_climate_data_file, "ts", ds_monthly_climate_data(:,:,:),&
-           dim1="x", dim2="y", dim3="time")
+           dim1=x_dim_name, dim2=y_dim_name, dim3="time")
       
       ds_monthly_climate_data(:,:,:) = 0
       ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "ts_anomalies", ds_monthly_climate_data(:,:,:), dim1="x", dim2="y", dim3="time")
+      CALL nc_write(ds_monthly_climate_data_file, "ts_anomalies", ds_monthly_climate_data(:,:,:), &
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
       ds_monthly_climate_data(:,:,:) = 0
       ds_monthly_climate_data(:,:,:) = hr_precipitation_data(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "PP", ds_monthly_climate_data(:,:,:), dim1="x", dim2="y", dim3="time")
+      CALL nc_write(ds_monthly_climate_data_file, "PP", ds_monthly_climate_data(:,:,:), & 
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
 
       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
@@ -155,7 +157,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
-              dim1="x", dim2="y", dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
          ds_annual_climate_data(:,:,:) = 0
          DO WHILE (k<lr_climate_data_t_size/months_nbr)
             DO j=1, months_nbr
@@ -167,7 +169,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
-              dim1="x", dim2="y", dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
          
       ENDIF
        
@@ -179,13 +181,13 @@ CONTAINS
               hr_surface_temperature_data, lr_hr_surface_temperature_difference)
          ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data
          CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
-              dim1="x", dim2="y", dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
         ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference
          CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
-              dim1="x", dim2="y", dim3="time") 
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time") 
         ds_monthly_climate_data(:,:,:) = hr_precipitation_data
          CALL nc_write(ds_annual_climate_data_file, "PP", ds_annual_climate_data(:,:,:),&
-              dim1="x", dim2="y", dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
     ENDIF
    

@@ -24,6 +24,7 @@ MODULE Parametrization
   LOGICAL :: lr_monthly_climate_data_availibility
   CHARACTER (LEN=str_len) :: lr_climate_data_file
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
+  CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   REAL :: lambda, alpha
 
   !Temperature-related variables
