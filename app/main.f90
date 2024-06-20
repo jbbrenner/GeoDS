@@ -14,7 +14,7 @@ PROGRAM main
   !Reading netCDF input files 
   !________________________________________________________________________________________!
 
-  CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, ios, fu)
+  CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, t_extent, ios, fu)
 
   PRINT *,"_______________________________"
 

@@ -9,14 +9,16 @@
 &global_inputs_variables
     lr_monthly_climate_data_availibility = .true.								!Variable used to check whether monthly climate input data are available or not
     lr_climate_data_file = '/home/jbrenner/These/Cartes/ERA5_preprocessed/DEM_Alps_1km/ERA5_ts_geobil_whole_period.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Note that the input data must be first interpolated on the high resolution elevation grid
-    lr_climate_data_x_size = 254 !901										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    lr_climate_data_y_size = 327 !521										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
+    lr_climate_data_x_size = 401										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    lr_climate_data_y_size = 421										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
     lr_climate_data_t_size = 1000											!Dataset extent in the t temporal dimension for the selected variable
     x_dim_name = 'x'
     y_dim_name = 'y'
-    xy_unit = 'm'    
-lambda = 2 !0.005
-    alpha = 2 !0.00025
+    xy_unit = 'm'
+    t_start = 1 
+    t_end = 1000  
+lambda = 0.005
+    alpha = 0.00025
 /
 
 !_______________________________________________________!
@@ -43,8 +45,8 @@ lambda = 2 !0.005
     hr_topographic_parameters = '/home/jbrenner/These/Cartes/ERA5_preprocessed/DEM_Alps_1km/HR_Topographic_Parameters_Full.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
     hr_surface_elevation_id = 'S'
     hr_topographic_insolation_id = 'topographic_daily_insolation'
-    hr_topo_x_size = 254 !901												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    hr_topo_y_size = 327 !521												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+    hr_topo_x_size = 401												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    hr_topo_y_size = 421												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
     hr_topo_t_size = 12													!Dataset extent in the t temporal dimension for the selected variable
 /
 

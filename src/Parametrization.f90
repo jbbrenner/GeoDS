@@ -25,6 +25,7 @@ MODULE Parametrization
   CHARACTER (LEN=str_len) :: lr_climate_data_file
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
+  INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha
 
   !Temperature-related variables

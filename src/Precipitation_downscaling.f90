@@ -23,8 +23,8 @@ CONTAINS
 
     PRINT*, 'Downscaling des précipitations'
 
-    ALLOCATE(hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
-    ALLOCATE(lr_hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
+    ALLOCATE(hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE(lr_hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
 
     hr_precipitation_data(:,:,:) = 0
     lr_hr_precipitation_data(:,:,:) = 0
