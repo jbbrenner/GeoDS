@@ -37,8 +37,8 @@ CONTAINS
     !PRINT*, topographic_insolation_anomalies_data(1,1,1)
     !PRINT*, '_____________________insol_test_____________________'
     
-    ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
-    ALLOCATE(lr_hr_surface_temperature_difference(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:lr_climate_data_t_size))
+    ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE(lr_hr_surface_temperature_difference(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     
     hr_surface_temperature_data(:,:,:) = 0
     lr_hr_surface_temperature_difference(:,:,:) = 0
@@ -48,7 +48,7 @@ CONTAINS
     !data arrays and topographic data arrays
 
     j=1
-        DO i=1, lr_climate_data_t_size
+        DO i=1, t_extent
            hr_surface_temperature_data(:,:,i) = lr_surface_temperature_data(:,:,i) + &
                 lambda * elevation_anomalies_data(:,:,j) + &
                 alpha * topographic_insolation_anomalies_data(:,:,j)
