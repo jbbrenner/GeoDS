@@ -6,12 +6,12 @@
 
 !_______________________________________________________!
 !________General inputs parametrization_________________!
-&global_inputs_variables
+&global_parametrization
     lr_monthly_climate_data_availibility = .true.								!Variable used to check whether monthly climate input data are available or not
     lr_climate_data_file = '/home/jbrenner/These/Cartes/ERA5_preprocessed/DEM_Alps_1km/ERA5_ts_geobil_whole_period.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Note that the input data must be first interpolated on the high resolution elevation grid
     lr_climate_data_x_size = 401										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
     lr_climate_data_y_size = 421										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
-    lr_climate_data_t_size = 1000											!Dataset extent in the t temporal dimension for the selected variable
+    lr_climate_data_t_size = 100											!Dataset extent in the t temporal dimension for the selected variable
     x_dim_name = 'x'
     y_dim_name = 'y'
     xy_unit = 'm'
@@ -21,18 +21,14 @@ lambda = 0.005
     alpha = 0.00025
 /
 
-!_______________________________________________________!
-!________Parametrization regarding temperature__________!
+!__________________________________________________________________!
+!________Parametrization regarding low-resolution climate__________!
 
-&temperature
+&inputs_climate_variables
     lr_surface_temperature_id = 'ts'											!Name of the variable to be read in the input file		
-/
-
-!_______________________________________________________!
-!________Parametrization regarding temperature__________!
-
-&precipitation
     lr_precipitation_id = 'PP'
+    lr_uwind_id = 'u'
+    lr_vwind_id = 'v'
 /
 
 !_______________________________________________________!

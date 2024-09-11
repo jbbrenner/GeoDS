@@ -28,7 +28,7 @@ CONTAINS
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
-    config_namelist_blockname="Global_inputs_variables"
+    config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
     
     CLOSE(fu)
@@ -59,6 +59,7 @@ CONTAINS
     !downscaled data
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
        ALLOCATE (ds_monthly_t_grid(t_extent))
+       ds_monthly_t_grid(:) = 0
        CALL nc_create(ds_monthly_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
        CALL nc_write_attr(ds_monthly_climate_data_file,"Title","High-resolution climate data grid")
        CALL nc_write_attr(ds_monthly_climate_data_file,"Institution", &

@@ -28,15 +28,15 @@ MODULE Parametrization
   INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha
 
-  !Temperature-related variables
+  !Low resolution climate variables
   CHARACTER (LEN=str_len) :: lr_surface_temperature_id
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_temperature_data
-
-
-  !Precipitation-related variables
   CHARACTER (LEN=str_len) :: lr_precipitation_id
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_precipitation_data
-
+  CHARACTER (LEN=str_len) :: lr_uwind_id
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_uwind_data
+  CHARACTER (LEN=str_len) :: lr_vwind_id
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_vwind_data
 
   !Topography-related input variables
   CHARACTER (LEN=str_len) :: lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &

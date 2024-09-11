@@ -24,10 +24,9 @@ CONTAINS
      
     INTEGER,INTENT(INOUT) :: ios,fu
 
-    NAMELIST/Global_inputs_variables/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
+    NAMELIST/Global_parametrization/lr_climate_data_file, lr_monthly_climate_data_availibility, lr_climate_data_x_size,&
          lr_climate_data_y_size, lr_climate_data_t_size, x_dim_name, y_dim_name, xy_unit, t_start, t_end, lambda, alpha
-    NAMELIST/Temperature/lr_surface_temperature_id
-    NAMELIST/Precipitation/lr_precipitation_id
+    NAMELIST/Inputs_climate_variables/lr_surface_temperature_id, lr_precipitation_id, lr_uwind_id, lr_vwind_id
     NAMELIST/Topography/lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
     hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id, hr_topo_x_size,&
        hr_topo_y_size, hr_topo_t_size
@@ -46,27 +45,20 @@ CONTAINS
     !by the calling subroutine
     SELECT CASE(config_namelist_blockname)
        
-    CASE ("Global_inputs_variables")
+    CASE ("Global_parametrization")
        OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
             WRITE (*, *)"Error:", Configuration_file, "could not be opened"
        END IF
-       READ (UNIT = fu, NML = Global_inputs_variables, IOSTAT = ios)
-       PRINT*, "Configuration file : accessing general inputs variables"
-    CASE ("Temperature")
+       READ (UNIT = fu, NML = Global_parametrization, IOSTAT = ios)
+       PRINT*, "Configuration file : accessing general parametrization variables"
+    CASE ("Inputs_climate_variables")
        OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
             WRITE (*, *)"Error:", Configuration_file, "could not be opened"
        END IF
-       READ (UNIT = fu, NML = Temperature, IOSTAT = ios)
-       PRINT*, "Configuration file : accessing temperature-related variables"
-    CASE ("Precipitation")
-       OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
-       IF (ios /= 0) THEN
-            WRITE (*, *)"Error:", Configuration_file, "could not be opened"
-       END IF
-       READ (UNIT = fu, NML = Precipitation, IOSTAT = ios)
-       PRINT*, "Configuration file : accessing precipitation-related variables"
+       READ (UNIT = fu, NML = Inputs_climate_variables, IOSTAT = ios)
+       PRINT*, "Configuration file : accessing inputs climate variables"
     CASE ("Topography")
        OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
@@ -74,7 +66,6 @@ CONTAINS
        END IF
        READ (UNIT = fu, NML = Topography, IOSTAT = ios)
        PRINT*, "Configuration file : accessing topography-related variables"
-       
     CASE ("Downscaled_outputs")
        OPEN (NEWUNIT = fu, ACTION = 'READ', FILE = Configuration_file, IOSTAT = ios)
        IF (ios /= 0) THEN
