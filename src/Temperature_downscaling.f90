@@ -33,6 +33,7 @@ CONTAINS
     CALL computing_insolation_anomalies(lr_topographic_insolation_data, hr_topographic_insolation_data, &
        topographic_insolation_anomalies_data)
 
+
     !PRINT*,'______________________insol_test_____________________'    
     !PRINT*, topographic_insolation_anomalies_data(1,1,1)
     !PRINT*, '_____________________insol_test_____________________'

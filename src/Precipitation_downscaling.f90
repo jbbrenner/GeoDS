@@ -3,6 +3,7 @@ MODULE Precipitation_downscaling
   !____________________________________________________!
 
   USE PARAMETRIZATION
+  USE Topographic_parameters_computation, ONLY: computing_WL_exposure_indexes
   !____________________________________________________!
 
   IMPLICIT NONE
@@ -25,10 +26,12 @@ CONTAINS
 
     ALLOCATE(hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     ALLOCATE(lr_hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    
 
     hr_precipitation_data(:,:,:) = 0
     lr_hr_precipitation_data(:,:,:) = 0
-    
+
+    PRINT*, "_______________________________"    
     END SUBROUTINE downscaling_precipitation
   
   END MODULE Precipitation_downscaling

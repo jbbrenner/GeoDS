@@ -1,4 +1,4 @@
-MODULE Writing_Outputs
+MODULE Outputs_writing
   !________________________________________________________________________________________!
 
   USE Parametrization
@@ -196,4 +196,4 @@ CONTAINS
   !________________________________________________________________________________________________________!
 
   
-END MODULE Writing_Outputs
+END MODULE Outputs_writing

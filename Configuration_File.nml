@@ -11,14 +11,15 @@
     lr_climate_data_file = '/home/jbrenner/These/Cartes/ERA5_preprocessed/DEM_Alps_1km/ERA5_ts_geobil_whole_period.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Note that the input data must be first interpolated on the high resolution elevation grid
     lr_climate_data_x_size = 401										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
     lr_climate_data_y_size = 421										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
-    lr_climate_data_t_size = 100											!Dataset extent in the t temporal dimension for the selected variable
+    lr_climate_data_t_size = 100										!Dataset extent in the t temporal dimension for the selected variable
     x_dim_name = 'x'
     y_dim_name = 'y'
     xy_unit = 'm'
-    t_start = 1 
-    t_end = 1000  
-lambda = 0.005
+    t_start = 1 												!First time step of the simulation
+    t_end = 300												!Last time step of the simulation
+    lambda = 0.005
     alpha = 0.00025
+    
 /
 
 !__________________________________________________________________!
@@ -56,4 +57,6 @@ lambda = 0.005
     ds_y_grid_lower_bound = -251600.0											!High resolution topography file's lower bound in y
     spatial_resolution = 1000.0												!Size of the outputs grid points
     ds_annual_data_generation = .true.
+    nbr_wdir = 4        												!Number of wind directions the user wants to study
+    d_wsearch = 100 												  	!Horizontal searching distance to find WL elements influencing the topographic exposure index of grid points
 /

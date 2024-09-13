@@ -2,6 +2,7 @@ MODULE Parametrization
 
   !________________________________________________________________________________________!  
 
+  USE Derived_types
   
   IMPLICIT NONE
   PUBLIC
@@ -16,10 +17,10 @@ MODULE Parametrization
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
-
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!
+  
   !Global inputs variables
   LOGICAL :: lr_monthly_climate_data_availibility
   CHARACTER (LEN=str_len) :: lr_climate_data_file
@@ -28,7 +29,7 @@ MODULE Parametrization
   INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha
 
-  !Low resolution climate variables
+  !Climate-related variables
   CHARACTER (LEN=str_len) :: lr_surface_temperature_id
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_temperature_data
   CHARACTER (LEN=str_len) :: lr_precipitation_id
@@ -50,6 +51,13 @@ MODULE Parametrization
   !Output variables
   !________________________________________________________________________________________!
 
+
+  !Topography-related outputs variables
+  TYPE(wlarr), DIMENSION(:), ALLOCATABLE :: WL_pointers_array !Dynamical array storing the nbr_wdir pointers to the wind exposure
+                                                              !arrays associated to the nbr_wdir directions of wind 
+
+
+  !Climate-related outputs variables
   CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
@@ -59,6 +67,8 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_precipitation_data
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
   LOGICAL :: ds_annual_data_generation
+  INTEGER :: nbr_wdir
+  REAL :: d_wsearch
   !________________________________________________________________________________________!
  
   
