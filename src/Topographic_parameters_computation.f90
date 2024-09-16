@@ -74,7 +74,7 @@ CONTAINS
 
     IMPLICIT NONE
 
-    CALL filling_WL_patterns_arrays(WL_pointers_array)
+    CALL filling_WL_patterns_arrays(WL_pointers_array, wdir_angle_boundaries, config_namelist_blockname, ios, fu)
     
     END SUBROUTINE computing_WL_exposure_indexes
 

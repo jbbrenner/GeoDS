@@ -13,10 +13,11 @@ MODULE Parametrization
 
   INTEGER, PARAMETER :: str_len = 256
   INTEGER, PARAMETER :: months_nbr = 12
-  CHARACTER (LEN=str_len) :: Configuration_file="/home/jbrenner/GeoDS/Configuration_File.nml"
+  CHARACTER (LEN=str_len) :: Configuration_file = "/home/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
+  DOUBLE PRECISION, PARAMETER :: pi = acos(-1.0)
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!
@@ -68,7 +69,8 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
   LOGICAL :: ds_annual_data_generation
   INTEGER :: nbr_wdir
-  REAL :: d_wsearch
+  DOUBLE PRECISION :: d_wsearch
+  DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: wdir_angle_boundaries
   !________________________________________________________________________________________!
  
   

@@ -5,6 +5,7 @@ PROGRAM main
 
   USE Parametrization
   USE Inputs_reading, ONLY: reading_temperature_inputs, reading_topography_inputs
+  USE WL_gridpoints_selection, ONLY: filling_WL_patterns_arrays
   USE Outputs_writing, ONLY: initializing_downscaled_outputs_grid, writing_downscaled_data_outputs
   !________________________________________________________________________________________!
 
@@ -23,6 +24,16 @@ PROGRAM main
 
   CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
        hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
+
+  !________________________________________________________________________________________!
+  !TOE tests
+  !________________________________________________________________________________________!
+  
+  PRINT*, "_______________________________"
+  PRINT*, "TEI tests"
+  CALL filling_WL_patterns_arrays(WL_pointers_array, wdir_angle_boundaries, config_namelist_blockname, ios, fu)
+  PRINT*, "End TEI tests"
+  PRINT*, "_______________________________"
 
   !________________________________________________________________________________________!
   !Writing netCDF output files 
