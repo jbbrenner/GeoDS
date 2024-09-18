@@ -12,7 +12,7 @@ MODULE Derived_types
   TYPE wlelem
      INTEGER :: ix !Relative x-coordinate of a given element stored in the associated k-wind exposure array
      INTEGER :: jy !Relative y-coordinate of a given element stored in the associated k-wind exposure array
-     REAL :: hdist !Distance between the given k-wind exposure array's element and the grid point whose WL index is being calculated
+     REAL :: horizontal_dist !Distance between the given k-wind exposure array's element and the grid point whose WL index is being calculated
   END TYPE wlelem
 
 

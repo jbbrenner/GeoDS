@@ -4,23 +4,27 @@ PROGRAM main
   !________________________________________________________________________________________!
 
   USE Parametrization
-  USE Inputs_reading, ONLY: reading_temperature_inputs, reading_topography_inputs
+  USE Inputs_reading, ONLY: reading_temperature_inputs, reading_wind_inputs, reading_topography_inputs
   USE WL_gridpoints_selection, ONLY: filling_WL_patterns_arrays
   USE Outputs_writing, ONLY: initializing_downscaled_outputs_grid, writing_downscaled_data_outputs
   !________________________________________________________________________________________!
 
   IMPLICIT NONE
 
+  INTEGER :: k
+
   !________________________________________________________________________________________!
   !Reading netCDF input files 
   !________________________________________________________________________________________!
 
+  PRINT*, ""
+  PRINT*, "___________INPUTS______________"
+
   CALL reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, t_extent, ios, fu)
 
-  PRINT *,"_______________________________"
   !CALL reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
 
-  PRINT *,"_______________________________"
+  CALL reading_wind_inputs(lr_uwind_data, lr_vwind_data, config_namelist_blockname, t_extent, ios, fu)
 
   CALL reading_topography_inputs(lr_surface_elevation_data, hr_surface_elevation_data, lr_topographic_insolation_data, &
        hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
@@ -62,9 +66,14 @@ PROGRAM main
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
-
+  DO k=1, nbr_wdir
+         DEALLOCATE(WL_pointers_array(k)%ptr)
+      END DO
+  DEALLOCATE(WL_pointers_array)
+  DEALLOCATE(wdir_angle_boundaries)
+        
   DEALLOCATE(lr_hr_surface_temperature_difference, &
-       lr_surface_temperature_data, hr_surface_temperature_data, lr_surface_elevation_data, &
+       lr_surface_temperature_data, hr_surface_temperature_data, lr_uwind_data, lr_vwind_data, lr_surface_elevation_data, &
        hr_surface_elevation_data, elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
        topographic_insolation_anomalies_data, ds_x_grid, ds_y_grid)
   

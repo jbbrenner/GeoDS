@@ -55,13 +55,6 @@ CONTAINS
          (hr_topo_x_size*hr_topo_y_size*hr_topo_t_size)
     PRINT*, "insolation anomalies max :", (MAXVAL(topographic_insolation_anomalies_data))
     PRINT*, "insolation anomalies min :", (MINVAL(topographic_insolation_anomalies_data))
-    print*, lr_topographic_insolation_data(1,1,2)
-    print*, hr_topographic_insolation_data(1,1,2)
-    
-    print*, topographic_insolation_anomalies_data(1,1,1)
-    print*, topographic_insolation_anomalies_data(1,1,2)
-    print*, topographic_insolation_anomalies_data(1,1,7)
-    print*, topographic_insolation_anomalies_data(1,1,12)
     PRINT*,"_______________________________"
 
     
@@ -78,8 +71,5 @@ CONTAINS
     
     END SUBROUTINE computing_WL_exposure_indexes
 
-
-  
-  
   
 END MODULE Topographic_parameters_computation

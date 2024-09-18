@@ -32,10 +32,10 @@ CONTAINS
     
     t_extent = t_end - t_start + 1
     PRINT*, "t_extent = ", t_extent
-    !Sizing data array with dimensions stored in the configuration file
-    ALLOCATE (lr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)
+    !Sizing data array with dimensions stored in the configuration file
+    ALLOCATE (lr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
    
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, [1,1,t_start], &
@@ -45,6 +45,7 @@ CONTAINS
   
   !___________________________________________________________________________________________________________________________!
   !___________________________________________________________________________________________________________________________!
+  
 !!$  SUBROUTINE reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
 !!$
 !!$    IMPLICIT NONE
@@ -70,6 +71,36 @@ CONTAINS
 !!$
 !!$
 !!$  END SUBROUTINE reading_precipitation_inputs
+
+  !___________________________________________________________________________________________________________________________!
+  !___________________________________________________________________________________________________________________________
+
+  SUBROUTINE reading_wind_inputs(lr_uwind_data, lr_vwind_data, config_namelist_blockname, t_extent, ios, fu)
+
+    IMPLICIT NONE
+
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_uwind_data, lr_vwind_data
+    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    INTEGER, INTENT(INOUT) :: t_extent, ios, fu
+
+    !_____________________________________________________________________________________!
+    !Reading temperature-related input variables in the configuration file
+    !_____________________________________________________________________________________!
+
+    config_namelist_blockname="Inputs_climate_variables"
+    CALL accessing_config_file(ios, fu)
+    !Sizing data array with dimensions stored in the configuration file
+    ALLOCATE (lr_uwind_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE (lr_vwind_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+
+   
+    !Storing temperature data from LR netCDF file in array
+    CALL nc_read(lr_UVwind_file, lr_uwind_id, lr_uwind_data, [1,1,t_start], &
+         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+    CALL nc_read(lr_UVwind_file, lr_vwind_id, lr_vwind_data, [1,1,t_start], &
+         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+ 
+  END SUBROUTINE reading_wind_inputs
 
   !___________________________________________________________________________________________________________________________!
   !___________________________________________________________________________________________________________________________!

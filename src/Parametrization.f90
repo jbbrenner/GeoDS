@@ -24,13 +24,14 @@ MODULE Parametrization
   
   !Global inputs variables
   LOGICAL :: lr_monthly_climate_data_availibility
-  CHARACTER (LEN=str_len) :: lr_climate_data_file
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha
 
   !Climate-related variables
+  CHARACTER (LEN=str_len) :: lr_climate_data_file
+  CHARACTER (LEN=str_len) :: lr_UVwind_file
   CHARACTER (LEN=str_len) :: lr_surface_temperature_id
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_surface_temperature_data
   CHARACTER (LEN=str_len) :: lr_precipitation_id
