@@ -5,7 +5,7 @@ PROGRAM main
 
   USE Parametrization
   USE Inputs_reading, ONLY: reading_temperature_inputs, reading_wind_inputs, reading_topography_inputs
-  USE WL_gridpoints_selection, ONLY: filling_WL_patterns_arrays
+  USE Topographic_parameters_computation, ONLY: computing_WL_exposure_indexes
   USE Outputs_writing, ONLY: initializing_downscaled_outputs_grid, writing_downscaled_data_outputs
   !________________________________________________________________________________________!
 
@@ -30,13 +30,13 @@ PROGRAM main
        hr_topographic_insolation_data, config_namelist_blockname, ios, fu)
 
   !________________________________________________________________________________________!
-  !TOE tests
+  !TEI tests
   !________________________________________________________________________________________!
   
   PRINT*, "_______________________________"
-  PRINT*, "TEI tests"
-  CALL filling_WL_patterns_arrays(WL_pointers_array, wdir_angle_boundaries, config_namelist_blockname, ios, fu)
-  PRINT*, "End TEI tests"
+  PRINT*, "TEI computation"
+  CALL computing_WL_exposure_indexes(TEI_pointers_array, config_namelist_blockname, ios, fu)
+  PRINT*, "End TEI computation"
   PRINT*, "_______________________________"
 
   !________________________________________________________________________________________!
@@ -60,16 +60,17 @@ PROGRAM main
   PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
   PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
   !PRINT*, MAXLOC(hr_surface_temperature_data)
-  !PRINT*, "July HR max elevdif temperature :", hr_surface_temperature_data(586,60,7)
-  !PRINT*, "July LR max elevdif temperature :", lr_surface_temperature_data(586,60,7)
   PRINT*,"_______________________________"
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
   DO k=1, nbr_wdir
-         DEALLOCATE(WL_pointers_array(k)%ptr)
-      END DO
-  DEALLOCATE(WL_pointers_array)
+     DEALLOCATE(WL_pattern_pointers_array(k)%wl_arr_ptr)
+     DEALLOCATE(TEI_pointers_array(k)%tei_arr_ptr)
+  END DO
+        
+  DEALLOCATE(WL_pattern_pointers_array)
+  DEALLOCATE(TEI_pointers_array)
   DEALLOCATE(wdir_angle_boundaries)
         
   DEALLOCATE(lr_hr_surface_temperature_difference, &

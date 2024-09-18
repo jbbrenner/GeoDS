@@ -55,9 +55,9 @@ MODULE Parametrization
 
 
   !Topography-related outputs variables
-  TYPE(wlarr), DIMENSION(:), ALLOCATABLE :: WL_pointers_array !Dynamical array storing the nbr_wdir pointers to the wind exposure
-                                                              !arrays associated to the nbr_wdir directions of wind 
-
+  TYPE(wl_pattern_arr), DIMENSION(:), ALLOCATABLE :: WL_pattern_pointers_array !Dynamical array storing the nbr_wdir pointers to the wind exposure arrays associated to the nbr_wdir directions of wind 
+  TYPE(tei_arr), DIMENSION(:), ALLOCATABLE :: TEI_pointers_array !Dynamical array storing the nbr_wdir pointers to topographic
+ !exposure indexes arrays, i.e. the arrays containing the index for each point for every nbr_wdir wind directions
 
   !Climate-related outputs variables
   CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file

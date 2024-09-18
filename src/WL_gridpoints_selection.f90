@@ -5,48 +5,41 @@ MODULE WL_gridpoints_selection
   
   USE Parametrization
   USE Support_functions, only: accessing_config_file
+
   IMPLICIT NONE
 
   INTEGER, PRIVATE :: i, j, k, m
-  DOUBLE PRECISION, PRIVATE :: max_size !maximum size of the wind exposure arrays 
+  DOUBLE PRECISION, PRIVATE :: max_size_real !maximum size of the wind exposure arrays, built as a REAL variable
+  INTEGER, PRIVATE :: max_size !maximum size of the wind exposure arrays, converted in INTEGER
   INTEGER, DIMENSION(:), ALLOCATABLE, PRIVATE :: counter
 
 CONTAINS
 
-    SUBROUTINE filling_WL_patterns_arrays(WL_pointers_array, wdir_angle_boundaries, config_namelist_blockname, ios, fu)
+    SUBROUTINE filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
 
       IMPLICIT NONE
 
-      TYPE(wlarr), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: WL_pointers_array
+      TYPE(wl_pattern_arr), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: WL_pattern_pointers_array
       DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: wdir_angle_boundaries
-      CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
-      INTEGER, INTENT(INOUT) :: ios, fu
-
-      !__________________________________________________________________!
-      !Reading TEI related information stored in the Configuration file
-      !__________________________________________________________________!
-      PRINT*, "____________________________________"
-      PRINT*, "Topographic exposure indexes computation"
-      config_namelist_blockname="Downscaled_outputs"
-      CALL accessing_config_file(ios, fu)
 
       !__________________________________________________________________!
       !Allocation and initialization of arrays
       !__________________________________________________________________!
       
-      ALLOCATE(counter(nbr_wdir))  !This counter is used to fill the different WL_pointers_arrays : it stores the index of the last added element to one of 
+      ALLOCATE(counter(nbr_wdir))  !This counter is used to fill the different WL_pattern_pointers_arrays : it stores the index of the last added element to one of 
                                    !the nbr_wdir pointers arrays, and is necessary to add the next element of the same array using the correct index
 
       ALLOCATE(wdir_angle_boundaries(nbr_wdir + 1)) !Array containing the bounds of each angle interval associated with the nbr_wdir wind directions
      
       PRINT*, "nbr_wdir =", nbr_wdir
       PRINT*, 'd_wsearch =', d_wsearch
-      max_size=CEILING((d_wsearch/spatial_resolution + 2)**2)
+      max_size_real=CEILING((d_wsearch/spatial_resolution + 2)**2)
+      max_size=INT(max_size_real)
       PRINT*, 'max_size = ', max_size
  
-      ALLOCATE(WL_pointers_array(nbr_wdir)) !Creation of nbr_wdir arrays, whose pointers are stored in WL_pointers_arrays : allows a dynamical declaration of variables
+      ALLOCATE(WL_pattern_pointers_array(nbr_wdir)) !Creation of nbr_wdir arrays, whose pointers are stored in WL_pattern_pointers_arrays : allows a dynamical declaration of variables
       DO k=1, nbr_wdir
-         ALLOCATE(WL_pointers_array(k)%ptr(max_size)) !Allocation of each of the pointed array using the max_size parameter : if nbr_wdir > 4, each array is sized to 
+         ALLOCATE(WL_pattern_pointers_array(k)%wl_arr_ptr(max_size)) !Allocation of each of the pointed array using the max_size parameter : if nbr_wdir > 4, each array is sized to 
       END DO                                          !be able to store a whole quadrant of grid points, in the extrem case where all of them influence the point the TEI
                                                       !is being calculated
       !___________________________________________________________________!
@@ -60,7 +53,6 @@ CONTAINS
          PRINT*, wdir_angle_boundaries(m)
       END DO
 
-      PRINT*, "TEST : ", atan2(0.0, -3.0)
       !2/filling the arrays    
       !Using a double loop, the algorithm checks every gridpoints within a square box of 2*max_size size, and verifies several
       !conditions to associate the given point to the correct wind direction array. Note that a same point can be in two different
@@ -72,36 +64,36 @@ CONTAINS
               DO m=1, nbr_wdir
                  IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .GE. wdir_angle_boundaries(m) & !If the tested gridpoint is close enough, the angle between it and the center of the scheme is being tested, in order to associate the gridpoint to the correct wind direction array. The multiplication of i and j by spatial_resolution allows to have real arguments for !the ATAN2 function, which do not work with integers
                       .AND. ATAN2(j*spatial_resolution,i*spatial_resolution) .LT. wdir_angle_boundaries(m+1)) THEN !Once the gridpoint is associated to the right array, the necessary information to compute the TEI are stored :
-                    WL_pointers_array(m)%ptr(counter(m))%ix = i !the relative coordinates of the gridpoint i.e. the x-increment 
-                    WL_pointers_array(m)%ptr(counter(m))%jy = j !and y-increment
-                    WL_pointers_array(m)%ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i !the relative coordinates of the gridpoint i.e. the x-increment 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j !and y-increment
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
                       (j*spatial_resolution)**2) !the relative distance between the point the TEI is beeing calculated and the given gridpoint
-                    !WL_pointers_array(m)%ptr(counter(m))%wdir_dist = SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
+                    !WL_pattern_pointers_array(m)%ptr(counter(m))%wdir_dist = SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
                      ! * COS(ATAN2(j*spatial_resolution,i*spatial_resolution) - wdir_angle_boundaries(m))
-                    PRINT *, "1st condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
+                    !PRINT *, "1st condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                     counter(m) = counter(m) + 1
                  ELSE IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .LT. wdir_angle_boundaries(m) &
                       .AND. ABS(ATAN2(j*spatial_resolution,i*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
                       .AND. ABS((SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
                       * SIN(wdir_angle_boundaries(m) - ATAN2(j*spatial_resolution,i*spatial_resolution)))) &
                       .LT. spatial_resolution) THEN
-                    WL_pointers_array(m)%ptr(counter(m))%ix = i 
-                    WL_pointers_array(m)%ptr(counter(m))%jy = j
-                    WL_pointers_array(m)%ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
                       (j*spatial_resolution)**2) 
                     counter(m) = counter(m) + 1
-                    PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
+                    !PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                  ELSE IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
                       .AND. ABS(ATAN2(j*spatial_resolution,i*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
                       .AND. ABS((SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
                       * SIN(ATAN2(j*spatial_resolution,i*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
                       .LT. spatial_resolution) THEN
-                    WL_pointers_array(m)%ptr(counter(m))%ix = i 
-                    WL_pointers_array(m)%ptr(counter(m))%jy = j
-                    WL_pointers_array(m)%ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
                       (j*spatial_resolution)**2) 
                     counter(m) = counter(m) + 1
-                    PRINT *, "3rd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
+                    !PRINT *, "3rd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                  END IF
               END DO
            ENDIF
@@ -111,9 +103,9 @@ CONTAINS
      !The following loop is used to correct the previous conditions for the specific cas of gridpoints located on the left portion of the x-absciss
      i=0
      DO j=FLOOR(-d_wsearch/spatial_resolution), -1
-        WL_pointers_array(1)%ptr(counter(1))%ix = i 
-        WL_pointers_array(1)%ptr(counter(1))%jy = j
-        WL_pointers_array(1)%ptr(counter(1))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%ix = i 
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%jy = j
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
                     (j*spatial_resolution)**2) 
         counter(1) = counter(1) + 1
      END DO
@@ -122,10 +114,8 @@ CONTAINS
       !___________________________________________________________________!
       !Deallocation of the private arrays
       !___________________________________________________________________!
-      print*, counter(:)
       DEALLOCATE(counter)
-        
-      PRINT*, "___________________________________"
+
     END SUBROUTINE filling_WL_patterns_arrays
 
 END MODULE WL_gridpoints_selection
