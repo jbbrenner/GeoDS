@@ -8,7 +8,7 @@ MODULE WL_gridpoints_selection
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: i, j, k, m
+  INTEGER, PRIVATE :: ir, jr, m
   DOUBLE PRECISION, PRIVATE :: max_size_real !maximum size of the wind exposure arrays, built as a REAL variable
   INTEGER, PRIVATE :: max_size !maximum size of the wind exposure arrays, converted in INTEGER
   INTEGER, DIMENSION(:), ALLOCATABLE, PRIVATE :: counter
@@ -38,8 +38,8 @@ CONTAINS
       PRINT*, 'max_size = ', max_size
  
       ALLOCATE(WL_pattern_pointers_array(nbr_wdir)) !Creation of nbr_wdir arrays, whose pointers are stored in WL_pattern_pointers_arrays : allows a dynamical declaration of variables
-      DO k=1, nbr_wdir
-         ALLOCATE(WL_pattern_pointers_array(k)%wl_arr_ptr(max_size)) !Allocation of each of the pointed array using the max_size parameter : if nbr_wdir > 4, each array is sized to 
+      DO m=1, nbr_wdir
+         ALLOCATE(WL_pattern_pointers_array(m)%wl_arr_ptr(max_size)) !Allocation of each of the pointed array using the max_size parameter : if nbr_wdir > 4, each array is sized to 
       END DO                                          !be able to store a whole quadrant of grid points, in the extrem case where all of them influence the point the TEI
                                                       !is being calculated
       !___________________________________________________________________!
@@ -58,40 +58,40 @@ CONTAINS
       !conditions to associate the given point to the correct wind direction array. Note that a same point can be in two different
       !arrays, just not with the same weight
 
-      DO i=FLOOR(-d_wsearch/spatial_resolution), CEILING(d_wsearch/spatial_resolution), 1 
-         DO j=FLOOR(-d_wsearch/spatial_resolution), CEILING(d_wsearch/spatial_resolution), 1
-           IF (SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) .LE. d_wsearch) THEN !Checking only the points within the maximum research distance chosen by the user
+      DO ir=FLOOR(-d_wsearch/spatial_resolution), CEILING(d_wsearch/spatial_resolution), 1 
+         DO jr=FLOOR(-d_wsearch/spatial_resolution), CEILING(d_wsearch/spatial_resolution), 1
+           IF (SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) .LE. d_wsearch) THEN !Checking only the points within the maximum research distance chosen by the user
               DO m=1, nbr_wdir
-                 IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .GE. wdir_angle_boundaries(m) & !If the tested gridpoint is close enough, the angle between it and the center of the scheme is being tested, in order to associate the gridpoint to the correct wind direction array. The multiplication of i and j by spatial_resolution allows to have real arguments for !the ATAN2 function, which do not work with integers
-                      .AND. ATAN2(j*spatial_resolution,i*spatial_resolution) .LT. wdir_angle_boundaries(m+1)) THEN !Once the gridpoint is associated to the right array, the necessary information to compute the TEI are stored :
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i !the relative coordinates of the gridpoint i.e. the x-increment 
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j !and y-increment
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
-                      (j*spatial_resolution)**2) !the relative distance between the point the TEI is beeing calculated and the given gridpoint
+                 IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m) & !If the tested gridpoint is close enough, the angle between it and the center of the scheme is being tested, in order to associate the gridpoint to the correct wind direction array. The multiplication of i and j by spatial_resolution allows to have real arguments for !the ATAN2 function, which do not work with integers
+                      .AND. ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m+1)) THEN !Once the gridpoint is associated to the right array, the necessary information to compute the TEI are stored :
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir !the relative coordinates of the gridpoint i.e. the x-increment 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr !and y-increment
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                      (jr*spatial_resolution)**2) !the relative distance between the point the TEI is beeing calculated and the given gridpoint
                     !WL_pattern_pointers_array(m)%ptr(counter(m))%wdir_dist = SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
                      ! * COS(ATAN2(j*spatial_resolution,i*spatial_resolution) - wdir_angle_boundaries(m))
                     !PRINT *, "1st condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                     counter(m) = counter(m) + 1
-                 ELSE IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .LT. wdir_angle_boundaries(m) &
-                      .AND. ABS(ATAN2(j*spatial_resolution,i*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
-                      .AND. ABS((SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
-                      * SIN(wdir_angle_boundaries(m) - ATAN2(j*spatial_resolution,i*spatial_resolution)))) &
+                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m) &
+                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
+                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+                      * SIN(wdir_angle_boundaries(m) - ATAN2(jr*spatial_resolution,ir*spatial_resolution)))) &
                       .LT. spatial_resolution) THEN
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i 
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
-                      (j*spatial_resolution)**2) 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                      (jr*spatial_resolution)**2) 
                     counter(m) = counter(m) + 1
                     !PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
-                 ELSE IF (ATAN2(j*spatial_resolution,i*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
-                      .AND. ABS(ATAN2(j*spatial_resolution,i*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
-                      .AND. ABS((SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
-                      * SIN(ATAN2(j*spatial_resolution,i*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
+                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
+                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
+                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+                      * SIN(ATAN2(jr*spatial_resolution,ir*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
                       .LT. spatial_resolution) THEN
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix = i 
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy = j
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
-                      (j*spatial_resolution)**2) 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                      (jr*spatial_resolution)**2) 
                     counter(m) = counter(m) + 1
                     !PRINT *, "3rd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                  END IF
@@ -101,12 +101,12 @@ CONTAINS
      END DO
      !___________________________________________________________________!
      !The following loop is used to correct the previous conditions for the specific cas of gridpoints located on the left portion of the x-absciss
-     i=0
-     DO j=FLOOR(-d_wsearch/spatial_resolution), -1
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%ix = i 
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%jy = j
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%horizontal_dist = SQRT((i*spatial_resolution)**2 + &
-                    (j*spatial_resolution)**2) 
+     ir=0
+     DO jr=FLOOR(-d_wsearch/spatial_resolution), -1
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%ix_relative = ir 
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%jy_relative = jr
+        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                    (jr*spatial_resolution)**2) 
         counter(1) = counter(1) + 1
      END DO
      !____________________________________________________________________!

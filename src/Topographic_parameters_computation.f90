@@ -12,7 +12,7 @@ MODULE Topographic_parameters_computation
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: k
+  INTEGER, PRIVATE :: m
   
 CONTAINS
 
@@ -79,17 +79,17 @@ CONTAINS
     
     config_namelist_blockname="Downscaled_outputs"
     CALL accessing_config_file(ios, fu)
-
-    PRINT*, "nbr_wdir", nbr_wdir
-       
+     
     ALLOCATE(TEI_pointers_array(nbr_wdir))
-
-    DO k=1, nbr_wdir 
-       ALLOCATE(TEI_pointers_array(k)%tei_arr_ptr(1:hr_topo_x_size, 1:hr_topo_y_size))
+    DO m=1, nbr_wdir
+       ALLOCATE(TEI_pointers_array(m)%tei_arr_ptr(1:hr_topo_x_size, 1:hr_topo_y_size))
     END DO
-
       
     CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
+
+    DO m=1, nbr_wdir
+    END DO
+    
     
     END SUBROUTINE computing_WL_exposure_indexes
 

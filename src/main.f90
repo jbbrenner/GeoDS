@@ -11,7 +11,7 @@ PROGRAM main
 
   IMPLICIT NONE
 
-  INTEGER :: k
+  INTEGER :: m
 
   !________________________________________________________________________________________!
   !Reading netCDF input files 
@@ -64,9 +64,9 @@ PROGRAM main
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!
-  DO k=1, nbr_wdir
-     DEALLOCATE(WL_pattern_pointers_array(k)%wl_arr_ptr)
-     DEALLOCATE(TEI_pointers_array(k)%tei_arr_ptr)
+  DO m=1, nbr_wdir
+     DEALLOCATE(WL_pattern_pointers_array(m)%wl_arr_ptr)
+     DEALLOCATE(TEI_pointers_array(m)%tei_arr_ptr)
   END DO
         
   DEALLOCATE(WL_pattern_pointers_array)
