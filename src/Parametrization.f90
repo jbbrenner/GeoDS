@@ -23,7 +23,7 @@ MODULE Parametrization
   !________________________________________________________________________________________!
   
   !Global inputs variables
-  LOGICAL :: lr_monthly_climate_data_availibility
+  LOGICAL :: lr_monthly_climate_data_availibility, wdir_grids_generation
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   INTEGER :: t_start, t_end, t_extent
@@ -60,7 +60,9 @@ MODULE Parametrization
  !exposure indexes arrays, i.e. the arrays containing the index for each point for every nbr_wdir wind directions
 
   !Climate-related outputs variables
-  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file, topographic_exposure_indexes_file
+  CHARACTER (LEN=str_len/2) :: wdir_patterns_file_path
+  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, &
+          ds_annual_climate_data_file, topographic_exposure_indexes_file
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, tei_wdir_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_surface_temperature_data

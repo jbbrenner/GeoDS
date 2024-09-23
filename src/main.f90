@@ -6,13 +6,13 @@ PROGRAM main
   USE Parametrization
   USE Inputs_reading, ONLY: reading_temperature_inputs, reading_wind_inputs, reading_topography_inputs
   USE Topographic_parameters_computation, ONLY: computing_WL_exposure_indexes
-  USE Outputs_writing, ONLY: initializing_downscaled_outputs_grid, writing_downscaled_data_outputs
+  USE Outputs_writing, ONLY: writing_wdir_gridpoints_patterns,initializing_downscaled_outputs_grid, &
+       writing_downscaled_data_outputs
   !________________________________________________________________________________________!
 
   IMPLICIT NONE
 
   INTEGER :: m
-
   !________________________________________________________________________________________!
   !Reading netCDF input files 
   !________________________________________________________________________________________!
@@ -36,13 +36,14 @@ PROGRAM main
   PRINT*, "_______________________________"
   PRINT*, "TEI computation"
   CALL computing_WL_exposure_indexes(TEI_pointers_array, config_namelist_blockname, ios, fu)
-
   PRINT*, "End TEI computation"
   PRINT*, "_______________________________"
 
   !________________________________________________________________________________________!
-  !Writing netCDF output files 
+  !Writing output files 
   !________________________________________________________________________________________!
+
+  CALL writing_wdir_gridpoints_patterns()
 
   CALL initializing_downscaled_outputs_grid(ds_x_grid,ds_y_grid, tei_wdir_grid, ds_monthly_t_grid,&
        ds_annual_t_grid, config_namelist_blockname, ios, fu)

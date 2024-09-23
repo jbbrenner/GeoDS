@@ -92,7 +92,6 @@ CONTAINS
     CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
     
     DO m=1, nbr_wdir
-       print*, m
        DO i=1, hr_topo_x_size
           DO j=1, hr_topo_y_size
              DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
@@ -110,11 +109,6 @@ CONTAINS
           END DO
        END DO
     END DO
-
-    PRINT*, WL_pattern_pointers_array(1)%wl_arr_ptr(1)%ix_relative, WL_pattern_pointers_array(1)%wl_arr_ptr(1)%jy_relative
-    !PRINT*, WL_pattern_pointers_array(4)%wl_arr_ptr(25)%ix_relative, WL_pattern_pointers_array(4)%wl_arr_ptr(25)%jy_relative
-    !PRINT*, "KESKISPASS :", TEI_pointers_array(1)%tei_arr_ptr(1,1), TEI_pointers_array(4)%tei_arr_ptr(401, 421)
-    
     
     END SUBROUTINE computing_WL_exposure_indexes
 

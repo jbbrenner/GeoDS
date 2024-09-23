@@ -12,9 +12,45 @@ MODULE Outputs_writing
   !Declaring local variables
   INTEGER, PRIVATE :: i, j, m
   INTEGER, PRIVATE :: k = 0
+  CHARACTER (LEN=str_len), PRIVATE :: txt_file_name, temporary_name
+  CHARACTER (LEN=3), PRIVATE :: str
 
 CONTAINS
 
+  !________________________________________________________________________________________!
+  !Subroutine generating a txt file to study specifically wind direction grids
+  !________________________________________________________________________________________!
+
+  SUBROUTINE writing_wdir_gridpoints_patterns()
+
+    IMPLICIT NONE
+    IF (wdir_grids_generation .EQV. .TRUE.) THEN
+    DO m=1, nbr_wdir
+       WRITE(str,'(I2)') m
+       txt_file_name = wdir_patterns_file_path // "/Wdir_grids/Wdir_grid" // str // ".txt"
+       temporary_name=''
+       j=1
+       DO i=1, LEN(txt_file_name)
+          IF (txt_file_name(i:i) .NE. " ") THEN
+             temporary_name(j:j) = txt_file_name(i:i)
+             j = j + 1
+          END IF
+       END DO
+       txt_file_name = temporary_name
+       PRINT*, "file's name : ", txt_file_name
+       OPEN(unit=11, file=txt_file_name)
+       WRITE(11, '(A1,A1,A1,A1,A6)') "X",";","Y",";","Weight"
+       DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
+          WRITE(11, '(I5,A1,I5,A1,F8.3)') WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
+            WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative,";",&
+            WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist
+       END DO
+       CLOSE(11)
+      END DO
+   END IF
+   
+  END SUBROUTINE writing_wdir_gridpoints_patterns
+  
   !________________________________________________________________________________________!
   !Subroutine generating a new empty netCDF file with high-resolution grid 
   !________________________________________________________________________________________!
