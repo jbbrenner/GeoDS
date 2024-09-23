@@ -12,7 +12,7 @@ MODULE Topographic_parameters_computation
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: m
+  INTEGER, PRIVATE :: m, i, j, k
   
 CONTAINS
 
@@ -84,11 +84,36 @@ CONTAINS
     DO m=1, nbr_wdir
        ALLOCATE(TEI_pointers_array(m)%tei_arr_ptr(1:hr_topo_x_size, 1:hr_topo_y_size))
     END DO
-      
-    CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
 
     DO m=1, nbr_wdir
+       TEI_pointers_array(m)%tei_arr_ptr(:,:) = 0.0
     END DO
+
+    CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
+    
+    DO m=1, nbr_wdir
+       print*, m
+       DO i=1, hr_topo_x_size
+          DO j=1, hr_topo_y_size
+             DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
+                IF ((i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .GE. 1) &
+                     .AND. (i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .LE. hr_topo_x_size) &
+                     .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .GE. 1) &
+                     .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
+                     .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
+                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + 1!TEI_pointers_array(m)%tei_arr_ptr(i, j) + &
+                       ! hr_surface_elevation_data(i + &
+                       ! WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &
+                   ! j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)
+               END IF
+             END DO
+          END DO
+       END DO
+    END DO
+
+    PRINT*, WL_pattern_pointers_array(1)%wl_arr_ptr(1)%ix_relative, WL_pattern_pointers_array(1)%wl_arr_ptr(1)%jy_relative
+    !PRINT*, WL_pattern_pointers_array(4)%wl_arr_ptr(25)%ix_relative, WL_pattern_pointers_array(4)%wl_arr_ptr(25)%jy_relative
+    !PRINT*, "KESKISPASS :", TEI_pointers_array(1)%tei_arr_ptr(1,1), TEI_pointers_array(4)%tei_arr_ptr(401, 421)
     
     
     END SUBROUTINE computing_WL_exposure_indexes

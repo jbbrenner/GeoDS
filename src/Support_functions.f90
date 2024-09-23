@@ -31,7 +31,7 @@ CONTAINS
     NAMELIST/Topography/lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &
     hr_topographic_parameters, hr_surface_elevation_id, hr_topographic_insolation_id, hr_topo_x_size,&
          hr_topo_y_size, hr_topo_t_size
-    NAMELIST/Downscaled_outputs/ds_monthly_climate_data_file, ds_annual_climate_data_file,&
+    NAMELIST/Downscaled_outputs/ds_monthly_climate_data_file, ds_annual_climate_data_file, topographic_exposure_indexes_file, &
          ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution, ds_annual_data_generation, nbr_wdir, d_wsearch
 
 

@@ -17,7 +17,7 @@ MODULE Parametrization
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
-  DOUBLE PRECISION, PARAMETER :: pi = acos(-1.0)
+  DOUBLE PRECISION, PARAMETER :: pi = ACOS(-1.0)
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!
@@ -60,14 +60,15 @@ MODULE Parametrization
  !exposure indexes arrays, i.e. the arrays containing the index for each point for every nbr_wdir wind directions
 
   !Climate-related outputs variables
-  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file
-  DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, ds_monthly_t_grid, ds_annual_t_grid
+  CHARACTER (LEN=str_len) :: ds_monthly_climate_data_file, ds_annual_climate_data_file, topographic_exposure_indexes_file
+  DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, tei_wdir_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_surface_temperature_data
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_surface_temperature_difference
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_precipitation_data
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_precipitation_data
-  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_monthly_climate_data, ds_annual_climate_data, &
+          topographic_exposure_indexes_data
   LOGICAL :: ds_annual_data_generation
   INTEGER :: nbr_wdir
   DOUBLE PRECISION :: d_wsearch
