@@ -37,13 +37,19 @@ CONTAINS
           END IF
        END DO
        txt_file_name = temporary_name
-       PRINT*, "file's name : ", txt_file_name
+       !PRINT*, "file's name : ", txt_file_name
        OPEN(unit=11, file=txt_file_name)
-       WRITE(11, '(A1,A1,A1,A1,A6)') "X",";","Y",";","Weight"
+       WRITE(11, '(A1,A1,A1,A1,A10)') "X",";","Y",";","horiz_dist"
        DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
-          WRITE(11, '(I5,A1,I5,A1,F8.3)') WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
+          WRITE(11, '(I5,A1,I5,A1,F8.2)') WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
             WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative,";",&
             WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist
+            !IF (m .EQ. 1) THEN
+             !       PRINT*, WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
+              !      WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative,";",&
+               !     WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist
+                !    PRINT*, '__'
+           ! END IF
        END DO
        CLOSE(11)
       END DO

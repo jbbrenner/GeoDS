@@ -76,29 +76,31 @@ CONTAINS
                       (jr*spatial_resolution)**2) !the relative distance between the point the TEI is beeing calculated and the given gridpoint
                     !WL_pattern_pointers_array(m)%ptr(counter(m))%wdir_dist = SQRT((i*spatial_resolution)**2 + (j*spatial_resolution)**2) &
                      ! * COS(ATAN2(j*spatial_resolution,i*spatial_resolution) - wdir_angle_boundaries(m))
-                    !PRINT *, "1st condition", ir, jr, ATAN2(jr*spatial_resolution,ir*spatial_resolution), m
+                     !IF (m .EQ. 1) THEN
+                      !       PRINT *, "1st condition", ir, jr, ATAN2(jr*spatial_resolution,ir*spatial_resolution), m
+                     !END IF
                     counter(m) = counter(m) + 1
-                 !ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m) &
-                 !     .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
-                 !     .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
-                 !     * SIN(wdir_angle_boundaries(m) - ATAN2(jr*spatial_resolution,ir*spatial_resolution)))) &
-                 !     .LT. spatial_resolution) THEN
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
-                 !     (jr*spatial_resolution)**2) 
-                 !   counter(m) = counter(m) + 1
+                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m) &
+                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
+                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+                      * SIN(wdir_angle_boundaries(m) - ATAN2(jr*spatial_resolution,ir*spatial_resolution)))) &
+                      .LT. spatial_resolution) THEN
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                      (jr*spatial_resolution)**2) 
+                    counter(m) = counter(m) + 1
                  !   !PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
-                 !ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
-                 !     .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
-                 !     .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
-                 !     * SIN(ATAN2(jr*spatial_resolution,ir*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
-                 !     .LT. spatial_resolution) THEN
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
-                 !   WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
-                 !     (jr*spatial_resolution)**2) 
-                 !   counter(m) = counter(m) + 1
+                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
+                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
+                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+                      * SIN(ATAN2(jr*spatial_resolution,ir*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
+                      .LT. spatial_resolution) THEN
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+                      (jr*spatial_resolution)**2) 
+                    counter(m) = counter(m) + 1
                     !PRINT *, "3rd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                  END IF
               END DO
@@ -107,20 +109,28 @@ CONTAINS
      END DO
      !___________________________________________________________________!
      !The following loop is used to correct the previous conditions for the specific case of gridpoints located on the left portion of the x-absciss
-     ir=0
-     DO jr=FLOOR(-d_wsearch/spatial_resolution), -1
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%ix_relative = ir 
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%jy_relative = jr
-        WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
-                    (jr*spatial_resolution)**2) 
-        counter(1) = counter(1) + 1
-     END DO
+     !ir=0
+     !DO jr=FLOOR(-d_wsearch/spatial_resolution), -1
+      !  WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%ix_relative = ir 
+       ! WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%jy_relative = jr
+        !WL_pattern_pointers_array(1)%wl_arr_ptr(counter(1))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+       !             (jr*spatial_resolution)**2) 
+        !counter(1) = counter(1) + 1
+     !END DO
      !____________________________________________________________________!
     
       !___________________________________________________________________!
       !Deallocation of the private arrays
       !___________________________________________________________________!
       DEALLOCATE(counter)
+
+
+     ! DO jr=1, SIZE(WL_pattern_pointers_array(1)%wl_arr_ptr)
+      !             PRINT*, WL_pattern_pointers_array(1)%wl_arr_ptr(jr)%ix_relative,";",&
+       !           WL_pattern_pointers_array(1)%wl_arr_ptr(jr)%jy_relative,";",&
+        !          WL_pattern_pointers_array(1)%wl_arr_ptr(jr)%horizontal_dist
+       !END DO
+
 
     END SUBROUTINE filling_WL_patterns_arrays
 
