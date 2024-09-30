@@ -38,50 +38,50 @@ CONTAINS
     ALLOCATE (lr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
    
     !Storing temperature data from LR netCDF file in array
-    CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, [1,1,t_start], &
-            [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+    CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, &
+            [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
  
   END SUBROUTINE reading_temperature_inputs
   
   !___________________________________________________________________________________________________________________________!
   !___________________________________________________________________________________________________________________________!
   
-!!$  SUBROUTINE reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
-!!$
-!!$    IMPLICIT NONE
-!!$
-!!$    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_precipitation_data
-!!$    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
-!!$    INTEGER, INTENT(INOUT) :: ios, fu
-!!$
-!!$    !_____________________________________________________________________________________!
-!!$    !Reading temperature-related input variables in the configuration file
-!!$    !_____________________________________________________________________________________!
-!!$    config_namelist_blockname="Global_inputs_variables"
-!!$    CALL accessing_config_file(ios, fu)
-!!$
-!!$    !Sizing data array with dimensions stored in the configuration file
-!!$    ALLOCATE (lr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-!!$
-!!$    config_namelist_blockname="Precipitation"
-!!$    CALL accessing_config_file(ios, fu)
-!!$
-!!$    !Storing temperature data from LR netCDF file in array
-!!$    CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)
-!!$
-!!$
-!!$  END SUBROUTINE reading_precipitation_inputs
+  SUBROUTINE reading_precipitation_inputs(lr_precipitation_data, config_namelist_blockname, ios, fu)
+
+    IMPLICIT NONE
+
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_precipitation_data
+    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    INTEGER, INTENT(INOUT) :: ios, fu
+
+    !_____________________________________________________________________________________!
+    !Reading temperature-related input variables in the configuration file
+    !_____________________________________________________________________________________!
+    config_namelist_blockname="Global_inputs_variables"
+    CALL accessing_config_file(ios, fu)
+
+    !Sizing data array with dimensions stored in the configuration file
+    ALLOCATE (lr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+
+    config_namelist_blockname="Precipitation"
+    CALL accessing_config_file(ios, fu)
+
+    !Storing temperature data from LR netCDF file in array
+    CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)
+
+
+  END SUBROUTINE reading_precipitation_inputs
 
   !___________________________________________________________________________________________________________________________!
   !___________________________________________________________________________________________________________________________
 
-  SUBROUTINE reading_wind_inputs(lr_uwind_data, lr_vwind_data, config_namelist_blockname, t_extent, ios, fu)
+  SUBROUTINE reading_wind_inputs(lr_uwind_data, lr_vwind_data, config_namelist_blockname, ios, fu)
 
     IMPLICIT NONE
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_uwind_data, lr_vwind_data
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
-    INTEGER, INTENT(INOUT) :: t_extent, ios, fu
+    INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file

@@ -92,18 +92,18 @@ CONTAINS
     CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
     
     DO m=1, nbr_wdir
-       DO i=1, hr_topo_x_size
-          DO j=1, hr_topo_y_size
+       DO j=1, hr_topo_y_size
+          DO i=1, hr_topo_x_size
              DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
                 IF ((i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .GE. 1) &
                      .AND. (i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .LE. hr_topo_x_size) &
                      .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .GE. 1) &
                      .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
                      .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
-                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + 1!TEI_pointers_array(m)%tei_arr_ptr(i, j) + &
-                       ! hr_surface_elevation_data(i + &
-                       ! WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &
-                   ! j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)
+                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &
+                        (hr_surface_elevation_data(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &
+                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)) * &
+                        (spatial_resolution * WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist)
                END IF
              END DO
           END DO

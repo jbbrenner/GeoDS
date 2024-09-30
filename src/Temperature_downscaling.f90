@@ -12,20 +12,20 @@ MODULE Temperature_downscaling
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: i, j
+  INTEGER, PRIVATE :: t, k
 
   
 CONTAINS
 
   !____________________________________________________________________________!
   SUBROUTINE applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-       hr_surface_temperature_data, lr_hr_surface_temperature_difference)
+       hr_surface_temperature_data, lr_hr_surface_temperature_anomalies)
     
     IMPLICIT NONE
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: elevation_anomalies_data, hr_surface_temperature_data, &
-         lr_hr_surface_temperature_difference
+         lr_hr_surface_temperature_anomalies
 
     !Computing elevation anomalies between low resolution grid and high resolution grid
     CALL computing_elevation_anomalies(lr_surface_elevation_data, &
@@ -39,27 +39,27 @@ CONTAINS
     !PRINT*, '_____________________insol_test_____________________'
     
     ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-    ALLOCATE(lr_hr_surface_temperature_difference(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE(lr_hr_surface_temperature_anomalies(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     
     hr_surface_temperature_data(:,:,:) = 0
-    lr_hr_surface_temperature_difference(:,:,:) = 0
+    lr_hr_surface_temperature_anomalies(:,:,:) = 0
 
     !for every time step (3rd dimension of the following arrays), the high resolution surface temperature is computed as
     !a correction of the GCM's outputs. A loop is used to overcome the problem of dimensions inequality between climate
     !data arrays and topographic data arrays
 
-    j=1
-        DO i=1, t_extent
-           hr_surface_temperature_data(:,:,i) = lr_surface_temperature_data(:,:,i) + &
-                lambda * elevation_anomalies_data(:,:,j) + &
-                alpha * topographic_insolation_anomalies_data(:,:,j)
-           j=j+1
-           IF (j .EQ. months_nbr+1) THEN
-              j=1
+    k=1
+        DO t=1, t_extent
+           hr_surface_temperature_data(:,:,t) = lr_surface_temperature_data(:,:,t) + &
+                lambda * elevation_anomalies_data(:,:,k) + &
+                alpha * topographic_insolation_anomalies_data(:,:,k)
+           k=k+1
+           IF (k .EQ. months_nbr+1) THEN
+              k=1
            ENDIF
         ENDDO       
 
-     lr_hr_surface_temperature_difference(:,:,:) = lr_surface_temperature_data(:,:,:) &
+     lr_hr_surface_temperature_anomalies(:,:,:) = lr_surface_temperature_data(:,:,:) &
              - hr_surface_temperature_data(:,:,:)
 
   END SUBROUTINE applying_lapse_rate_correction

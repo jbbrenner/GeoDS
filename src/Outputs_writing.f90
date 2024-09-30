@@ -18,7 +18,9 @@ MODULE Outputs_writing
 CONTAINS
 
   !________________________________________________________________________________________!
-  !Subroutine generating a txt file to study specifically wind direction grids
+  !Subroutine generating a txt file to study specifically wind direction grids. One txt file is created
+  !for each of the nbr_wdir wind directions, containing the relative ix, iy and horizontal_distance of 
+  !the influence points in the windward direction of the point the TEI is being calculated
   !________________________________________________________________________________________!
 
   SUBROUTINE writing_wdir_gridpoints_patterns()
@@ -115,41 +117,77 @@ CONTAINS
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
        ALLOCATE (ds_monthly_t_grid(t_extent))
        ds_monthly_t_grid(:) = 0
-       CALL nc_create(ds_monthly_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
-       CALL nc_write_attr(ds_monthly_climate_data_file,"Title","High-resolution climate data grid")
-       CALL nc_write_attr(ds_monthly_climate_data_file,"Institution", &
+       CALL nc_create(ds_monthly_temperature_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+       CALL nc_write_attr(ds_monthly_temperature_data_file,"Title","High-resolution climate data grid")
+       CALL nc_write_attr(ds_monthly_temperature_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-       CALL nc_write_dim(ds_monthly_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
-       CALL nc_write_dim(ds_monthly_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
-       CALL nc_write_dim(ds_monthly_climate_data_file,"time",x=ds_monthly_t_grid, &
+       CALL nc_write_dim(ds_monthly_temperature_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+       CALL nc_write_dim(ds_monthly_temperature_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+       CALL nc_write_dim(ds_monthly_temperature_data_file,"time",x=ds_monthly_t_grid, &
             units="months",calendar="360_day", unlimited=.TRUE.)
             !units="hours since 1800-01-01 00:00:00.0", calendar="gregorian", unlimited=.TRUE.)
-       
-       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
-          ALLOCATE (ds_annual_t_grid(t_extent/months_nbr))
-          CALL nc_create(ds_annual_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
-          CALL nc_write_attr(ds_annual_climate_data_file,"Title","High-resolution climate data grid")
-          CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
+ 
+
+       ds_monthly_t_grid(:) = 0
+       CALL nc_create(ds_monthly_precipitation_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+       CALL nc_write_attr(ds_monthly_precipitation_data_file,"Title","High-resolution climate data grid")
+       CALL nc_write_attr(ds_monthly_precipitation_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-          CALL nc_write_dim(ds_annual_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
-          CALL nc_write_dim(ds_annual_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
-          CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
+       CALL nc_write_dim(ds_monthly_precipitation_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+       CALL nc_write_dim(ds_monthly_precipitation_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+       CALL nc_write_dim(ds_monthly_precipitation_data_file,"time",x=ds_monthly_t_grid, &
+            units="months",calendar="360_day", unlimited=.TRUE.)
+
+
+       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
+          ALLOCATE (ds_annual_t_grid(t_extent/months_nbr))
+          CALL nc_create(ds_annual_temperature_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_temperature_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_temperature_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
+
+          CALL nc_write_dim(ds_annual_temperature_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_temperature_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_temperature_data_file,"time",x=ds_annual_t_grid, &
                units="years",calendar="360_day", unlimited=.TRUE.)
+        
+          CALL nc_create(ds_annual_precipitation_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_precipitation_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_precipitation_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
+
+          CALL nc_write_dim(ds_annual_precipitation_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_precipitation_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_precipitation_data_file,"time",x=ds_annual_t_grid, &
+               units="years",calendar="360_day", unlimited=.TRUE.)
+
+
        ENDIF
        
      ELSE
           ALLOCATE (ds_annual_t_grid(t_extent))
-          CALL nc_create(ds_annual_climate_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
-          CALL nc_write_attr(ds_annual_climate_data_file,"Title","High-resolution climate data grid")
-          CALL nc_write_attr(ds_annual_climate_data_file,"Institution", &
+          CALL nc_create(ds_annual_temperature_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_temperature_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_temperature_data_file,"Institution", &
                        "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
 
-          CALL nc_write_dim(ds_annual_climate_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
-          CALL nc_write_dim(ds_annual_climate_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
-          CALL nc_write_dim(ds_annual_climate_data_file,"time",x=ds_annual_t_grid, &
+          CALL nc_write_dim(ds_annual_temperature_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_temperature_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_temperature_data_file,"time",x=ds_annual_t_grid, &
                units="years",calendar="360_day", unlimited=.TRUE.)
+        
+          CALL nc_create(ds_annual_precipitation_data_file, OVERWRITE=.TRUE.,NETCDF4=.TRUE.)
+          CALL nc_write_attr(ds_annual_precipitation_data_file,"Title","High-resolution climate data grid")
+          CALL nc_write_attr(ds_annual_precipitation_data_file,"Institution", &
+                       "Laboratoire de Sciences du Climat et de l'Environnement, GeoDS project")
+
+          CALL nc_write_dim(ds_annual_precipitation_data_file,x_dim_name,x=ds_x_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_precipitation_data_file,y_dim_name,x=ds_y_grid,units=xy_unit)
+          CALL nc_write_dim(ds_annual_precipitation_data_file,"time",x=ds_annual_t_grid, &
+               units="years",calendar="360_day", unlimited=.TRUE.)
+
      ENDIF
         
      CLOSE(fu)
@@ -160,106 +198,140 @@ CONTAINS
   !________________________________________________________________________________________!
   !Subroutine writing downscaled climate data in the netCDF file generated by the downscaled_outputs_grid_init subroutine
   !________________________________________________________________________________________!
-  SUBROUTINE writing_downscaled_data_outputs(ds_monthly_climate_data_file, ds_annual_climate_data_file,&
-                  topographic_exposure_indexes_file, &
-       lr_surface_temperature_data, ds_monthly_climate_data, ds_annual_climate_data, topographic_exposure_indexes_data)
+  SUBROUTINE writing_downscaled_data_outputs(ds_monthly_temperature_data_file, ds_annual_temperature_data_file,&
+       ds_monthly_precipitation_data_file, ds_annual_precipitation_data_file, topographic_exposure_indexes_file, &
+       lr_surface_temperature_data, ds_annual_temperature_data, ds_annual_precipitation_data, &
+       topographic_exposure_indexes_data)
 
     IMPLICIT NONE
     
-    CHARACTER (LEN=str_len), INTENT(IN) :: ds_monthly_climate_data_file, ds_annual_climate_data_file, &
-            topographic_exposure_indexes_file
+    CHARACTER (LEN=str_len), INTENT(IN) :: ds_monthly_temperature_data_file, ds_annual_temperature_data_file, &
+            ds_monthly_precipitation_data_file, ds_annual_precipitation_data_file, topographic_exposure_indexes_file
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
-    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: ds_monthly_climate_data,&
-         ds_annual_climate_data, topographic_exposure_indexes_data
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: ds_annual_temperature_data, &
+         ds_annual_precipitation_data, topographic_exposure_indexes_data
 
 
     ALLOCATE(topographic_exposure_indexes_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:nbr_wdir))
-    
+   
+     
     DO m=1, nbr_wdir
-       DO i=1, hr_topo_x_size
-          DO j=1, hr_topo_y_size
+       DO j=1, hr_topo_y_size
+          DO i=1, hr_topo_x_size
              topographic_exposure_indexes_data(i, j, m) = TEI_pointers_array(m)%tei_arr_ptr(i, j)
           END DO
        END DO
     END DO
-    
-        
+   
     !Downscaled climate data arrays are sized to fit the high resolution Digital Elevation Model dataset structure (target grid)
     !If monthly low resolution climate data are available, the annual downscaled climate dataset is built as the average of the
     !monthly downscaled climate dataset on 12 months time span
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
         
-      ALLOCATE (ds_monthly_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size, 1:t_extent))
-      ds_monthly_climate_data(:,:,:) = 0
       CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-           hr_surface_temperature_data, lr_hr_surface_temperature_difference)
+           hr_surface_temperature_data, lr_hr_surface_temperature_anomalies)
     
       CALL downscaling_precipitation(lr_precipitation_data, hr_precipitation_data, &
-       lr_hr_precipitation_data)
+       lr_hr_precipitation_anomalies)
 
-      
       CALL nc_write(topographic_exposure_indexes_file, "topographic_exposure_index", &
            topographic_exposure_indexes_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="wdir")
-
-      ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "ts", ds_monthly_climate_data(:,:,:),&
+ 
+      CALL nc_write(ds_monthly_temperature_data_file, "ts", hr_surface_temperature_data(:,:,:),&
            dim1=x_dim_name, dim2=y_dim_name, dim3="time")
-      
-      ds_monthly_climate_data(:,:,:) = 0
-      ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "ts_anomalies", ds_monthly_climate_data(:,:,:), &
+
+      CALL nc_write(ds_monthly_temperature_data_file, "ts_anomalies", lr_hr_surface_temperature_anomalies(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
-      ds_monthly_climate_data(:,:,:) = 0
-      ds_monthly_climate_data(:,:,:) = hr_precipitation_data(:,:,:)
-      CALL nc_write(ds_monthly_climate_data_file, "PP", ds_monthly_climate_data(:,:,:), & 
+      CALL nc_write(ds_monthly_precipitation_data_file, "PP", hr_precipitation_data(:,:,:), & 
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+
+      CALL nc_write(ds_monthly_precipitation_data_file, "PP_anomalies", lr_hr_precipitation_anomalies(:,:,:), &
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+
 
 
       IF (ds_annual_data_generation .EQV. .TRUE.) THEN
-         ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
+         ALLOCATE (ds_annual_temperature_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:t_extent/months_nbr))
-         ds_annual_climate_data(:,:,:) = 0
+         ds_annual_temperature_data(:,:,:) = 0
+         k = 0
          DO WHILE (k<t_extent/months_nbr)
             DO j=1, months_nbr
-               ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1) + &
-                    hr_surface_temperature_data(:,:,k*months_nbr + j)
-               
+               ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1) + &
+                    hr_surface_temperature_data(:,:,k*months_nbr + j)              
             ENDDO
-            ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1)/months_nbr
+            ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
+         CALL nc_write(ds_annual_temperature_data_file, "ts", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
-         ds_annual_climate_data(:,:,:) = 0
+         ds_annual_temperature_data(:,:,:) = 0
+
+         k = 0
          DO WHILE (k<t_extent/months_nbr)
             DO j=1, months_nbr
-               ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1) + &
-                    lr_hr_surface_temperature_difference(:,:,k*months_nbr + j)
+               ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1) + &
+                    lr_hr_surface_temperature_anomalies(:,:,k*months_nbr + j)
                
             ENDDO
-            ds_annual_climate_data(:,:,k+1) = ds_annual_climate_data(:,:,k+1)/months_nbr
+            ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
+         CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
-         
+
+
+        ALLOCATE (ds_annual_precipitation_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
+              1:t_extent/months_nbr))
+        ds_annual_precipitation_data(:,:,:) = 0
+        
+        k = 0
+         DO WHILE (k<t_extent/months_nbr)
+            DO j=1, months_nbr
+               ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1) + &
+                    hr_precipitation_data(:,:,k*months_nbr + j)
+
+            ENDDO
+            ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
+            k=k+1
+         ENDDO
+         CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+         ds_annual_precipitation_data(:,:,:) = 0
+
+         k = 0
+         DO WHILE (k<t_extent/months_nbr)
+            DO j=1, months_nbr
+               ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1) + &
+                    lr_hr_precipitation_anomalies(:,:,k*months_nbr + j)
+
+            ENDDO
+            ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
+            k=k+1
+         ENDDO
+         CALL nc_write(ds_annual_precipitation_data_file, "PP_anomalies", ds_annual_precipitation_data(:,:,:),&
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+
       ENDIF
        
     ELSE
-         ALLOCATE (ds_annual_climate_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
+         ALLOCATE (ds_annual_temperature_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
               1:t_extent))
-         ds_annual_climate_data(:,:,:) = 0
+         ALLOCATE (ds_annual_precipitation_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
+              1:t_extent))
+         ds_annual_temperature_data(:,:,:) = 0
+         ds_annual_precipitation_data(:,:,:) = 0
          CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-              hr_surface_temperature_data, lr_hr_surface_temperature_difference)
-         ds_monthly_climate_data(:,:,:) = hr_surface_temperature_data
-         CALL nc_write(ds_annual_climate_data_file, "ts", ds_annual_climate_data(:,:,:),&
+              hr_surface_temperature_data, lr_hr_surface_temperature_anomalies)
+         ds_annual_temperature_data(:,:,:) = hr_surface_temperature_data
+         CALL nc_write(ds_annual_temperature_data_file, "ts", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
-        ds_monthly_climate_data(:,:,:) = lr_hr_surface_temperature_difference
-         CALL nc_write(ds_annual_climate_data_file, "ts_anomalies", ds_annual_climate_data(:,:,:),&
+        ds_annual_temperature_data(:,:,:) = lr_hr_surface_temperature_anomalies
+         CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time") 
-        ds_monthly_climate_data(:,:,:) = hr_precipitation_data
-         CALL nc_write(ds_annual_climate_data_file, "PP", ds_annual_climate_data(:,:,:),&
+        ds_annual_precipitation_data(:,:,:) = hr_precipitation_data
+         CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
     ENDIF

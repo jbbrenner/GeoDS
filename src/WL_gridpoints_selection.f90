@@ -69,7 +69,7 @@ CONTAINS
            IF (SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) .LE. d_wsearch) THEN !Checking only the points within the maximum research distance chosen by the user
               DO m=1, nbr_wdir
                  IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m) & !If the tested gridpoint is close enough, the angle between it and the center of the scheme is being tested, in order to associate the gridpoint to the correct wind direction array. The multiplication of i and j by spatial_resolution allows to have real arguments for !the ATAN2 function, which do not work with integers
-                      .AND. ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LE. wdir_angle_boundaries(m+1)) THEN !Once the gridpoint is associated to the right array, the necessary information to compute the TEI are stored :
+                      .AND. ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m+1)) THEN !Once the gridpoint is associated to the right array, the necessary information to compute the TEI are stored :
                     WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir !the relative coordinates of the gridpoint i.e. the x-increment 
                     WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr !and y-increment
                     WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
