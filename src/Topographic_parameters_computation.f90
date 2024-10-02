@@ -88,7 +88,7 @@ CONTAINS
     END DO
 
     DO m=1, nbr_wdir
-       TEI_pointers_array(m)%tei_arr_ptr(:,:) = 0.0
+       TEI_pointers_array(m)%tei_arr_ptr(:,:) = 1.0
     END DO
 
     CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
@@ -110,7 +110,7 @@ CONTAINS
                    IF (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist .GT. 0d0) THEN                 !Since each influence gridpoint wieght is
                       TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &      !given by 1/horizontal distance between 
                        (hr_surface_elevation_data(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &  !the gridpoint of influence and the cell the TEI's
-                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)) * &                      !is being computed, it is necessary to check 
+                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)) * &                    !is being computed, it is necessary to check 
                         (spatial_resolution * 1.0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist)    !if horizontal_dist is equal to 0 in order to 
                    ELSE                                                                                          !avoid errors risen by null divisions
                       TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &

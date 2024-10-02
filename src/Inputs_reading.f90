@@ -57,14 +57,11 @@ CONTAINS
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
-    config_namelist_blockname="Global_inputs_variables"
+    config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
 
     !Sizing data array with dimensions stored in the configuration file
     ALLOCATE (lr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-
-    config_namelist_blockname="Precipitation"
-    CALL accessing_config_file(ios, fu)
 
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)

@@ -80,27 +80,27 @@ CONTAINS
                       !       PRINT *, "1st condition", ir, jr, ATAN2(jr*spatial_resolution,ir*spatial_resolution), m
                      !END IF
                     counter(m) = counter(m) + 1
-                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m) &
-                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
-                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
-                      * SIN(wdir_angle_boundaries(m) - ATAN2(jr*spatial_resolution,ir*spatial_resolution)))) &
-                      .LT. spatial_resolution) THEN
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
-                      (jr*spatial_resolution)**2) 
-                    counter(m) = counter(m) + 1
-                 !   !PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
-                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
-                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
-                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
-                      * SIN(ATAN2(jr*spatial_resolution,ir*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
-                      .LT. spatial_resolution) THEN
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
-                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
-                      (jr*spatial_resolution)**2) 
-                    counter(m) = counter(m) + 1
+!                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .LT. wdir_angle_boundaries(m) &
+!                     .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m)) .LT. pi/4 &
+!                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+!                      * SIN(wdir_angle_boundaries(m) - ATAN2(jr*spatial_resolution,ir*spatial_resolution)))) &
+!                      .LT. spatial_resolution) THEN
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+!                      (jr*spatial_resolution)**2) 
+!                    counter(m) = counter(m) + 1
+!                 !   !PRINT *, "2nd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
+!                 ELSE IF (ATAN2(jr*spatial_resolution,ir*spatial_resolution) .GE. wdir_angle_boundaries(m+1) &
+!                      .AND. ABS(ATAN2(jr*spatial_resolution,ir*spatial_resolution)-wdir_angle_boundaries(m+1)) .LT. pi/4 &
+!                      .AND. ABS((SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) &
+!                      * SIN(ATAN2(jr*spatial_resolution,ir*spatial_resolution) - wdir_angle_boundaries(m+1)))) &
+!                      .LT. spatial_resolution) THEN
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%ix_relative = ir 
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%jy_relative = jr
+!                    WL_pattern_pointers_array(m)%wl_arr_ptr(counter(m))%horizontal_dist = SQRT((ir*spatial_resolution)**2 + &
+!                      (jr*spatial_resolution)**2) 
+!                    counter(m) = counter(m) + 1
                     !PRINT *, "3rd condition", i, j, ATAN2(j*spatial_resolution,i*spatial_resolution), m
                  END IF
               END DO
