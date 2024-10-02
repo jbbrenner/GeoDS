@@ -1,6 +1,6 @@
 # Generic definitions ...
 
-F_OPTIM_HIGH  = -O3
+F_OPTIM_HIGH  = -O2
 F_PRE_PROCESS = -cpp
 F_FLAGS_EXTD  = -ffixed-line-length-132
 F_FLAGS_CARD  = -ffixed-line-length-80
