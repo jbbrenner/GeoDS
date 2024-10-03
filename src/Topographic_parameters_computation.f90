@@ -102,21 +102,19 @@ CONTAINS
        DO j=1, hr_topo_y_size
           DO i=1, hr_topo_x_size        
              DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
-                IF ((i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .GE. 1) &                            
+                IF ((i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .GE. 1d0) &                            
                      .AND. (i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .LE. hr_topo_x_size) &
                      .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .GE. 1) &
                      .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
                      .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
                    IF (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist .GT. 0d0) THEN                 !Since each influence gridpoint wieght is
                       TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &      !given by 1/horizontal distance between 
-                       (hr_surface_elevation_data(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &  !the gridpoint of influence and the cell the TEI's
+                        (hr_surface_elevation_data(i, j, 1) - hr_surface_elevation_data(i + &
+                        WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &  !the gridpoint of influence and the cell the TEI's
                         j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)) * &                    !is being computed, it is necessary to check 
                         (spatial_resolution * 1.0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist)    !if horizontal_dist is equal to 0 in order to 
                    ELSE                                                                                          !avoid errors risen by null divisions
-                      TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &
-                       (hr_surface_elevation_data(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &
-                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1)) * &
-                        (spatial_resolution * WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist)
+                      TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j)
                    END IF
                END IF
              END DO
