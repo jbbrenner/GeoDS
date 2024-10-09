@@ -34,7 +34,7 @@ CONTAINS
          hr_topo_y_size, hr_topo_t_size
     NAMELIST/Downscaled_outputs/wdir_patterns_file_path, ds_monthly_temperature_data_file, &
             ds_annual_temperature_data_file, ds_monthly_precipitation_data_file, ds_annual_precipitation_data_file, &
-            topographic_exposure_indexes_file, ds_x_grid_lower_bound, &
+            topographic_exposure_indexes_file, sorted_wind_directions_file, ds_x_grid_lower_bound, &
             ds_y_grid_lower_bound, spatial_resolution, ds_annual_data_generation, nbr_wdir, d_wsearch
 
 

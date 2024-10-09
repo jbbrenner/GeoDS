@@ -55,7 +55,7 @@ PROGRAM main
   CALL writing_downscaled_data_outputs(ds_monthly_temperature_data_file, ds_annual_temperature_data_file,&
        ds_monthly_precipitation_data_file, ds_annual_precipitation_data_file, topographic_exposure_indexes_file, &
        lr_surface_temperature_data, ds_annual_temperature_data, &
-       ds_annual_precipitation_data, topographic_exposure_indexes_data)
+       ds_annual_precipitation_data, topographic_exposure_indexes_data, sorted_wind_directions_data)
 
   PRINT*, hr_topo_x_size, hr_topo_y_size, lr_climate_data_t_size, sum(lr_surface_temperature_data)
   PRINT*, "Low resolution mean temperature :",&

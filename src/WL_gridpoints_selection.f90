@@ -33,7 +33,7 @@ CONTAINS
      
       PRINT*, "nbr_wdir =", nbr_wdir
       PRINT*, 'd_wsearch =', d_wsearch
-      max_size_real=CEILING((d_wsearch/spatial_resolution + 2)**2)
+      max_size_real=CEILING(2*(d_wsearch/spatial_resolution + 2)**2)
       max_size=INT(max_size_real)
       PRINT*, 'max_size = ', max_size
  
