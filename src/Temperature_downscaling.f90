@@ -59,8 +59,8 @@ CONTAINS
            ENDIF
         ENDDO       
 
-     lr_hr_surface_temperature_anomalies(:,:,:) = lr_surface_temperature_data(:,:,:) &
-             - hr_surface_temperature_data(:,:,:)
+     lr_hr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
+             - lr_surface_temperature_data(:,:,:)
 
   END SUBROUTINE applying_lapse_rate_correction
  

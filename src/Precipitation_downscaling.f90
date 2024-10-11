@@ -38,7 +38,7 @@ CONTAINS
        END DO
     END DO
     
-   lr_hr_precipitation_anomalies(:,:,:) = lr_precipitation_data(:,:,:) - hr_precipitation_data(:,:,:)
+   lr_hr_precipitation_anomalies(:,:,:) = hr_precipitation_data(:,:,:) - lr_precipitation_data(:,:,:)
 
     PRINT*, "_______________________________"    
     END SUBROUTINE downscaling_precipitation
