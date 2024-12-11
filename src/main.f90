@@ -58,6 +58,7 @@ PROGRAM main
        ds_annual_precipitation_data, topographic_exposure_indexes_data, sorted_wind_directions_data)
 
   PRINT*, hr_topo_x_size, hr_topo_y_size, lr_climate_data_t_size, sum(lr_surface_temperature_data)
+  PRINT*, "TEST", sum(lr_surface_temperature_data),hr_topo_x_size,hr_topo_y_size,lr_climate_data_t_size, T_conv
   PRINT*, "Low resolution mean temperature :",&
        sum(lr_surface_temperature_data)/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size) - T_conv
   PRINT*, "Low resolution maximum temperature :", (MAXVAL(lr_surface_temperature_data)) - T_conv
@@ -80,8 +81,8 @@ PROGRAM main
   DEALLOCATE(TEI_pointers_array)
   DEALLOCATE(wdir_angle_boundaries)
         
-  DEALLOCATE(hr_precipitation_data, lr_hr_precipitation_anomalies, &
-       lr_hr_surface_temperature_anomalies, &
+  DEALLOCATE(hr_precipitation_data, hr_lr_precipitation_ratio, hr_lr_precipitation_anomalies, &
+       hr_lr_surface_temperature_anomalies, &
        lr_surface_temperature_data, hr_surface_temperature_data, lr_uwind_data, lr_vwind_data, lr_surface_elevation_data, &
        hr_surface_elevation_data, elevation_anomalies_data, lr_topographic_insolation_data, hr_topographic_insolation_data, &
        topographic_insolation_anomalies_data, ds_x_grid, ds_y_grid, tei_wdir_grid, topographic_exposure_indexes_data, &

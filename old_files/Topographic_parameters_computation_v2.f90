@@ -1,10 +1,12 @@
+!Ancienne version de calcul du TEI avec approche proposée par Aurélien
+!(construire un  maximum qui ne dépende pas du domaine choisi)
+
 MODULE Topographic_parameters_computation
 
   !__________________________________________________________________________________________________________________________!
   !Interface script calling all geometry-based modules to compute the different topographical indicators required to downscale
   !temperatures and precipitation fields.
   !__________________________________________________________________________________________________________________________!
-
 
   USE Parametrization
   USE Support_functions, only: accessing_config_file
@@ -13,6 +15,8 @@ MODULE Topographic_parameters_computation
   IMPLICIT NONE
 
   INTEGER, PRIVATE :: m, i, j, k
+  DOUBLE PRECISION, PRIVATE :: elev_max, TEI_global_minimum, TEI_global_maximum
+  DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE, PRIVATE :: TEI_minima, TEI_maxima
   
 CONTAINS
 
@@ -74,6 +78,13 @@ CONTAINS
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
     
+
+    !__________________________________________________________________!
+    !Computing TEI global extrema for rescaling
+    !__________________________________________________________________!
+
+    elev_max=9000d0
+
     !__________________________________________________________________!
     !Reading TEI related information stored in the Configuration file
     !__________________________________________________________________!"
@@ -81,11 +92,14 @@ CONTAINS
     config_namelist_blockname="Downscaled_outputs"
     CALL accessing_config_file(ios, fu)
     
+    ALLOCATE(TEI_minima(1:hr_topo_x_size, 1:hr_topo_y_size),TEI_maxima(1:hr_topo_x_size, 1:hr_topo_y_size)) 
     ALLOCATE(TEI_pointers_array(nbr_wdir))
     DO m=1, nbr_wdir
        ALLOCATE(TEI_pointers_array(m)%tei_arr_ptr(1:hr_topo_x_size, 1:hr_topo_y_size))
     END DO
 
+    TEI_minima(:,:) = 0d0
+    TEI_maxima(:,:) = 0d0
     DO m=1, nbr_wdir
        TEI_pointers_array(m)%tei_arr_ptr(:,:) = 1d0
     END DO
@@ -115,12 +129,45 @@ CONTAINS
                         j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1))* &                 !if horizontal_dist is equal to 0 in order to
                         1d0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist            !avoid errors risen by null divisions         
                      
+                      TEI_minima(i,j) = TEI_minima(i,j) - elev_max * &
+                        1d0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist 
+
+                      TEI_maxima(i,j) = TEI_maxima(i,j) + elev_max * &
+                        1d0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist
+                   ELSE                                                                                         
+                      TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j)
                    END IF
                END IF
              END DO
           END DO
        END DO
     END DO
+
+    TEI_global_minimum = MINVAL(TEI_minima)
+    TEI_global_maximum = MAXVAL(TEI_maxima)
+
+    PRINT*, ""
+    PRINT*, "TEST PRECIPITATIONS"
+    PRINT*, "TEI_global_min =", TEI_global_minimum
+    PRINT*, "TEI_global_max =", TEI_global_maximum
+    PRINT*, "TEI_min =", MINVAL(TEI_pointers_array(1)%tei_arr_ptr), MINVAL(TEI_pointers_array(3)%tei_arr_ptr)
+    PRINT*, "TEI_max =", MAXVAL(TEI_pointers_array(1)%tei_arr_ptr), MAXVAL(TEI_pointers_array(3)%tei_arr_ptr)
+
+    DO m=1, nbr_wdir
+      DO j=1, hr_topo_y_size
+        DO i=1, hr_topo_x_size
+          TEI_pointers_array(m)%tei_arr_ptr(i, j) = 2*((TEI_pointers_array(m)%tei_arr_ptr(i, j) - TEI_global_minimum)/(TEI_global_maximum - TEI_global_minimum)) - 1d0
+        END DO
+      END DO 
+    END DO
+ 
+    PRINT*, ""
+    PRINT*, "TEST PRECIPITATIONS after normalization"
+    PRINT*, "TEI_global_min =", TEI_global_minimum
+    PRINT*, "TEI_global_max =", TEI_global_maximum
+    PRINT*, "TEI_min =", MINVAL(TEI_pointers_array(1)%tei_arr_ptr), MINVAL(TEI_pointers_array(3)%tei_arr_ptr)
+    PRINT*, "TEI_max =", MAXVAL(TEI_pointers_array(1)%tei_arr_ptr), MAXVAL(TEI_pointers_array(3)%tei_arr_ptr)
+
     
     END SUBROUTINE computing_WL_exposure_indexes
 

@@ -13,6 +13,7 @@ MODULE Topographic_parameters_computation
   IMPLICIT NONE
 
   INTEGER, PRIVATE :: m, i, j, k
+  DOUBLE PRECISION, PRIVATE :: max_delta_elev
   
 CONTAINS
 
@@ -74,20 +75,21 @@ CONTAINS
     CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
     
+
     !__________________________________________________________________!
     !Reading TEI related information stored in the Configuration file
     !__________________________________________________________________!"
     
     config_namelist_blockname="Downscaled_outputs"
     CALL accessing_config_file(ios, fu)
-    
+     
     ALLOCATE(TEI_pointers_array(nbr_wdir))
     DO m=1, nbr_wdir
        ALLOCATE(TEI_pointers_array(m)%tei_arr_ptr(1:hr_topo_x_size, 1:hr_topo_y_size))
     END DO
 
     DO m=1, nbr_wdir
-       TEI_pointers_array(m)%tei_arr_ptr(:,:) = 1d0
+       TEI_pointers_array(m)%tei_arr_ptr(:,:) = 1.0
     END DO
 
     CALL filling_WL_patterns_arrays(WL_pattern_pointers_array, wdir_angle_boundaries)
@@ -97,6 +99,8 @@ CONTAINS
     !influence point is within the gridbox (IF conditions). The characteristics of the influence gridpoints are read in the
     !topography-related array (e.g. elevation) using the relative coordinates of the influence gridpoint, and the absolute
     !coordinate of the cell whose TEI is being calculated.
+    
+    max_delta_elev = MAXVAL(hr_surface_elevation_data) - MINVAL(hr_surface_elevation_data)
     
     DO m=1, nbr_wdir                                                                                              
        DO j=1, hr_topo_y_size
@@ -108,13 +112,16 @@ CONTAINS
                      .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
                      .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
                    IF (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist .GT. 0d0) THEN
-                                                                                                               !Since each influence gridpoint weight is
+                                                                                                               !Since each influence gridpoint wieght is
                       TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &      !given by 1/horizontal distance between 
-                        (hr_surface_elevation_data(i, j, 1) - hr_surface_elevation_data(i + &           !the gridpoint of influence and the cell the TEI's
+                        ((hr_surface_elevation_data(i, j, 1) - hr_surface_elevation_data(i + &           !the gridpoint of influence and the cell the TEI's
                         WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &                        !is being computed, it is necessary to check
-                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1))* &                 !if horizontal_dist is equal to 0 in order to
-                        1d0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist            !avoid errors risen by null divisions         
-                     
+                        j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1))/max_delta_elev)* &                 !if horizontal_dist is equal to 0 in order to
+                        !(MAXVAL(hr_surface_elevation_data)-MINVAL(hr_surface_elevation_data)) * &            !avoid errors risen by null divisions         
+                        (spatial_resolution * 1.0/WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist)
+                      
+                   ELSE                                                                                         
+                      TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j)
                    END IF
                END IF
              END DO

@@ -13,7 +13,7 @@ MODULE Parametrization
 
   INTEGER, PARAMETER :: str_len = 256
   INTEGER, PARAMETER :: months_nbr = 12
-  CHARACTER (LEN=str_len) :: Configuration_file = "/home/jbrenner/GeoDS/Configuration_File.nml"
+  CHARACTER (LEN=str_len) :: Configuration_file = "/home/users/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
@@ -27,7 +27,7 @@ MODULE Parametrization
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   INTEGER :: t_start, t_end, t_extent
-  REAL :: lambda, alpha
+  REAL :: lambda, alpha, beta
 
   !Climate-related variables
   CHARACTER (LEN=str_len) :: lr_climate_data_file
@@ -67,9 +67,10 @@ MODULE Parametrization
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: ds_x_grid, ds_y_grid, tei_wdir_grid, ds_monthly_t_grid, ds_annual_t_grid
   DOUBLE PRECISION :: ds_x_grid_lower_bound, ds_y_grid_lower_bound, spatial_resolution
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_surface_temperature_data
-  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_surface_temperature_anomalies
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_lr_surface_temperature_anomalies
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_precipitation_data
-  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: lr_hr_precipitation_anomalies
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_lr_precipitation_ratio
+  DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: hr_lr_precipitation_anomalies 
   DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE :: ds_annual_temperature_data, &
           ds_annual_precipitation_data, topographic_exposure_indexes_data, &
           sorted_wind_directions_data
@@ -77,6 +78,8 @@ MODULE Parametrization
   INTEGER :: nbr_wdir
   DOUBLE PRECISION :: d_wsearch
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: wdir_angle_boundaries
+  DOUBLE PRECISION :: max_precipitation_increase_factor
+  LOGICAL :: broad_mountain_range_drying_effect_activator 
   !________________________________________________________________________________________!
  
   

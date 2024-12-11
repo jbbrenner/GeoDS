@@ -32,6 +32,7 @@ CONTAINS
     
     t_extent = t_end - t_start + 1
     PRINT*, "t_extent = ", t_extent
+    lr_climate_data_t_size = t_extent
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)
     !Sizing data array with dimensions stored in the configuration file
@@ -65,8 +66,7 @@ CONTAINS
 
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)
-
-
+    
   END SUBROUTINE reading_precipitation_inputs
 
   !___________________________________________________________________________________________________________________________!

@@ -252,10 +252,10 @@ CONTAINS
     IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
         
       CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-           hr_surface_temperature_data, lr_hr_surface_temperature_anomalies)
+           hr_surface_temperature_data, hr_lr_surface_temperature_anomalies)
     
       CALL downscaling_precipitation(lr_precipitation_data, hr_precipitation_data, &
-       lr_hr_precipitation_anomalies)
+       hr_lr_precipitation_ratio, hr_lr_precipitation_anomalies)
 
       CALL nc_write(topographic_exposure_indexes_file, "topographic_exposure_index", &
            topographic_exposure_indexes_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="wdir")
@@ -266,13 +266,16 @@ CONTAINS
       CALL nc_write(ds_monthly_temperature_data_file, "ts", hr_surface_temperature_data(:,:,:),&
            dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
-      CALL nc_write(ds_monthly_temperature_data_file, "ts_anomalies", lr_hr_surface_temperature_anomalies(:,:,:), &
+      CALL nc_write(ds_monthly_temperature_data_file, "ts_anomalies", hr_lr_surface_temperature_anomalies(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
       CALL nc_write(ds_monthly_precipitation_data_file, "PP", hr_precipitation_data(:,:,:), & 
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+      
+      CALL nc_write(ds_monthly_precipitation_data_file, "PP_ratio", hr_lr_precipitation_ratio(:,:,:), &
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
-      CALL nc_write(ds_monthly_precipitation_data_file, "PP_anomalies", lr_hr_precipitation_anomalies(:,:,:), &
+      CALL nc_write(ds_monthly_precipitation_data_file, "PP_anomalies", hr_lr_precipitation_anomalies(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
 
 
@@ -298,7 +301,7 @@ CONTAINS
          DO WHILE (k<t_extent/months_nbr)
             DO j=1, months_nbr
                ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1) + &
-                    lr_hr_surface_temperature_anomalies(:,:,k*months_nbr + j)
+                    hr_lr_surface_temperature_anomalies(:,:,k*months_nbr + j)
                
             ENDDO
             ds_annual_temperature_data(:,:,k+1) = ds_annual_temperature_data(:,:,k+1)/months_nbr
@@ -317,7 +320,6 @@ CONTAINS
             DO j=1, months_nbr
                ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1) + &
                     hr_precipitation_data(:,:,k*months_nbr + j)
-
             ENDDO
             ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
             k=k+1
@@ -330,8 +332,20 @@ CONTAINS
          DO WHILE (k<t_extent/months_nbr)
             DO j=1, months_nbr
                ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1) + &
-                    lr_hr_precipitation_anomalies(:,:,k*months_nbr + j)
+                    hr_lr_precipitation_ratio(:,:,k*months_nbr + j)
+            ENDDO
+            ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
+            k=k+1
+         ENDDO
+         CALL nc_write(ds_annual_precipitation_data_file, "PP_ratio", ds_annual_precipitation_data(:,:,:),& 
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+         ds_annual_precipitation_data(:,:,:) = 0
 
+         k = 0
+         DO WHILE (k<t_extent/months_nbr)
+            DO j=1, months_nbr
+               ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1) + &
+                    hr_lr_precipitation_anomalies(:,:,k*months_nbr + j)
             ENDDO
             ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
             k=k+1
@@ -349,13 +363,13 @@ CONTAINS
          ds_annual_temperature_data(:,:,:) = 0
          ds_annual_precipitation_data(:,:,:) = 0
          CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-              hr_surface_temperature_data, lr_hr_surface_temperature_anomalies)
+              hr_surface_temperature_data, hr_lr_surface_temperature_anomalies)
          ds_annual_temperature_data(:,:,:) = hr_surface_temperature_data
          CALL nc_write(sorted_wind_directions_file, "sorted_wind_directions", &
            sorted_wind_directions_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="time")
          CALL nc_write(ds_annual_temperature_data_file, "ts", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time")
-        ds_annual_temperature_data(:,:,:) = lr_hr_surface_temperature_anomalies
+        ds_annual_temperature_data(:,:,:) = hr_lr_surface_temperature_anomalies
          CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time") 
         ds_annual_precipitation_data(:,:,:) = hr_precipitation_data
