@@ -26,11 +26,17 @@ CONTAINS
     ALLOCATE(hr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     ALLOCATE(hr_lr_precipitation_ratio(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     ALLOCATE(hr_lr_precipitation_anomalies(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-    
-    hr_precipitation_data(:,:,:) = 0
-    hr_lr_precipitation_ratio(:,:,:) = 0
-    hr_lr_precipitation_anomalies(:,:,:) = 0
+   
+    hr_precipitation_data(:,:,:) = 0.d0
+    hr_lr_precipitation_ratio(:,:,:) = 0.d0
+    hr_lr_precipitation_anomalies(:,:,:) = 0.d0
 
+    !The precipitation at high resolution for a given gridpoint are calculated by correcting the low
+    !resolution precipitation data with the TEI of the corresponding gridpoint
+    !and the dominant wind direction of the month, using the following formula : 
+    !P(hr) = P(lr) * exp(beta*TEI). A max_precipitation_increase_factor can be
+    !used to limit the ratio P(hr)/P(lr) when TEI increases too much, but can be
+    !desactivated using a very large number (e.g. 10000)
     DO t=1, t_extent
        DO j=1, hr_topo_y_size
           DO i=1, hr_topo_x_size

@@ -70,7 +70,7 @@ CONTAINS
     
     DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: ds_x_grid, ds_y_grid, tei_wdir_grid, &
             ds_monthly_t_grid, ds_annual_t_grid
-    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
     config_namelist_blockname="Global_parametrization"
@@ -113,7 +113,7 @@ CONTAINS
     !dataset are wanted or not (= monthly data average over a year).
     !If only annual low resolution climate data are available, the algorithm generates annual
     !downscaled data
-    IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
+    IF (lr_monthly_climate_data_availability .EQV. .TRUE.) THEN
        ALLOCATE (ds_monthly_t_grid(t_extent))
        ds_monthly_t_grid(:) = 0
 
@@ -249,7 +249,7 @@ CONTAINS
     !Downscaled climate data arrays are sized to fit the high resolution Digital Elevation Model dataset structure (target grid)
     !If monthly low resolution climate data are available, the annual downscaled climate dataset is built as the average of the
     !monthly downscaled climate dataset on 12 months time span
-    IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
+    IF (lr_monthly_climate_data_availability .EQV. .TRUE.) THEN
         
       CALL applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
            hr_surface_temperature_data, hr_lr_surface_temperature_anomalies)

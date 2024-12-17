@@ -37,7 +37,7 @@ PROGRAM main
   
   PRINT*, "_______________________________"
   PRINT*, "TEI computation"
-  CALL computing_WL_exposure_indexes(TEI_pointers_array, config_namelist_blockname, ios, fu)
+  CALL computing_WL_exposure_indexes(TEI_pointers_array, TEI_drying_effect_correction, config_namelist_blockname, ios, fu)
   PRINT*, "End TEI computation"
   PRINT*, "_______________________________"
 
@@ -79,6 +79,9 @@ PROGRAM main
         
   DEALLOCATE(WL_pattern_pointers_array)
   DEALLOCATE(TEI_pointers_array)
+  IF (broad_mountain_range_drying_effect_activator .EQV. .TRUE.) THEN
+     DEALLOCATE(TEI_drying_effect_correction)
+  END IF
   DEALLOCATE(wdir_angle_boundaries)
         
   DEALLOCATE(hr_precipitation_data, hr_lr_precipitation_ratio, hr_lr_precipitation_anomalies, &
@@ -88,7 +91,7 @@ PROGRAM main
        topographic_insolation_anomalies_data, ds_x_grid, ds_y_grid, tei_wdir_grid, topographic_exposure_indexes_data, &
        sorted_wind_directions_data)
   
-  IF (lr_monthly_climate_data_availibility .EQV. .TRUE.) THEN
+  IF (lr_monthly_climate_data_availability .EQV. .TRUE.) THEN
      DEALLOCATE(ds_monthly_t_grid)
      IF (ds_annual_data_generation .EQV. .TRUE.) THEN
         DEALLOCATE(ds_annual_t_grid, ds_annual_temperature_data)

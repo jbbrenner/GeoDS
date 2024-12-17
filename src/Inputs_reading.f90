@@ -21,7 +21,7 @@ CONTAINS
     IMPLICIT NONE
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
-    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: t_extent, ios, fu
 
     !_____________________________________________________________________________________!
@@ -52,7 +52,7 @@ CONTAINS
     IMPLICIT NONE
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_precipitation_data
-    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
@@ -77,7 +77,7 @@ CONTAINS
     IMPLICIT NONE
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_uwind_data, lr_vwind_data
-    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
@@ -109,7 +109,7 @@ CONTAINS
 
     DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_elevation_data, &
          hr_surface_elevation_data, lr_topographic_insolation_data, hr_topographic_insolation_data
-    CHARACTER(LEN=str_len), INTENT(OUT) :: config_namelist_blockname
+    CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !______________________________________________________________________________________!

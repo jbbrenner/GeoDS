@@ -23,11 +23,11 @@ MODULE Parametrization
   !________________________________________________________________________________________!
   
   !Global inputs variables
-  LOGICAL :: lr_monthly_climate_data_availibility, wdir_grids_generation
+  LOGICAL :: lr_monthly_climate_data_availability, wdir_grids_generation
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   INTEGER :: t_start, t_end, t_extent
-  REAL :: lambda, alpha, beta
+  REAL :: lambda, alpha, beta, delta
 
   !Climate-related variables
   CHARACTER (LEN=str_len) :: lr_climate_data_file
@@ -56,7 +56,7 @@ MODULE Parametrization
 
   !Topography-related outputs variables
   TYPE(wl_pattern_arr), DIMENSION(:), ALLOCATABLE :: WL_pattern_pointers_array !Dynamical array storing the nbr_wdir pointers to the wind exposure arrays associated to the nbr_wdir directions of wind 
-  TYPE(tei_arr), DIMENSION(:), ALLOCATABLE :: TEI_pointers_array !Dynamical array storing the nbr_wdir pointers to topographic
+  TYPE(tei_arr), DIMENSION(:), ALLOCATABLE :: TEI_pointers_array, TEI_drying_effect_correction !Dynamical array storing the nbr_wdir pointers to topographic
  !exposure indexes arrays, i.e. the arrays containing the index for each point for every nbr_wdir wind directions
 
   !Climate-related outputs variables
@@ -76,10 +76,11 @@ MODULE Parametrization
           sorted_wind_directions_data
   LOGICAL :: ds_annual_data_generation
   INTEGER :: nbr_wdir
-  DOUBLE PRECISION :: d_wsearch
+  DOUBLE PRECISION :: TEI_windward_searching_dist
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: wdir_angle_boundaries
   DOUBLE PRECISION :: max_precipitation_increase_factor
-  LOGICAL :: broad_mountain_range_drying_effect_activator 
+  LOGICAL :: broad_mountain_range_drying_effect_activator
+  DOUBLE PRECISION :: drying_effect_windward_searching_dist 
   !________________________________________________________________________________________!
  
   
