@@ -14,8 +14,8 @@
     x_dim_name = 'x'
     y_dim_name = 'y'
     xy_unit = 'm'
-t_start = 508
-t_end = 532
+t_start = 533
+t_end = 557
 lambda = 0.005
 alpha = 0.002062792888641358
 beta = 0.001
