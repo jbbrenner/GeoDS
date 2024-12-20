@@ -43,7 +43,7 @@ CONTAINS
        OPEN(unit=11, file=txt_file_name)
        WRITE(11, '(A1,A1,A1,A1,A10)') "X",";","Y",";","horiz_dist"
        DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
-          WRITE(11, '(I5,A1,I5,A1,F8.2)') WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
+          WRITE(11, '(I5,A1,I5,A1,F10.2)') WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative,";",&
             WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative,";",&
             WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist
             !IF (m .EQ. 1) THEN
