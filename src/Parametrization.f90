@@ -13,7 +13,7 @@ MODULE Parametrization
 
   INTEGER, PARAMETER :: str_len = 256
   INTEGER, PARAMETER :: months_nbr = 12
-  CHARACTER (LEN=str_len) :: Configuration_file = "/home/acclimate/jbrenner/Calibration_GeoDS/Simulation_1/Configuration_File.nml"
+  CHARACTER (LEN=str_len) :: Configuration_file = "/home/users/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15

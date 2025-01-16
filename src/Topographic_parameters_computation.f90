@@ -196,17 +196,17 @@ CONTAINS
 
 !Loop for converting TEI to P multiplicative factor
 
-!    DO m=1, nbr_wdir
-!       DO j=1, hr_topo_y_size
-!          DO i=1, hr_topo_x_size
-!            IF (exp(TEI_pointers_array(m)%tei_arr_ptr(i,j)/100) .GT. max_precipitation_increase_factor) THEN 
-!               TEI_pointers_array(m)%tei_arr_ptr(i,j) = max_precipitation_increase_factor
-!            ELSE 
-!               TEI_pointers_array(m)%tei_arr_ptr(i,j) = exp(TEI_pointers_array(m)%tei_arr_ptr(i,j)/100)
-!            END IF
-!          END DO
-!       END DO
-!    END DO
+    DO m=1, nbr_wdir
+       DO j=1, hr_topo_y_size
+          DO i=1, hr_topo_x_size
+            IF (exp(TEI_pointers_array(m)%tei_arr_ptr(i,j)/100) .GT. max_precipitation_increase_factor) THEN 
+               TEI_pointers_array(m)%tei_arr_ptr(i,j) = max_precipitation_increase_factor
+            ELSE 
+               TEI_pointers_array(m)%tei_arr_ptr(i,j) = exp(TEI_pointers_array(m)%tei_arr_ptr(i,j)/100)
+            END IF
+          END DO
+       END DO
+    END DO
     
 
 
