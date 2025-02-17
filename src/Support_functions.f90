@@ -26,7 +26,7 @@ CONTAINS
 
     NAMELIST/Global_parametrization/lr_monthly_climate_data_availability, wdir_grids_generation, &
          lr_climate_data_x_size, lr_climate_data_y_size, &
-         x_dim_name, y_dim_name, xy_unit, t_start, t_end, lambda, alpha, beta, delta
+         x_dim_name, y_dim_name, xy_unit, missing_data_error_code, t_start, t_end, lambda, alpha, beta, delta
     NAMELIST/Inputs_climate_variables/lr_climate_data_file, lr_UVwind_file, lr_surface_temperature_id, &
          lr_precipitation_id, lr_uwind_id, lr_vwind_id
     NAMELIST/Topography/lr_topographic_parameters, lr_surface_elevation_id, lr_topographic_insolation_id, &

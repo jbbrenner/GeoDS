@@ -41,7 +41,7 @@ CONTAINS
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, &
             [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
- 
+
   END SUBROUTINE reading_temperature_inputs
   
   !___________________________________________________________________________________________________________________________!
@@ -65,7 +65,8 @@ CONTAINS
     ALLOCATE (lr_precipitation_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
 
     !Storing temperature data from LR netCDF file in array
-    CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data)
+    CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data, &
+            [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
     
   END SUBROUTINE reading_precipitation_inputs
 
