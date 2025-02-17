@@ -13,7 +13,7 @@ MODULE Parametrization
 
   INTEGER, PARAMETER :: str_len = 256
   INTEGER, PARAMETER :: months_nbr = 12
-  CHARACTER (LEN=str_len) :: Configuration_file = "/home/users/jbrenner/GeoDS/Configuration_File.nml"
+  CHARACTER (LEN=str_len) :: Configuration_file = "/home/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
@@ -26,6 +26,7 @@ MODULE Parametrization
   LOGICAL :: lr_monthly_climate_data_availability, wdir_grids_generation
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
+  REAL :: missing_data_error_code
   INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha, beta, delta
 

@@ -66,8 +66,10 @@ CONTAINS
       !conditions to associate the given point to the correct wind direction array. Note that a same point can be in two different
       !arrays, just not with the same weight
 
-      DO ir=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), CEILING(drying_effect_windward_searching_dist/spatial_resolution), 1 
-         DO jr=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), CEILING(drying_effect_windward_searching_dist/spatial_resolution), 1
+      DO ir=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), &
+              CEILING(drying_effect_windward_searching_dist/spatial_resolution), 1 
+         DO jr=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), &
+                 CEILING(drying_effect_windward_searching_dist/spatial_resolution), 1
 
            !Checking only the points within the maximum research distance chosen by the user
            IF (SQRT((ir*spatial_resolution)**2 + (jr*spatial_resolution)**2) .LE. drying_effect_windward_searching_dist) THEN 
