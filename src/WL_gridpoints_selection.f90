@@ -56,9 +56,9 @@ CONTAINS
       END DO
 
       DO m=1, nbr_wdir
-         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%ix_relative=-9999
-         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%jy_relative=-9999
-         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%horizontal_dist=-9999
+         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%ix_relative=-999
+         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%jy_relative=-999
+         WL_pattern_pointers_array(m)%wl_arr_ptr(:)%horizontal_dist=-999
       END DO
 
       !2/filling the arrays    

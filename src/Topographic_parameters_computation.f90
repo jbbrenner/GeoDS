@@ -12,7 +12,7 @@ MODULE Topographic_parameters_computation
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: m, i, j, k, counter
+  INTEGER, PRIVATE :: m, i, j, k, counter_TEI, counter_DE
   
 CONTAINS
 
@@ -113,14 +113,15 @@ CONTAINS
     
     DO m=1, nbr_wdir                                                                                              
        DO j=1, hr_topo_y_size
-          DO i=1, hr_topo_x_size        
+          DO i=1, hr_topo_x_size
+             counter_TEI = 0        
              DO k=1, SIZE(WL_pattern_pointers_array(m)%wl_arr_ptr)
                 !The following condition is used to manage boundaries grid points 
                 IF ((i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .GE. 1d0) &                            
                 .AND. (i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .LE. hr_topo_x_size) &
                 .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .GE. 1) &
                 .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
-                .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
+                .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -999)) THEN
                 !Only the points within the searching distance chosen by the user are used to compute the TEI
                    IF ((WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist .GT. 0d0) &
                    .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%horizontal_dist .LE. &
@@ -131,7 +132,8 @@ CONTAINS
                         .AND. (hr_surface_elevation_data(i + &       !the gridpoint of influence and the cell the TEI's
                         WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &                                       !is being computed, it is necessary to check
                         j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1) .GT. &
-                        missing_data_error_code)) THEN                 !Since each influence gridpoint weight is
+                        missing_data_error_code)) THEN
+                                counter_TEI = counter_TEI + 1                 !Since each influence gridpoint weight is
                                 TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &   !given by 1/horizontal distance between 
                                 (hr_surface_elevation_data(i, j, 1) - hr_surface_elevation_data(i + &                   !the gridpoint of influence and the cell the TEI's
                                 WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &                               !is being computed, it is necessary to check
@@ -141,6 +143,16 @@ CONTAINS
                    END IF
                END IF
              END DO
+
+             !The following IF condition is used to be consistent while computing the TEI for different spatial resolutions
+             !(counter_TEI). It ensures that the TEI remains stable when switching to a finer scale DEM, if no additional topographic information 
+             !is added when increasing the resolution. The term "TEI_windward_searching_dist/1000.0" is used to preserve the
+             !relationship between TEI and the windward searching distance when it is increased by the user (a greater searching
+             !distance is expected to generate higher TEI variations)
+             IF (counter_TEI .NE. 0) THEN
+                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = (TEI_pointers_array(m)%tei_arr_ptr(i, j)/counter_TEI) * &
+                           TEI_windward_searching_dist/1000.0                                                           
+             END IF
           END DO
        END DO
     END DO
@@ -155,7 +167,7 @@ CONTAINS
     !Plateau). In such contexts, most of the incoming precipitation occurs at
     !the boundaries of the mountain range, leaving the interior areas relatively
     !dry, even if they might be more exposed
-    counter=0 
+    counter_DE=0 
     IF (broad_mountain_range_drying_effect_activator .EQV. .TRUE.) THEN
        DO m=1, nbr_wdir                                                                                              
           DO j=1, hr_topo_y_size
@@ -165,22 +177,25 @@ CONTAINS
                         .AND. (i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .LE. hr_topo_x_size) &
                         .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .GE. 1.d0) &
                         .AND. (j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative .LE. hr_topo_y_size) &
-                        .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -9999)) THEN
-                           counter = counter + 1
+                        .AND. (WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative .NE. -999)) THEN
+                           counter_DE = counter_DE + 1
                            IF (TEI_pointers_array(m)%tei_arr_ptr(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, & 
                            j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative) .GT. 0.d0) THEN
+
                               TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) = &
                                TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) + &
                                TEI_pointers_array(m)%tei_arr_ptr(i + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &
-                               j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative)                 
+                               j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative)
+
                            END IF
                     END IF
                 END DO
 
-                IF (counter .NE. 0) THEN
-                   TEI_drying_effect_correction(m)%tei_arr_ptr(i,j)=TEI_drying_effect_correction(m)%tei_arr_ptr(i, j)/counter
-                   counter=0
-                END IF
+!                IF (counter_DE .NE. 0) THEN
+!                   TEI_drying_effect_correction(m)%tei_arr_ptr(i,j)=TEI_drying_effect_correction(m)%tei_arr_ptr(i, &
+!                   j)/counter_DE
+!                   counter_DE=0
+!                END IF
 
              END DO
           END DO
