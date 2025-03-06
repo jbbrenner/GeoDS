@@ -26,7 +26,7 @@ MODULE Parametrization
   LOGICAL :: lr_monthly_climate_data_availability, wdir_grids_generation
   INTEGER :: lr_climate_data_x_size, lr_climate_data_y_size, lr_climate_data_t_size
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
-  REAL :: missing_data_error_code
+  DOUBLE PRECISION :: missing_data_error_code
   INTEGER :: t_start, t_end, t_extent
   REAL :: lambda, alpha, beta, delta
 

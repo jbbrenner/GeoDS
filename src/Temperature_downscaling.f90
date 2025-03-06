@@ -12,7 +12,7 @@ MODULE Temperature_downscaling
 
   IMPLICIT NONE
 
-  INTEGER, PRIVATE :: t, k
+  INTEGER, PRIVATE :: t, i, j, k
 
   
 CONTAINS
@@ -61,6 +61,22 @@ CONTAINS
 
      hr_lr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
              - lr_surface_temperature_data(:,:,:)
+
+
+     !managing missing data
+     DO t=1, t_extent
+        DO j=1, hr_topo_y_size
+           DO i=1, hr_topo_x_size
+                IF (lr_precipitation_data(i,j,t) .LT. -100) THEN
+                        hr_surface_temperature_data(i,j,t)=missing_data_error_code
+                        lr_surface_temperature_data(i,j,t)=missing_data_error_code
+                        hr_lr_surface_temperature_anomalies(i,j,t)=missing_data_error_code
+                END IF
+           END DO
+        END DO
+     END DO
+
+
 
   END SUBROUTINE applying_lapse_rate_correction
  

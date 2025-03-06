@@ -57,7 +57,24 @@ CONTAINS
     
    hr_lr_precipitation_anomalies(:,:,:) = hr_precipitation_data(:,:,:) - lr_precipitation_data(:,:,:)
 
-    PRINT*, "_______________________________"    
+   
+   !Loop to manage missing values
+   DO t=1, t_extent
+       DO j=1, hr_topo_y_size
+          DO i=1, hr_topo_x_size
+                IF (lr_precipitation_data(i,j,t) .LT. -100) THEN 
+                        hr_precipitation_data(i,j,t)=missing_data_error_code
+                        lr_precipitation_data(i,j,t)=missing_data_error_code
+                        hr_lr_precipitation_anomalies(i,j,t)=missing_data_error_code
+                        hr_lr_precipitation_ratio(i,j,t)=missing_data_error_code
+                END IF
+          END DO
+       END DO
+    END DO
+
+
+
+   PRINT*, "_______________________________"    
     END SUBROUTINE downscaling_precipitation
   
   END MODULE Precipitation_downscaling

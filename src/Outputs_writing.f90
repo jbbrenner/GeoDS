@@ -258,25 +258,27 @@ CONTAINS
        hr_lr_precipitation_ratio, hr_lr_precipitation_anomalies)
 
       CALL nc_write(topographic_exposure_indexes_file, "topographic_exposure_index", &
-           topographic_exposure_indexes_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="wdir")
+           topographic_exposure_indexes_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="wdir", &
+           missing_value=missing_data_error_code)
 
       CALL nc_write(sorted_wind_directions_file, "sorted_wind_directions", &
-           sorted_wind_directions_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+           sorted_wind_directions_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="time", &
+           missing_value=missing_data_error_code)
 
       CALL nc_write(ds_monthly_temperature_data_file, "ts", hr_surface_temperature_data(:,:,:),&
-           dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+           dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
       CALL nc_write(ds_monthly_temperature_data_file, "ts_anomalies", hr_lr_surface_temperature_anomalies(:,:,:), &
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
       CALL nc_write(ds_monthly_precipitation_data_file, "PP", hr_precipitation_data(:,:,:), & 
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
       
       CALL nc_write(ds_monthly_precipitation_data_file, "PP_ratio", hr_lr_precipitation_ratio(:,:,:), &
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
       CALL nc_write(ds_monthly_precipitation_data_file, "PP_anomalies", hr_lr_precipitation_anomalies(:,:,:), &
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
 
 
@@ -294,7 +296,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_temperature_data_file, "ts", ds_annual_temperature_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
          ds_annual_temperature_data(:,:,:) = 0
 
          k = 0
@@ -308,7 +310,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
 
         ALLOCATE (ds_annual_precipitation_data(1:hr_topo_x_size, 1:hr_topo_y_size,&
@@ -325,7 +327,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
          ds_annual_precipitation_data(:,:,:) = 0
 
          k = 0
@@ -338,7 +340,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_precipitation_data_file, "PP_ratio", ds_annual_precipitation_data(:,:,:),& 
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
          ds_annual_precipitation_data(:,:,:) = 0
 
          k = 0
@@ -351,7 +353,7 @@ CONTAINS
             k=k+1
          ENDDO
          CALL nc_write(ds_annual_precipitation_data_file, "PP_anomalies", ds_annual_precipitation_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
       ENDIF
        
@@ -366,15 +368,16 @@ CONTAINS
               hr_surface_temperature_data, hr_lr_surface_temperature_anomalies)
          ds_annual_temperature_data(:,:,:) = hr_surface_temperature_data
          CALL nc_write(sorted_wind_directions_file, "sorted_wind_directions", &
-           sorted_wind_directions_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+           sorted_wind_directions_data(:,:,:), dim1=x_dim_name, dim2=y_dim_name, dim3="time", &
+           missing_value=missing_data_error_code)
          CALL nc_write(ds_annual_temperature_data_file, "ts", ds_annual_temperature_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
         ds_annual_temperature_data(:,:,:) = hr_lr_surface_temperature_anomalies
          CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time") 
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code) 
         ds_annual_precipitation_data(:,:,:) = hr_precipitation_data
          CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
-              dim1=x_dim_name, dim2=y_dim_name, dim3="time")
+              dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
     ENDIF
    

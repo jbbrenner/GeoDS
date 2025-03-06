@@ -40,7 +40,8 @@ CONTAINS
    
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, &
-            [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+            start=[1,1,t_start], count=[lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
+            missing_value=missing_data_error_code)
 
   END SUBROUTINE reading_temperature_inputs
   
@@ -66,7 +67,8 @@ CONTAINS
 
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data, &
-            [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+            [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
+            missing_value=missing_data_error_code)
     
   END SUBROUTINE reading_precipitation_inputs
 
@@ -94,9 +96,9 @@ CONTAINS
    
     !Storing temperature data from LR netCDF file in array
     CALL nc_read(lr_UVwind_file, lr_uwind_id, lr_uwind_data, [1,1,t_start], &
-         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
     CALL nc_read(lr_UVwind_file, lr_vwind_id, lr_vwind_data, [1,1,t_start], &
-         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent])
+         [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
  
   END SUBROUTINE reading_wind_inputs
 
@@ -128,16 +130,24 @@ CONTAINS
 
 
     IF (hr_topo_t_size .EQ. 1) THEN
-       CALL nc_read(lr_topographic_parameters, lr_surface_elevation_id, lr_surface_elevation_data(:,:,1))
-       CALL nc_read(hr_topographic_parameters, hr_surface_elevation_id, hr_surface_elevation_data(:,:,1))
-       CALL nc_read(lr_topographic_parameters, lr_topographic_insolation_id, lr_topographic_insolation_data(:,:,1))
-       CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data(:,:,1))
+       CALL nc_read(lr_topographic_parameters, lr_surface_elevation_id, lr_surface_elevation_data(:,:,1), &
+               missing_value=missing_data_error_code)
+       CALL nc_read(hr_topographic_parameters, hr_surface_elevation_id, hr_surface_elevation_data(:,:,1), &
+               missing_value=missing_data_error_code)
+       CALL nc_read(lr_topographic_parameters, lr_topographic_insolation_id, lr_topographic_insolation_data(:,:,1), &
+               missing_value=missing_data_error_code)
+       CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data(:,:,1), &
+               missing_value=missing_data_error_code)
     ELSE
        !Storing temperature data from LR netCDF file in array
-       CALL nc_read(lr_topographic_parameters, lr_surface_elevation_id, lr_surface_elevation_data)
-       CALL nc_read(hr_topographic_parameters, hr_surface_elevation_id, hr_surface_elevation_data)
-       CALL nc_read(lr_topographic_parameters, lr_topographic_insolation_id, lr_topographic_insolation_data)
-       CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data)
+       CALL nc_read(lr_topographic_parameters, lr_surface_elevation_id, lr_surface_elevation_data, &
+               missing_value=missing_data_error_code)
+       CALL nc_read(hr_topographic_parameters, hr_surface_elevation_id, hr_surface_elevation_data, &
+               missing_value=missing_data_error_code)
+       CALL nc_read(lr_topographic_parameters, lr_topographic_insolation_id, lr_topographic_insolation_data, &
+               missing_value=missing_data_error_code)
+       CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data, &
+               missing_value=missing_data_error_code)
     ENDIF
 
     !Closing configuration file
