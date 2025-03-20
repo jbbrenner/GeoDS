@@ -48,19 +48,48 @@ CONTAINS
     !a correction of the GCM's outputs. A loop is used to overcome the problem of dimensions inequality between climate
     !data arrays and topographic data arrays
 
+!    k=1
+!        DO t=1, t_extent
+!           hr_surface_temperature_data(:,:,t) = lr_surface_temperature_data(:,:,t) + &
+!                lambda * elevation_anomalies_data(:,:,k) + &
+!                alpha * topographic_insolation_anomalies_data(:,:,k)
+!           k=k+1
+!           IF (k .EQ. months_nbr+1) THEN
+!              k=1
+!           ENDIF
+!        ENDDO       
+
+!     hr_lr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
+!             - lr_surface_temperature_data(:,:,:)
+
+
     k=1
         DO t=1, t_extent
-           hr_surface_temperature_data(:,:,t) = lr_surface_temperature_data(:,:,t) + &
-                lambda * elevation_anomalies_data(:,:,k) + &
-                alpha * topographic_insolation_anomalies_data(:,:,k)
-           k=k+1
-           IF (k .EQ. months_nbr+1) THEN
-              k=1
-           ENDIF
-        ENDDO       
+                DO j=1, hr_topo_y_size
+                        DO i=1, hr_topo_x_size
+                                hr_surface_temperature_data(i,j,t) = lr_surface_temperature_data(i,j,t) + &
+                                elevation_anomalies_data(i,j,k) * (lapse_rate + lambda * &
+                                TEI_pointers_array(INT(sorted_wind_directions_data(i,j,t)))%tei_arr_ptr(i, j)) + &
+                                alpha * topographic_insolation_anomalies_data(i,j,k)                        
+                        k=k+1
+                        IF (k .EQ. months_nbr+1) THEN
+                                k=1
+                        ENDIF
+                        END DO
+                END DO
+        END DO
+
 
      hr_lr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
              - lr_surface_temperature_data(:,:,:)
+
+
+
+
+
+
+
+
 
 
      !managing missing data

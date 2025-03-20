@@ -9,7 +9,7 @@ MODULE Wind_directions_ordering
 
   IMPLICIT NONE
 
-  DOUBLE PRECISION, PRIVATE :: wind_direction
+  DOUBLE PRECISION, PRIVATE :: wind_direction, wind_direction_shifted
   INTEGER, PRIVATE :: m, i, j, t
 
 CONTAINS
@@ -23,6 +23,7 @@ CONTAINS
    ALLOCATE(sorted_wind_directions_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
 
     sorted_wind_directions_data(:,:,:) = 0
+    wind_direction_shifted = 0
 
     DO t=1, t_extent
        DO j=1, hr_topo_y_size
@@ -33,6 +34,18 @@ CONTAINS
              ELSE
                      wind_direction = wind_direction - pi
              END IF
+
+             !______________________________________________________________________
+             !wind direction shift
+             !wind_direction_shifted = wind_direction - pi/4
+
+             !IF (wind_direction_shifted .LT. -pi) THEN
+             !        wind_direction_shifted = pi - ABS(wind_direction - pi/4 -(-pi))
+             !END IF
+                
+             !wind_direction = wind_direction_shifted
+             !______________________________________________________________________
+
              DO m=1, nbr_wdir
                 IF ((wind_direction .GE. wdir_angle_boundaries(m)) & 
                      .AND. (wind_direction .LT. &

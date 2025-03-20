@@ -9,26 +9,26 @@
 &global_parametrization
     lr_monthly_climate_data_availability = .true.								!Variable used to check whether monthly climate input data are available or not
     wdir_grids_generation = .true.
-    lr_climate_data_x_size = 219										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    lr_climate_data_y_size = 138 										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
-    x_dim_name = 'X'
-    y_dim_name = 'Y'
+    lr_climate_data_x_size = 110										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    lr_climate_data_y_size = 70 										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
+    x_dim_name = 'x'
+    y_dim_name = 'y'
     xy_unit = 'm'
-    missing_data_error_code = -999
+    missing_data_error_code = -9999.99
 t_start = 1
 t_end = 588
-lambda = 0.1
-alpha = 0.002062792888641358
-beta = 0.8
-delta = 0.01
+lambda = !0.001
+alpha = 0.0001565417  !0.0000665417 !0.002062792888641358
+beta = 0.24
+delta = 0.005
 /
 
 !__________________________________________________________________!
 !________Parametrization regarding low-resolution climate__________!
 
 &inputs_climate_variables
-    lr_climate_data_file = '/home/jbrenner/These/Cartes/APGD/final_analysis/APGD_degraded_1971-2019_full.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Input data must be first interpolated on the high resolution elevation grid
-    lr_UVwind_file = '/home/jbrenner/These/Cartes/APGD/final_analysis/ERA5_degraded_850hpa_wind_1971-2019.nc' 
+    lr_climate_data_file = '/home/jbrenner/These/Cartes/APGD/final_analysis/10km/LR_climate.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Input data must be first interpolated on the high resolution elevation grid
+    lr_UVwind_file = '/home/jbrenner/These/Cartes/APGD/final_analysis/10km/ERA5_wind_850hpa_remapbil_10km.nc' 
     lr_surface_temperature_id = 'ts'											!Name of the variable to be read in the input file		
     lr_precipitation_id = 'pp'
     lr_uwind_id = 'u'
@@ -39,14 +39,14 @@ delta = 0.01
 !________Parametrization regarding topography___________!
 
 &topography
-    lr_topographic_parameters = '/home/jbrenner/These/Cartes/APGD/final_analysis/HR_Topographic_Parameters.nc'	!Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
+    lr_topographic_parameters = '/home/jbrenner/These/Cartes/APGD/final_analysis/10km/LR_Topographic_Parameters.nc'	!Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
     lr_surface_elevation_id = 'S'											!Name of the variable to be read in the input file
     lr_topographic_insolation_id = 'topographic_daily_insolation'							
-    hr_topographic_parameters = '/home/jbrenner/These/Cartes/APGD/final_analysis/HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
+    hr_topographic_parameters = '/home/jbrenner/These/Cartes/APGD/final_analysis/10km/HR_Topographic_Parameters.nc' !HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
     hr_surface_elevation_id = 'S'
     hr_topographic_insolation_id = 'topographic_daily_insolation'
-    hr_topo_x_size = 219 												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    hr_topo_y_size = 138 												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+    hr_topo_x_size = 110 												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    hr_topo_y_size = 70 												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
     hr_topo_t_size = 12													!Dataset extent in the t temporal dimension for the selected variable
 /
 
@@ -63,11 +63,11 @@ delta = 0.01
     sorted_wind_directions_file = '/home/jbrenner/These/GeoDS_Outputs/sorted_wind_directions_Alps_APGD.nc'
     ds_x_grid_lower_bound = 3791000											!High resolution topography file's lower bound in x
     ds_y_grid_lower_bound = 2201000											!High resolution topography file's lower bound in y
-    spatial_resolution = 5000.0												!Size of the outputs grid points
-    ds_annual_data_generation = .true.
-    nbr_wdir = 4												!Number of wind directions the user wants to study
-    TEI_windward_searching_dist = 30000.0 										!Horizontal searching distance to find WL elements influencing the topographic exposure index of grid points
-    max_precipitation_increase_factor = 2.0						        	    	      	!Maximum ratio P(high_resolution)/P(low_resolution)
-    broad_mountain_range_drying_effect_activator = .false. !.true.		             				!Activates/deactivates the drying effect occuring in broad mountain barriers and leading to relatively dry inner lands
-    drying_effect_windward_searching_dist = 40000.0											
+    spatial_resolution = 10000.0												!Size of the outputs grid points
+    ds_annual_data_generation = .false.
+    nbr_wdir = 30												!Number of wind directions the user wants to study
+    TEI_windward_searching_dist = 60000.0 										!Horizontal searching distance to find WL elements influencing the topographic exposure index of grid points
+    max_precipitation_increase_factor = 4.0						        	    	      	!Maximum ratio P(high_resolution)/P(low_resolution)
+    broad_mountain_range_drying_effect_activator = .true.		             				!Activates/deactivates the drying effect occuring in broad mountain barriers and leading to relatively dry inner lands
+    drying_effect_windward_searching_dist = 150000.0											
 /

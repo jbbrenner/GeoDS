@@ -57,11 +57,11 @@ CONTAINS
     topographic_insolation_anomalies_data(:,:,:) = lr_topographic_insolation_data(:,:,:) - hr_topographic_insolation_data(:,:,:)
 
     PRINT*,"_______________________________"
-    PRINT*, "insolation anomalies lr-hr :", (sum(topographic_insolation_anomalies_data))/&
-         (hr_topo_x_size*hr_topo_y_size*hr_topo_t_size)
-    PRINT*, "insolation anomalies max :", (MAXVAL(topographic_insolation_anomalies_data))
-    PRINT*, "insolation anomalies min :", (MINVAL(topographic_insolation_anomalies_data))
-    PRINT*,"_______________________________"
+!    PRINT*, "insolation anomalies lr-hr :", (sum(topographic_insolation_anomalies_data))/&
+!         (hr_topo_x_size*hr_topo_y_size*hr_topo_t_size)
+!    PRINT*, "insolation anomalies max :", (MAXVAL(topographic_insolation_anomalies_data))
+!    PRINT*, "insolation anomalies min :", (MINVAL(topographic_insolation_anomalies_data))
+!    PRINT*,"_______________________________"
     
   END SUBROUTINE computing_insolation_anomalies
  
@@ -210,7 +210,9 @@ CONTAINS
        DO m=1, nbr_wdir
           DO j=1, hr_topo_y_size
              DO i=1, hr_topo_x_size
-               IF (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0.d0) THEN
+               IF (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0.d0) &
+                       !.AND. (TEI_pointers_array(m)%tei_arr_ptr(i,j) .GT. 1.d0)) &
+                       THEN
                   TEI_pointers_array(m)%tei_arr_ptr(i,j) = TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
                   delta * TEI_drying_effect_correction(m)%tei_arr_ptr(i, j)
                END IF                   
