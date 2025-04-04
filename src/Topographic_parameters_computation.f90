@@ -150,8 +150,8 @@ CONTAINS
              !relationship between TEI and the windward searching distance when it is increased by the user (a greater searching
              !distance is expected to generate higher TEI variations)
              IF (counter_TEI .NE. 0) THEN
-                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = (TEI_pointers_array(m)%tei_arr_ptr(i, j)/counter_TEI) * &
-                           TEI_windward_searching_dist/1000.0                                                           
+                   TEI_pointers_array(m)%tei_arr_ptr(i, j) = (TEI_pointers_array(m)%tei_arr_ptr(i, j)/counter_TEI)! * &
+                          !TEI_windward_searching_dist/1000.0                                                           
              END IF
           END DO
        END DO
@@ -191,11 +191,11 @@ CONTAINS
                     END IF
                 END DO
 
-!                IF (counter_DE .NE. 0) THEN
-!                   TEI_drying_effect_correction(m)%tei_arr_ptr(i,j)=TEI_drying_effect_correction(m)%tei_arr_ptr(i, &
-!                   j)/counter_DE
-!                   counter_DE=0
-!                END IF
+                IF (counter_DE .NE. 0) THEN
+                   TEI_drying_effect_correction(m)%tei_arr_ptr(i,j)=TEI_drying_effect_correction(m)%tei_arr_ptr(i, &
+                   j)/counter_DE
+                   counter_DE=0
+                END IF
 
              END DO
           END DO
@@ -210,12 +210,12 @@ CONTAINS
        DO m=1, nbr_wdir
           DO j=1, hr_topo_y_size
              DO i=1, hr_topo_x_size
-               IF (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0.d0) &
+               !IF (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0.d0) &
                        !.AND. (TEI_pointers_array(m)%tei_arr_ptr(i,j) .GT. 1.d0)) &
-                       THEN
+               !        THEN
                   TEI_pointers_array(m)%tei_arr_ptr(i,j) = TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
                   delta * TEI_drying_effect_correction(m)%tei_arr_ptr(i, j)
-               END IF                   
+               !END IF                   
              END DO
           END DO
        END DO
