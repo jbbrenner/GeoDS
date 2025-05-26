@@ -202,7 +202,13 @@ CONTAINS
        END DO
     END IF
 
-    
+    !PRINT*, 'min_TEI', MINVAL(TEI_pointers_array(1)%tei_arr_ptr)
+    !PRINT*, 'max_TEI', MAXVAL(TEI_pointers_array(1)%tei_arr_ptr)
+    !PRINT*, 'min_corr', MINVAL(TEI_drying_effect_correction(1)%tei_arr_ptr)
+    !PRINT*, 'max_corr', MAXVAL(TEI_drying_effect_correction(1)%tei_arr_ptr)
+    !PRINT*,'TEI sommet',TEI_pointers_array(1)%tei_arr_ptr(30,29)
+    !PRINT*, 'corr', TEI_drying_effect_correction(1)%tei_arr_ptr(30,29)
+
     !The following loop is used to correct the TEI values stored in the TEI_pointers_array 
     !the TEI_drying_effect_correction values. A calibration coefficient delta is
     !used to fit the drying effect to observations
@@ -210,17 +216,21 @@ CONTAINS
        DO m=1, nbr_wdir
           DO j=1, hr_topo_y_size
              DO i=1, hr_topo_x_size
-               !IF (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0.d0) &
-                       !.AND. (TEI_pointers_array(m)%tei_arr_ptr(i,j) .GT. 1.d0)) &
-               !        THEN
+               IF(TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0) THEN 
                   TEI_pointers_array(m)%tei_arr_ptr(i,j) = TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
-                  delta * TEI_drying_effect_correction(m)%tei_arr_ptr(i, j)
-               !END IF                   
+                 !delta * (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) + 0.8)**16
+                 ! delta * (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))
+                 !delta*(TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))*(TEI_pointers_array(m)%tei_arr_ptr(i,j)*10000)**3 
+                delta * ((TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))*hr_surface_elevation_data(i,j,1)**3)
+               END IF                   
              END DO
           END DO
        END DO
     END IF
 
+    !PRINT*,'TEI sommet',TEI_pointers_array(1)%tei_arr_ptr(30,29)
+    !PRINT*, 'min_TEI_corr', MINVAL(TEI_pointers_array(1)%tei_arr_ptr)
+    !PRINT*, 'max_TEI_corr', MAXVAL(TEI_pointers_array(1)%tei_arr_ptr)
 
 !Loop for converting TEI to P multiplicative factor
 
