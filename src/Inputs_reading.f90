@@ -27,6 +27,7 @@ CONTAINS
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
+    PRINT*, "Reading T° input file"
     config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
     
@@ -43,6 +44,7 @@ CONTAINS
             start=[1,1,t_start], count=[lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
             missing_value=missing_data_error_code)
 
+    PRINT*,"T° valid"
   END SUBROUTINE reading_temperature_inputs
   
   !___________________________________________________________________________________________________________________________!
@@ -59,6 +61,7 @@ CONTAINS
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
+    PRINT*, "Reading P input file"
     config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
 
@@ -69,7 +72,7 @@ CONTAINS
     CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data, &
             [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
             missing_value=missing_data_error_code)
-    
+    PRINT*,"P valid"
   END SUBROUTINE reading_precipitation_inputs
 
   !___________________________________________________________________________________________________________________________!
@@ -84,9 +87,9 @@ CONTAINS
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
-    !Reading temperature-related input variables in the configuration file
+    !Reading wind-related input variables in the configuration file
     !_____________________________________________________________________________________!
-
+    PRINT*, "Reading wind input file"
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)
     !Sizing data array with dimensions stored in the configuration file
@@ -99,7 +102,7 @@ CONTAINS
          [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
     CALL nc_read(lr_UVwind_file, lr_vwind_id, lr_vwind_data, [1,1,t_start], &
          [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
- 
+    PRINT*, "Wind valid"
   END SUBROUTINE reading_wind_inputs
 
   !___________________________________________________________________________________________________________________________!
@@ -118,7 +121,7 @@ CONTAINS
     !______________________________________________________________________________________!
     !Reading topography-related input variables in the configuration file
     !______________________________________________________________________________________!
-        
+    PRINT*, "Reading S input file"
     config_namelist_blockname="Topography"
     CALL accessing_config_file(ios, fu)
     !Sizing data array using dimensions stored in the configuration file
@@ -150,6 +153,7 @@ CONTAINS
                missing_value=missing_data_error_code)
     ENDIF
 
+    PRINT*, "S valid"
     !Closing configuration file
    CLOSE(fu)
 

@@ -73,7 +73,6 @@ CONTAINS
     END DO
 
 
-
    PRINT*, "_______________________________"    
     END SUBROUTINE downscaling_precipitation
   

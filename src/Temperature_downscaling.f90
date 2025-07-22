@@ -40,7 +40,7 @@ CONTAINS
     
     ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     ALLOCATE(hr_lr_surface_temperature_anomalies(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-    
+
     hr_surface_temperature_data(:,:,:) = 0
     hr_lr_surface_temperature_anomalies(:,:,:) = 0
 
@@ -71,10 +71,13 @@ CONTAINS
                                 elevation_anomalies_data(i,j,k) * (lapse_rate + lambda * &
                                 TEI_pointers_array(INT(sorted_wind_directions_data(i,j,t)))%tei_arr_ptr(i, j)) + &
                                 alpha * topographic_insolation_anomalies_data(i,j,k)                        
-                        k=k+1
+                        IF (k .LT. t_extent) THEN
+                                k=k+1
+                        END IF
                         IF (k .EQ. months_nbr+1) THEN
                                 k=1
                         ENDIF
+
                         END DO
                 END DO
         END DO

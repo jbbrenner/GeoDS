@@ -32,9 +32,9 @@ CONTAINS
 
     elevation_anomalies_data(:,:,:) = lr_surface_elevation_data(:,:,:) - hr_surface_elevation_data(:,:,:)
     PRINT*,"_______________________________"
-    PRINT*, "elevation anomalies lr-hr :", (sum(elevation_anomalies_data))/(hr_topo_x_size*hr_topo_y_size*hr_topo_t_size)
-    PRINT*, "elevation anomalies max :", (MAXVAL(elevation_anomalies_data))
-    PRINT*, "elevation anomalies min :", (MINVAL(elevation_anomalies_data))
+    !PRINT*, "elevation anomalies lr-hr :", (sum(elevation_anomalies_data))/(hr_topo_x_size*hr_topo_y_size*hr_topo_t_size)
+    !PRINT*, "elevation anomalies max :", (MAXVAL(elevation_anomalies_data))
+    !PRINT*, "elevation anomalies min :", (MINVAL(elevation_anomalies_data))
  
   END SUBROUTINE computing_elevation_anomalies
 
@@ -158,8 +158,7 @@ CONTAINS
     END DO
     
     !___________________________________________________________________________________________________  
-    !ACTIVATED IF broad_mountain_range_drying_effect_activator = .TRUE.
-    !(Configuration_file.nml
+    !ACTIVATED IF broad_mountain_range_drying_effect_activator = .TRUE. (Configuration_File)
     !___________________________________________________________________________________________________
 
     !The following loops are activated only if the user wants to take into account the
@@ -202,35 +201,23 @@ CONTAINS
        END DO
     END IF
 
-    !PRINT*, 'min_TEI', MINVAL(TEI_pointers_array(1)%tei_arr_ptr)
-    !PRINT*, 'max_TEI', MAXVAL(TEI_pointers_array(1)%tei_arr_ptr)
-    !PRINT*, 'min_corr', MINVAL(TEI_drying_effect_correction(1)%tei_arr_ptr)
-    !PRINT*, 'max_corr', MAXVAL(TEI_drying_effect_correction(1)%tei_arr_ptr)
-    !PRINT*,'TEI sommet',TEI_pointers_array(1)%tei_arr_ptr(30,29)
-    !PRINT*, 'corr', TEI_drying_effect_correction(1)%tei_arr_ptr(30,29)
-
     !The following loop is used to correct the TEI values stored in the TEI_pointers_array 
     !the TEI_drying_effect_correction values. A calibration coefficient delta is
     !used to fit the drying effect to observations
+
     IF (broad_mountain_range_drying_effect_activator .EQV. .TRUE.) THEN
        DO m=1, nbr_wdir
           DO j=1, hr_topo_y_size
              DO i=1, hr_topo_x_size
                IF(TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) .GT. 0) THEN 
                   TEI_pointers_array(m)%tei_arr_ptr(i,j) = TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
-                 !delta * (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j) + 0.8)**16
-                 ! delta * (TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))
-                 !delta*(TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))*(TEI_pointers_array(m)%tei_arr_ptr(i,j)*10000)**3 
-                delta * ((TEI_drying_effect_correction(m)%tei_arr_ptr(i, j))*hr_surface_elevation_data(i,j,1)**3)
+                  delta *((TEI_drying_effect_correction(m)%tei_arr_ptr(i, j)) *hr_surface_elevation_data(i,j,1)**3)
                END IF                   
              END DO
           END DO
        END DO
     END IF
 
-    !PRINT*,'TEI sommet',TEI_pointers_array(1)%tei_arr_ptr(30,29)
-    !PRINT*, 'min_TEI_corr', MINVAL(TEI_pointers_array(1)%tei_arr_ptr)
-    !PRINT*, 'max_TEI_corr', MAXVAL(TEI_pointers_array(1)%tei_arr_ptr)
 
 !Loop for converting TEI to P multiplicative factor
 

@@ -69,5 +69,5 @@ delta = 0.01
     TEI_windward_searching_dist = 100000.0 										!Horizontal searching distance to find WL elements influencing the topographic exposure index of grid points
     max_precipitation_increase_factor = 4.0						        	    	      	!Maximum ratio P(high_resolution)/P(low_resolution)
     broad_mountain_range_drying_effect_activator = .false. !.true.		             				!Activates/deactivates the drying effect occuring in broad mountain barriers and leading to relatively dry inner lands
-    drying_effect_windward_searching_dist = 150000.0											
+    drying_effect_windward_searching_dist = 100000.0											
 /

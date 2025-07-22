@@ -29,7 +29,7 @@ F_MEM_MODEL_M =
 F_MEM_MODEL_L =
 F_LARGE_ARRAY =
 #
-DBG_FLAGS     = -w -g -p -ggdb -ffpe-trap=invalid,zero,overflow,underflow -fbacktrace -fcheck=all
+DBG_FLAGS     = -fpe0 -w -g -p -ggdb -ffpe-trap=invalid,zero,overflow,underflow -fbacktrace -fcheck=all
 DBG_FLAGS     = -p -ggdb -Wall -W -Wextra -Wsurprising -pedantic -fbounds-check -fstrict-aliasing -fimplicit-none -Warray-temporaries -Wextra -fbacktrace -fcheck=all
 
 CMP_SPECF     =
