@@ -57,18 +57,18 @@ PROGRAM main
        lr_surface_temperature_data, ds_annual_temperature_data, &
        ds_annual_precipitation_data, topographic_exposure_indexes_data, sorted_wind_directions_data)
 
-  PRINT*, hr_topo_x_size, hr_topo_y_size, lr_climate_data_t_size, sum(lr_surface_temperature_data)
-  PRINT*, "TEST", sum(lr_surface_temperature_data),hr_topo_x_size,hr_topo_y_size,lr_climate_data_t_size, T_conv
-  PRINT*, "Low resolution mean temperature :",&
-       sum(lr_surface_temperature_data)/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size) - T_conv
-  PRINT*, "Low resolution maximum temperature :", (MAXVAL(lr_surface_temperature_data)) - T_conv
-  PRINT*, "Low resolution maximum temperature :",(MINVAL(lr_surface_temperature_data)) - T_conv
-  PRINT*, "High resolution mean temperature :",&
-       (sum(hr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size) &
-       - T_conv
-  PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
-  PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
-  PRINT*,"_______________________________"
+  !PRINT*, hr_topo_x_size, hr_topo_y_size, lr_climate_data_t_size, sum(lr_surface_temperature_data)
+  !PRINT*, "TEST", sum(lr_surface_temperature_data),hr_topo_x_size,hr_topo_y_size,lr_climate_data_t_size, T_conv
+  !PRINT*, "Low resolution mean temperature :",&
+  !     sum(lr_surface_temperature_data)/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size) - T_conv
+  !PRINT*, "Low resolution maximum temperature :", (MAXVAL(lr_surface_temperature_data)) - T_conv
+  !PRINT*, "Low resolution maximum temperature :",(MINVAL(lr_surface_temperature_data)) - T_conv
+  !PRINT*, "High resolution mean temperature :",&
+  !     (sum(hr_surface_temperature_data))/(hr_topo_x_size*hr_topo_y_size*lr_climate_data_t_size) &
+  !     - T_conv
+  !PRINT*, "High resolution maximum temperature :",(MAXVAL(hr_surface_temperature_data)) - T_conv
+  !PRINT*, "High resolution minimum temperature :",(MINVAL(hr_surface_temperature_data)) - T_conv
+  !PRINT*,"_______________________________"
   !________________________________________________________________________________________!
   !Deallocating all arrays after writing outputs in netCDF files
   !________________________________________________________________________________________!

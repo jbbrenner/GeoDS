@@ -31,6 +31,7 @@ CONTAINS
     hr_lr_precipitation_ratio(:,:,:) = 0.d0
     hr_lr_precipitation_anomalies(:,:,:) = 0.d0
 
+
     !The precipitation at high resolution for a given gridpoint are calculated by correcting the low
     !resolution precipitation data with the TEI of the corresponding gridpoint
     !and the dominant wind direction of the month, using the following formula : 

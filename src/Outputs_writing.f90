@@ -271,13 +271,13 @@ CONTAINS
       CALL nc_write(ds_monthly_temperature_data_file, "ts_anomalies", hr_lr_surface_temperature_anomalies(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
-      CALL nc_write(ds_monthly_precipitation_data_file, "PP", hr_precipitation_data(:,:,:), & 
+      CALL nc_write(ds_monthly_precipitation_data_file, "pr", hr_precipitation_data(:,:,:), & 
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
       
-      CALL nc_write(ds_monthly_precipitation_data_file, "PP_ratio", hr_lr_precipitation_ratio(:,:,:), &
+      CALL nc_write(ds_monthly_precipitation_data_file, "pr_ratio", hr_lr_precipitation_ratio(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
-      CALL nc_write(ds_monthly_precipitation_data_file, "PP_anomalies", hr_lr_precipitation_anomalies(:,:,:), &
+      CALL nc_write(ds_monthly_precipitation_data_file, "pr_anomalies", hr_lr_precipitation_anomalies(:,:,:), &
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
 
@@ -326,7 +326,7 @@ CONTAINS
             ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
+         CALL nc_write(ds_annual_precipitation_data_file, "pr", ds_annual_precipitation_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
          ds_annual_precipitation_data(:,:,:) = 0
 
@@ -339,7 +339,7 @@ CONTAINS
             ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_precipitation_data_file, "PP_ratio", ds_annual_precipitation_data(:,:,:),& 
+         CALL nc_write(ds_annual_precipitation_data_file, "pr_ratio", ds_annual_precipitation_data(:,:,:),& 
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
          ds_annual_precipitation_data(:,:,:) = 0
 
@@ -352,7 +352,7 @@ CONTAINS
             ds_annual_precipitation_data(:,:,k+1) = ds_annual_precipitation_data(:,:,k+1)/months_nbr
             k=k+1
          ENDDO
-         CALL nc_write(ds_annual_precipitation_data_file, "PP_anomalies", ds_annual_precipitation_data(:,:,:),&
+         CALL nc_write(ds_annual_precipitation_data_file, "pr_anomalies", ds_annual_precipitation_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
       ENDIF
@@ -376,7 +376,7 @@ CONTAINS
          CALL nc_write(ds_annual_temperature_data_file, "ts_anomalies", ds_annual_temperature_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code) 
         ds_annual_precipitation_data(:,:,:) = hr_precipitation_data
-         CALL nc_write(ds_annual_precipitation_data_file, "PP", ds_annual_precipitation_data(:,:,:),&
+         CALL nc_write(ds_annual_precipitation_data_file, "pr", ds_annual_precipitation_data(:,:,:),&
               dim1=x_dim_name, dim2=y_dim_name, dim3="time", missing_value=missing_data_error_code)
 
     ENDIF

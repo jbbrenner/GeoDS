@@ -26,7 +26,7 @@ t_start = 1
 t_end = 12
 lambda = 0 ! 0.00086
 alpha = 0 !0.0000665417 !0.002062792888641358
-beta = 39
+beta = 31 !35 !26
 delta = 12e-11 
 /
 
@@ -49,7 +49,7 @@ delta = 12e-11
     lr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GCM_data/lgm/FGOALS/LR_Topographic_Parameters.nc'	!Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
     lr_surface_elevation_id = 'S'											!Name of the variable to be read in the input file
     lr_topographic_insolation_id = 'topographic_daily_insolation'							
-    hr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GeoDS_Inputs_PMIP/ALPS2/HR_Topographic_Parameters_lgm.nc' !HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
+    hr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GeoDS_Inputs_PMIP/ALPS2/HR_Topographic_Parameters_Jouvet.nc' !HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
     hr_surface_elevation_id = 'S'
     hr_topographic_insolation_id = 'topographic_daily_insolation'
     hr_topo_x_size = 550 												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable

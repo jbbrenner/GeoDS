@@ -37,13 +37,23 @@ CONTAINS
 
              !______________________________________________________________________
              !wind direction shift
+             !wind_direction_shifted = wind_direction + pi/4
+
+             !IF (wind_direction_shifted .GT. pi) THEN
+             !        wind_direction_shifted = -pi + ABS(wind_direction + pi/4 -(pi))
+             !END IF
+                
+             !wind_direction = wind_direction_shifted
+             
+             ! Si moins
              !wind_direction_shifted = wind_direction - pi/4
 
              !IF (wind_direction_shifted .LT. -pi) THEN
              !        wind_direction_shifted = pi - ABS(wind_direction - pi/4 -(-pi))
              !END IF
-                
+
              !wind_direction = wind_direction_shifted
+
              !______________________________________________________________________
 
              DO m=1, nbr_wdir

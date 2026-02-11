@@ -18,7 +18,7 @@ MODULE Parametrization
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
   DOUBLE PRECISION, PARAMETER :: pi = ACOS(-1.0)
-  DOUBLE PRECISION, PARAMETER :: lapse_rate = 0.0065
+  DOUBLE PRECISION, PARAMETER :: lapse_rate = 0.007
   !________________________________________________________________________________________!
   !Input variables
   !________________________________________________________________________________________!

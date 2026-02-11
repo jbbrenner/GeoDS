@@ -16,17 +16,17 @@
 &global_parametrization
     lr_monthly_climate_data_availability = .true.								!Variable used to check whether monthly climate input data are available or not
     wdir_grids_generation = .true.
-    lr_climate_data_x_size = 550										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    lr_climate_data_y_size = 350										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
+    lr_climate_data_x_size = 275										!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    lr_climate_data_y_size = 175										!Dataset extent in the y spatial dimension (y/latitude) for the selected variable	
     x_dim_name = 'x'
     y_dim_name = 'y'
     xy_unit = 'm'
     missing_data_error_code = -9999.99
 t_start = 1
-t_end = 12
+t_end = 588
 lambda = 0 ! 0.00086
 alpha = 0 !0.0000665417 !0.002062792888641358
-beta = 39
+beta = 16 !35 !26
 delta = 12e-11 
 /
 
@@ -34,8 +34,8 @@ delta = 12e-11
 !________Parametrization regarding low-resolution climate__________!
 
 &inputs_climate_variables
-    lr_climate_data_file = '/home/jbrenner/These/Applications_Paleo/GCM_data/lgm/FGOALS/LR_climate.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Input data must be first interpolated on the high resolution elevation grid
-    lr_UVwind_file = '/home/jbrenner/These/Applications_Paleo/GCM_data/lgm/FGOALS/LR_winds.nc' !ERA5_winds_awi.nc' 
+    lr_climate_data_file = '/home/jbrenner/These/Applications_Paleo/GCM_data/piControl/ERA5/alps4/LR_climate.nc'	!Path of the low resolution temperature input netCDF file (GCM's outputs). Input data must be first interpolated on the high resolution elevation grid
+    lr_UVwind_file = '/home/jbrenner/These/Applications_Paleo/GCM_data/piControl/ERA5/alps4/LR_winds.nc' 
     lr_surface_temperature_id = 'tas'											!Name of the variable to be read in the input file		
     lr_precipitation_id = 'pr'
     lr_uwind_id = 'ua'
@@ -46,14 +46,14 @@ delta = 12e-11
 !________Parametrization regarding topography___________!
 
 &topography
-    lr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GCM_data/lgm/FGOALS/LR_Topographic_Parameters.nc'	!Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
+    lr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GCM_data/piControl/ERA5/alps4/LR_Topographic_Parameters.nc'	!Path of the low resolution elevation input netcdf file. Note that the input data must be first interpolated on the high resolution elevation grid
     lr_surface_elevation_id = 'S'											!Name of the variable to be read in the input file
     lr_topographic_insolation_id = 'topographic_daily_insolation'							
-    hr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GeoDS_Inputs_PMIP/ALPS2/HR_Topographic_Parameters_lgm.nc' !HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
+    hr_topographic_parameters = '/home/jbrenner/These/Applications_Paleo/GeoDS_Inputs_PMIP/ALPS4/HR_Topographic_Parameters.nc' !HR_Topographic_Parameters.nc'	!Path of the high resolution elevation input netCDF file (GCM's outputs)
     hr_surface_elevation_id = 'S'
     hr_topographic_insolation_id = 'topographic_daily_insolation'
-    hr_topo_x_size = 550 												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
-    hr_topo_y_size = 350												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
+    hr_topo_x_size = 275 												!Dataset extent in the x spatial dimension (x/longitude) for the selected variable
+    hr_topo_y_size = 175												!Dataset extent in the y spatial dimension (y/latitude) for the selected variable
     hr_topo_t_size = 12													!Dataset extent in the t temporal dimension for the selected variable
 /
 

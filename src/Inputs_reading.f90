@@ -5,9 +5,11 @@ MODULE Inputs_reading
   USE Parametrization
   USE ncio, ONLY: nc_read
   USE Support_functions, only: accessing_config_file
-  
+
   IMPLICIT NONE
- 
+
+  REAL, PRIVATE :: sea_level
+
 CONTAINS
 
   !____________________________________________________________________________________________________________________________!
@@ -121,7 +123,8 @@ CONTAINS
     !______________________________________________________________________________________!
     !Reading topography-related input variables in the configuration file
     !______________________________________________________________________________________!
-    PRINT*, "Reading S input file"
+    sea_level = -120
+    PRINT*, "Reading S input file"   
     config_namelist_blockname="Topography"
     CALL accessing_config_file(ios, fu)
     !Sizing data array using dimensions stored in the configuration file
@@ -152,6 +155,15 @@ CONTAINS
        CALL nc_read(hr_topographic_parameters, hr_topographic_insolation_id, hr_topographic_insolation_data, &
                missing_value=missing_data_error_code)
     ENDIF
+
+    
+   ! hr_surface_elevation_data(:,:,:) = hr_surface_elevation_data(:,:,:) + sea_level
+    WHERE (hr_surface_elevation_data(:,:,:) .LT. 0)
+        hr_surface_elevation_data(:,:,:) = 0
+        hr_topographic_insolation_data(:,:,:) = 0
+    ENDWHERE
+
+
 
     PRINT*, "S valid"
     !Closing configuration file
