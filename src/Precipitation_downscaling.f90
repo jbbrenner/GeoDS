@@ -57,8 +57,8 @@ CONTAINS
     END DO
     
    hr_lr_precipitation_anomalies(:,:,:) = hr_precipitation_data(:,:,:) - lr_precipitation_data(:,:,:)
-
    
+
    !Loop to manage missing values
    DO t=1, t_extent
        DO j=1, hr_topo_y_size

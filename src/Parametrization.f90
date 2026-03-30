@@ -29,7 +29,7 @@ MODULE Parametrization
   CHARACTER (LEN=str_len) :: x_dim_name, y_dim_name, xy_unit
   DOUBLE PRECISION :: missing_data_error_code
   INTEGER :: t_start, t_end, t_extent
-  REAL :: lambda, alpha, beta, delta
+  REAL(8) :: lambda, alpha, beta, delta
 
   !Climate-related variables
   CHARACTER (LEN=str_len) :: lr_climate_data_file

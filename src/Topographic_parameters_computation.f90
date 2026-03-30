@@ -156,8 +156,6 @@ CONTAINS
        END DO
     END DO
  
-
-
     !_______________________________________
     !TEST en imposant une limite au TEI
     max_TEI = 0
@@ -243,7 +241,6 @@ CONTAINS
           END DO
        END DO
     END IF
-
 
 !Loop for converting TEI to P multiplicative factor
 
