@@ -18,31 +18,20 @@ MODULE Temperature_downscaling
 CONTAINS
 
   !____________________________________________________________________________!
-  SUBROUTINE applying_lapse_rate_correction(lr_surface_temperature_data, elevation_anomalies_data, &
-       hr_surface_temperature_data, hr_lr_surface_temperature_anomalies)
+  SUBROUTINE applying_lapse_rate_correction(locvar__lr_surface_temperature_array, locvar__elevation_anomalies_array, &
+       locvar__hr_surface_temperature_array, locvar__hr_lr_surface_temperature_anomalies_array)
     
     IMPLICIT NONE
 
-    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
-    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: elevation_anomalies_data, hr_surface_temperature_data, &
-         hr_lr_surface_temperature_anomalies
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: locvar__lr_surface_temperature_array
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: locvar__elevation_anomalies_array, locvar__hr_surface_temperature_array, &
+         locvar__hr_lr_surface_temperature_anomalies_array
 
-    !Computing elevation anomalies between low resolution grid and high resolution grid
-    CALL computing_elevation_anomalies(lr_surface_elevation_data, &
-         hr_surface_elevation_data, elevation_anomalies_data)
-    CALL computing_insolation_anomalies(lr_topographic_insolation_data, hr_topographic_insolation_data, &
-       topographic_insolation_anomalies_data)
-
-
-    !PRINT*,'______________________insol_test_____________________'    
-    !PRINT*, topographic_insolation_anomalies_data(1,1,1)
-    !PRINT*, '_____________________insol_test_____________________'
+    ALLOCATE(locvar__hr_surface_temperature_array(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE(locvar__hr_lr_surface_temperature_anomalies_array(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
     
-    ALLOCATE(hr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-    ALLOCATE(hr_lr_surface_temperature_anomalies(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
-
-    hr_surface_temperature_data(:,:,:) = 0
-    hr_lr_surface_temperature_anomalies(:,:,:) = 0
+    locvar__hr_surface_temperature_array(:,:,:) = 0
+    locvar__hr_lr_surface_temperature_anomalies_array(:,:,:) = 0
 
     !for every time step (3rd dimension of the following arrays), the high resolution surface temperature is computed as
     !a correction of the GCM's outputs. A loop is used to overcome the problem of dimensions inequality between climate
@@ -50,8 +39,8 @@ CONTAINS
 
 !    k=1
 !        DO t=1, t_extent
-!           hr_surface_temperature_data(:,:,t) = lr_surface_temperature_data(:,:,t) + &
-!                lambda * elevation_anomalies_data(:,:,k) + &
+!           locvar__hr_surface_temperature_array(:,:,t) = locvar__lr_surface_temperature_array(:,:,t) + &
+!                lambda * locvar__elevation_anomalies_array(:,:,k) + &
 !                alpha * topographic_insolation_anomalies_data(:,:,k)
 !           k=k+1
 !           IF (k .EQ. months_nbr+1) THEN
@@ -59,40 +48,28 @@ CONTAINS
 !           ENDIF
 !        ENDDO       
 
-!     hr_lr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
-!             - lr_surface_temperature_data(:,:,:)
-
+!     locvar__hr_lr_surface_temperature_anomalies_array(:,:,:) = locvar__hr_surface_temperature_array(:,:,:) &
+!             - locvar__lr_surface_temperature_array(:,:,:)
 
     k=1
         DO t=1, t_extent
                 DO j=1, hr_topo_y_size
                         DO i=1, hr_topo_x_size
-                                hr_surface_temperature_data(i,j,t) = lr_surface_temperature_data(i,j,t) + &
-                                elevation_anomalies_data(i,j,k) * (lapse_rate + lambda * &
+                                locvar__hr_surface_temperature_array(i,j,t) = locvar__lr_surface_temperature_array(i,j,t) + &
+                                locvar__elevation_anomalies_array(i,j,k) * (lapse_rate + lambda * &
                                 TEI_pointers_array(INT(sorted_wind_directions_data(i,j,t)))%tei_arr_ptr(i, j)) + &
                                 alpha * topographic_insolation_anomalies_data(i,j,k)                        
-                        IF (k .LT. t_extent) THEN
-                                k=k+1
-                        END IF
+                        k=k+1
                         IF (k .EQ. months_nbr+1) THEN
                                 k=1
                         ENDIF
-
                         END DO
                 END DO
         END DO
 
 
-     hr_lr_surface_temperature_anomalies(:,:,:) = hr_surface_temperature_data(:,:,:) &
-             - lr_surface_temperature_data(:,:,:)
-
-
-
-
-
-
-
-
+     locvar__hr_lr_surface_temperature_anomalies_array(:,:,:) = locvar__hr_surface_temperature_array(:,:,:) &
+             - locvar__lr_surface_temperature_array(:,:,:)
 
 
      !managing missing data
@@ -100,9 +77,9 @@ CONTAINS
         DO j=1, hr_topo_y_size
            DO i=1, hr_topo_x_size
                 IF (lr_precipitation_data(i,j,t) .LT. -100) THEN
-                        hr_surface_temperature_data(i,j,t)=missing_data_error_code
-                        lr_surface_temperature_data(i,j,t)=missing_data_error_code
-                        hr_lr_surface_temperature_anomalies(i,j,t)=missing_data_error_code
+                        locvar__hr_surface_temperature_array(i,j,t)=missing_data_error_code
+                        locvar__lr_surface_temperature_array(i,j,t)=missing_data_error_code
+                        locvar__hr_lr_surface_temperature_anomalies_array(i,j,t)=missing_data_error_code
                 END IF
            END DO
         END DO
@@ -114,4 +91,4 @@ CONTAINS
  
    !____________________________________________________________________________!
 
-  END MODULE Temperature_downscaling
+  END MODULE temperature_downscaling
