@@ -5,11 +5,9 @@ MODULE Inputs_reading
   USE Parametrization
   USE ncio, ONLY: nc_read
   USE Support_functions, only: accessing_config_file
-
+  
   IMPLICIT NONE
-
-  REAL, PRIVATE :: sea_level
-
+ 
 CONTAINS
 
   !____________________________________________________________________________________________________________________________!
@@ -18,18 +16,17 @@ CONTAINS
   !with a different category of data (i.e : data related to temperature, precipitation, topography...)
   !____________________________________________________________________________________________________________________________!
   
-  SUBROUTINE reading_temperature_inputs(lr_surface_temperature_data, config_namelist_blockname, t_extent, ios, fu)
+  SUBROUTINE reading_temperature_inputs(locvar__lr_surface_temperature_array, config_namelist_blockname, t_extent, ios, fu)
 
     IMPLICIT NONE
 
-    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: lr_surface_temperature_data
+    DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) :: locvar__lr_surface_temperature_array
     CHARACTER(LEN=str_len), INTENT(INOUT) :: config_namelist_blockname
     INTEGER, INTENT(INOUT) :: t_extent, ios, fu
 
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
-    PRINT*, "Reading T° input file"
     config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
     
@@ -39,14 +36,13 @@ CONTAINS
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)
     !Sizing data array with dimensions stored in the configuration file
-    ALLOCATE (lr_surface_temperature_data(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
+    ALLOCATE (locvar__lr_surface_temperature_array(1:lr_climate_data_x_size, 1:lr_climate_data_y_size, 1:t_extent))
    
     !Storing temperature data from LR netCDF file in array
-    CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, lr_surface_temperature_data, &
+    CALL nc_read(lr_climate_data_file, lr_surface_temperature_id, locvar__lr_surface_temperature_array, &
             start=[1,1,t_start], count=[lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
             missing_value=missing_data_error_code)
 
-    PRINT*,"T° valid"
   END SUBROUTINE reading_temperature_inputs
   
   !___________________________________________________________________________________________________________________________!
@@ -63,7 +59,6 @@ CONTAINS
     !_____________________________________________________________________________________!
     !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
-    PRINT*, "Reading P input file"
     config_namelist_blockname="Global_parametrization"
     CALL accessing_config_file(ios, fu)
 
@@ -74,7 +69,7 @@ CONTAINS
     CALL nc_read(lr_climate_data_file, lr_precipitation_id, lr_precipitation_data, &
             [1,1,t_start], [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], &
             missing_value=missing_data_error_code)
-    PRINT*,"P valid"
+    
   END SUBROUTINE reading_precipitation_inputs
 
   !___________________________________________________________________________________________________________________________!
@@ -89,9 +84,9 @@ CONTAINS
     INTEGER, INTENT(INOUT) :: ios, fu
 
     !_____________________________________________________________________________________!
-    !Reading wind-related input variables in the configuration file
+    !Reading temperature-related input variables in the configuration file
     !_____________________________________________________________________________________!
-    PRINT*, "Reading wind input file"
+
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)
     !Sizing data array with dimensions stored in the configuration file
@@ -104,7 +99,7 @@ CONTAINS
          [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
     CALL nc_read(lr_UVwind_file, lr_vwind_id, lr_vwind_data, [1,1,t_start], &
          [lr_climate_data_x_size, lr_climate_data_y_size, t_extent], missing_value=missing_data_error_code)
-    PRINT*, "Wind valid"
+ 
   END SUBROUTINE reading_wind_inputs
 
   !___________________________________________________________________________________________________________________________!
@@ -123,8 +118,7 @@ CONTAINS
     !______________________________________________________________________________________!
     !Reading topography-related input variables in the configuration file
     !______________________________________________________________________________________!
-    sea_level = -120
-    PRINT*, "Reading S input file"   
+        
     config_namelist_blockname="Topography"
     CALL accessing_config_file(ios, fu)
     !Sizing data array using dimensions stored in the configuration file
@@ -156,16 +150,6 @@ CONTAINS
                missing_value=missing_data_error_code)
     ENDIF
 
-    
-   ! hr_surface_elevation_data(:,:,:) = hr_surface_elevation_data(:,:,:) + sea_level
-    WHERE (hr_surface_elevation_data(:,:,:) .LT. 0)
-        hr_surface_elevation_data(:,:,:) = 0
-        hr_topographic_insolation_data(:,:,:) = 0
-    ENDWHERE
-
-
-
-    PRINT*, "S valid"
     !Closing configuration file
    CLOSE(fu)
 
