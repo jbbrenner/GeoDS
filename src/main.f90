@@ -43,7 +43,7 @@ PROGRAM main
        topographic_insolation_anomalies_data)
   
   CALL computing_WL_exposure_indexes(TEI_pointers_array, TEI_drying_effect_correction)
-
+  PRINT*, "TEST JB", TEI_drying_effect_correction(1)%tei_arr_ptr(100,100)
   CALL writing_wdir_gridpoints_patterns()
 
   CALL computing_wind_directions(sorted_wind_directions_data)

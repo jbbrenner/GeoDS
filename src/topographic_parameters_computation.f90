@@ -117,7 +117,8 @@ CONTAINS
                         j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1) .GT. &
                         missing_data_error_code)) THEN
                                 counter_TEI = counter_TEI + 1                 !Since each influence gridpoint weight is
-                                locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j) = TEI_pointers_array(m)%tei_arr_ptr(i, j) + &   !given by 1/horizontal distance between 
+                                locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j) = &
+                                locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j) + &   !given by 1/horizontal distance between 
                                 (hr_surface_elevation_data(i, j, 1) - hr_surface_elevation_data(i + &                   !the gridpoint of influence and the cell the TEI's
                                 WL_pattern_pointers_array(m)%wl_arr_ptr(k)%ix_relative, &                               !is being computed, it is necessary to check
                                 j + WL_pattern_pointers_array(m)%wl_arr_ptr(k)%jy_relative, 1))* &                      !if horizontal_dist is equal to 0 in order to
@@ -133,8 +134,8 @@ CONTAINS
              !relationship between TEI and the windward searching distance when it is increased by the user (a greater searching
              !distance is expected to generate higher TEI variations)
              IF (counter_TEI .NE. 0) THEN
-                   locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j) = (TEI_pointers_array(m)%tei_arr_ptr(i, j)/counter_TEI) * &
-                           TEI_windward_searching_dist/1000.0                                                           
+                   locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j) = (locvar__TEI_pointers_array(m)%tei_arr_ptr(i, j)/counter_TEI)! * &
+                           !TEI_windward_searching_dist/1000.0                                                           
              END IF
           END DO
        END DO
@@ -174,11 +175,12 @@ CONTAINS
                     END IF
                 END DO
 
-!                IF (counter_DE .NE. 0) THEN
-!                   locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i,j)=TEI_drying_effect_correction(m)%tei_arr_ptr(i, &
-!                   j)/counter_DE
-!                   counter_DE=0
-!                END IF
+                IF (counter_DE .NE. 0) THEN
+                   locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i,j)= &
+                           locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i, &
+                   j)/counter_DE
+                   counter_DE=0
+                END IF
 
              END DO
           END DO
@@ -196,8 +198,9 @@ CONTAINS
                IF (locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i, j) .GT. 0.d0) &
                        !.AND. (locvar__TEI_pointers_array(m)%tei_arr_ptr(i,j) .GT. 1.d0)) &
                        THEN
-                  locvar__TEI_pointers_array(m)%tei_arr_ptr(i,j) = TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
-                  delta * locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i, j)
+                  locvar__TEI_pointers_array(m)%tei_arr_ptr(i,j) = locvar__TEI_pointers_array(m)%tei_arr_ptr(i,j) - &
+                  delta * ((locvar__TEI_drying_effect_correction_array(m)%tei_arr_ptr(i, j)) * &
+                  hr_surface_elevation_data(i,j,1)**3)
                END IF                   
              END DO
           END DO
