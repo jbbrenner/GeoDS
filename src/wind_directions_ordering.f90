@@ -37,13 +37,13 @@ CONTAINS
 
              !______________________________________________________________________
              !wind direction shift
-             !wind_direction_shifted = wind_direction - pi/4
+             wind_direction_shifted = wind_direction + wind_shift*pi/180 !+ : sens anit-horaire, - sens horaire
 
-             !IF (wind_direction_shifted .LT. -pi) THEN
-             !        wind_direction_shifted = pi - ABS(wind_direction - pi/4 -(-pi))
-             !END IF
-                
-             !wind_direction = wind_direction_shifted
+             IF (wind_direction_shifted .GT. pi) THEN
+                     wind_direction_shifted = wind_direction_shifted - 2*pi
+             END IF
+
+             wind_direction = wind_direction_shifted
              !______________________________________________________________________
 
              DO m=1, nbr_wdir

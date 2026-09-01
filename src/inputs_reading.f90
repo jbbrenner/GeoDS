@@ -33,7 +33,7 @@ CONTAINS
     CALL accessing_config_file(ios, fu)
     
     t_extent = t_end - t_start + 1
-    PRINT*, "t_extent = ", t_extent
+    !!PRINT*, "t_extent = ", t_extent
     lr_climate_data_t_size = t_extent
     config_namelist_blockname="Inputs_climate_variables"
     CALL accessing_config_file(ios, fu)

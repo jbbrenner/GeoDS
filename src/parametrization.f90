@@ -13,7 +13,8 @@ MODULE Parametrization
 
   INTEGER, PARAMETER :: str_len = 256
   INTEGER, PARAMETER :: months_nbr = 12
-  CHARACTER (LEN=str_len) :: Configuration_file = "/home/jbrenner/GeoDS/Configuration_File.nml"
+  REAL, PARAMETER :: pdt_geods = 1.0
+  CHARACTER (LEN=str_len) :: Configuration_file = "/home/users/jbrenner/GeoDS/Configuration_File.nml"
   CHARACTER(LEN=str_len) :: config_namelist_blockname !String storing a blockname of the configuration file's namelist
   INTEGER :: ios, fu !Test variables
   DOUBLE PRECISION, PARAMETER :: T_conv = 273.15
@@ -78,7 +79,7 @@ MODULE Parametrization
           sorted_wind_directions_data
   LOGICAL :: ds_annual_data_generation
   INTEGER :: nbr_wdir
-  DOUBLE PRECISION :: TEI_windward_searching_dist
+  DOUBLE PRECISION :: TEI_windward_searching_dist, wind_shift
   DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: wdir_angle_boundaries
   DOUBLE PRECISION :: max_precipitation_increase_factor
   LOGICAL :: broad_mountain_range_drying_effect_activator

@@ -51,13 +51,12 @@ CONTAINS
 
       ALLOCATE(locvar__wdir_angle_boundaries_array(nbr_wdir + 1)) !Array containing the bounds of each angle interval associated with the nbr_wdir wind directions
      
-      PRINT*, "nbr_wdir =", nbr_wdir
-      PRINT*, 'TEI_windward_searching_dist =', TEI_windward_searching_dist
-      PRINT*, 'drying_effect_windward_searching_dist =', drying_effect_windward_searching_dist
+     !! PRINT*, "nbr_wdir =", nbr_wdir
+     !! PRINT*, 'TEI_windward_searching_dist =', TEI_windward_searching_dist
+     !! PRINT*, 'drying_effect_windward_searching_dist =', drying_effect_windward_searching_dist
       max_size_real=CEILING(2*(drying_effect_windward_searching_dist/spatial_resolution + 2)**2)
       max_size=INT(max_size_real)
-      PRINT*, 'max_size = ', max_size
- 
+     !! PRINT*, 'max_size = ', max_size
       ALLOCATE(locvar__wl_pattern_pointers_array(nbr_wdir))                  !Creation of nbr_wdir arrays, whose pointers are stored in point_arrays : allows a dynamical declaration of variables
       DO m=1, nbr_wdir
          ALLOCATE(locvar__wl_pattern_pointers_array(m)%wl_arr_ptr(max_size)) !Allocation of each of the pointed array using the max_size parameter : if nbr_wdir > 4, each array is sized to 
@@ -66,13 +65,12 @@ CONTAINS
       !___________________________________________________________________!
       !Filling of arrays
       !___________________________________________________________________!
-
       counter(:) = 1
 
       !1/filling the locvar__wdir_angle_boundaries_array array : division of 2pi radians in nbr_wdir equal angle intervals. Each lower limit is an item of the array
       DO m=1, nbr_wdir + 1
          locvar__wdir_angle_boundaries_array(m) = (m-1) * (2*pi/nbr_wdir) - pi
-         PRINT*, locvar__wdir_angle_boundaries_array(m)
+      !!   PRINT*, locvar__wdir_angle_boundaries_array(m)
       END DO
 
       DO m=1, nbr_wdir
@@ -85,7 +83,6 @@ CONTAINS
       !Using a double loop, the algorithm checks every gridpoints within a square box of 2*max_size size, and verifies several
       !conditions to associate the given point to the correct wind direction array. Note that a same point can be in two different
       !arrays, just not with the same weight
-
       DO ir=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), &
               CEILING(drying_effect_windward_searching_dist/spatial_resolution), 1 
          DO jr=FLOOR(-drying_effect_windward_searching_dist/spatial_resolution), &
@@ -139,7 +136,7 @@ CONTAINS
            ENDIF
         END DO
      END DO
-
+       
 
 !PRINT*, locvar__wl_pattern_pointers_array(1)%wl_arr_ptr
      !___________________________________________________________________!
@@ -153,7 +150,7 @@ CONTAINS
         !counter(1) = counter(1) + 1
      !END DO
      !____________________________________________________________________!
-    
+
       !___________________________________________________________________!
       !Deallocation of the private arrays
       !___________________________________________________________________!

@@ -35,7 +35,7 @@ CONTAINS
     NAMELIST/Downscaled_outputs/wdir_patterns_file_path, ds_monthly_temperature_data_file, &
             ds_annual_temperature_data_file, ds_monthly_precipitation_data_file, ds_annual_precipitation_data_file, &
             topographic_exposure_indexes_file, sorted_wind_directions_file, ds_x_grid_lower_bound, &
-            ds_y_grid_lower_bound, spatial_resolution, ds_annual_data_generation, nbr_wdir, TEI_windward_searching_dist, &
+            ds_y_grid_lower_bound, spatial_resolution, ds_annual_data_generation, nbr_wdir, TEI_windward_searching_dist, wind_shift, &
             max_precipitation_increase_factor, broad_mountain_range_drying_effect_activator, drying_effect_windward_searching_dist 
 
 

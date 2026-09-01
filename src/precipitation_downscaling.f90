@@ -54,7 +54,6 @@ CONTAINS
     END DO
     
    locvar__hr_lr_precipitation_anomalies_array(:,:,:) = locvar__hr_precipitation_array(:,:,:) - locvar__lr_precipitation_array(:,:,:)
-
    
    !Loop to manage missing values
    DO t=1, t_extent
