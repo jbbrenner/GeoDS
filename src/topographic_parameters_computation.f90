@@ -93,8 +93,7 @@ CONTAINS
     !influence point is within the gridbox (IF conditions). The characteristics of the influence gridpoints are read in the
     !topography-related array (e.g. elevation) using the relative coordinates of the influence gridpoint, and the absolute
     !coordinate of the cell whose TEI is being calculated.
-    
-    DO m=1, nbr_wdir                                                                                              
+    DO m=1, nbr_wdir
        DO j=1, hr_topo_y_size
           DO i=1, hr_topo_x_size
              counter_TEI = 0        
@@ -206,7 +205,8 @@ CONTAINS
           END DO
        END DO
     END IF
-
+    
+        !print*, "TEI module geods", TEI_pointers_array(1)%tei_arr_ptr(100,100)
 
 !Loop for converting TEI to P multiplicative factor
 
