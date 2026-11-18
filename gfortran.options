@@ -2,8 +2,8 @@
 
 F_OPTIM_HIGH  = -O2
 F_PRE_PROCESS = -cpp
-F_FLAGS_EXTD  = -ffixed-line-length-132
-F_FLAGS_CARD  = -ffixed-line-length-80
+F_FLAGS_EXTD  = -ffree-line-length-512 #-ffixed-line-length-132
+F_FLAGS_CARD  = -ffree-line-length-512 #-ffixed-line-length-80
 F_DFLT_DBLE8  = -fdefault-double-8
 F_DFLT_REAL8  = -fdefault-real-8
 F_DFLT_DBLE   = $(F_DFLT_REAL8) $(F_DFLT_DBLE8)
